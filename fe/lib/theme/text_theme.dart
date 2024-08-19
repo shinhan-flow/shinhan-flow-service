@@ -27,10 +27,10 @@ class SHFlowTextStyle {
     height: 22 / 16,
   );
   static final TextStyle button = TextStyle(
-    fontSize: 20.sp,
+    fontSize: 18.sp,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w600,
-    height: 22 / 20,
+    height: 22 / 18,
   );
   static final TextStyle title = TextStyle(
     fontSize: 24.sp,

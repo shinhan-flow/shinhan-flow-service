@@ -44,7 +44,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         surfaceTintColor: backgroundColor ?? Colors.white,
         shape: hasBorder
             ? const Border(
-                bottom: BorderSide(color: Color(0xFF525252)),
+                bottom: BorderSide(color: Color(0xFFDFDFDF)),
               )
             : null,
         centerTitle: true,
@@ -65,7 +65,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       shape: hasBorder
           ? const Border(
-              bottom: BorderSide(color: Color(0xFF525252)),
+              bottom: BorderSide(color: Color(0xFFDFDFDF)),
             )
           : null,
       title: Text(
