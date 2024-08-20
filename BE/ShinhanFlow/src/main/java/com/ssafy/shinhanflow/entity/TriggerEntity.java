@@ -63,7 +63,7 @@ public class TriggerEntity {
 	private LocalDateTime deletedAt;
 
 	public enum Category {
-		TIME, PRODUCT, AMOUNT, EXCHANGE
+		TIME, PRODUCT, TRANSFER, EXCHANGE
 	}
 
 	@Builder
