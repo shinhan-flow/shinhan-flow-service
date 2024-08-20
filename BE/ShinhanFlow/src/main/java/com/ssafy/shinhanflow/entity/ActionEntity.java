@@ -1,12 +1,13 @@
 package com.ssafy.shinhanflow.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.ColumnDefault;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,25 +19,33 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "product_trigger")
+@Table(name = "action")
 @Entity
-public class ProductTrigger {
-
+public class ActionEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@NotNull
+	@Column(name = "member_id")
+	private Long memberId;
 
 	@NotNull
 	@Column(name = "flow_id")
 	private Long flowId;
 
 	@NotNull
-	@Column(name = "code")
-	private Byte code;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "category")
+	private Category category;
 
 	@NotNull
-	@Column(name = "interest", precision = 5, scale = 3)
-	private BigDecimal interest;
+	@Column(name = "code")
+	private int code;
+
+	@NotNull
+	@Column(name = "data")
+	private String data;
 
 	@ColumnDefault("CURRENT_TIMESTAMP")
 	@NotNull
@@ -51,4 +60,16 @@ public class ProductTrigger {
 	@ColumnDefault("NULL")
 	@Column(name = "deleted_at", insertable = false)
 	private LocalDateTime deletedAt;
+
+	public enum Category {
+		NOTIFICATION, TRANSFER , EXCHANGE
+	}
+
+	public ActionEntity(Long memberId, Long flowId, Category category, int code, String data) {
+		this.memberId = memberId;
+		this.flowId = flowId;
+		this.category = category;
+		this.code = code;
+		this.data = data;
+	}
 }

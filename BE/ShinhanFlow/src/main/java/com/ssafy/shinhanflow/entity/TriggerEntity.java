@@ -14,38 +14,39 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity()
-@Table(name = "amount_trigger")
-public class AmountTriggerEntity {
+@Entity
+@Table(name = "trigger")
+public class TriggerEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@NotNull
+	@Column(name = "member_id")
+	private Long memberId;
 
 	@NotNull
 	@Column(name = "flow_id")
 	private Long flowId;
 
 	@NotNull
-	@Column(name = "code")
-	private Byte code;
-
-	@NotNull
-	@Column(name = "withdraw")
-	private String withdraw;
-
-	@NotNull
-	@Column(name = "deposit")
-	private String deposit;
-
 	@Enumerated(EnumType.STRING)
+	@Column(name = "category")
+	private Category category;
+
 	@NotNull
-	@Column(name = "condition")
-	private Condition condition;
+	@Column(name = "code")
+	private int code;
+
+	@NotNull
+	@Column(name = "data")
+	private String data;
 
 	@ColumnDefault("CURRENT_TIMESTAMP")
 	@NotNull
@@ -61,7 +62,16 @@ public class AmountTriggerEntity {
 	@Column(name = "deleted_at", insertable = false)
 	private LocalDateTime deletedAt;
 
-	private enum Condition{
-		LT, GT, EQ
+	public enum Category {
+		TIME, PRODUCT, AMOUNT, EXCHANGE
+	}
+
+	@Builder
+	public TriggerEntity(Long flowId, Long memberId, Category category, int code, String data) {
+		this.flowId = flowId;
+		this.memberId = memberId;
+		this.category = category;
+		this.code = code;
+		this.data = data;
 	}
 }

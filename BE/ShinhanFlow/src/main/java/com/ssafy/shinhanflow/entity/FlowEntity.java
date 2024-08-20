@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -52,4 +53,11 @@ public class FlowEntity {
 	@ColumnDefault("NULL")
 	@Column(name = "deleted_at", insertable = false)
 	private LocalDateTime deletedAt;
+
+	@Builder
+	public FlowEntity(Long memberId, String title, String description) {
+		this.memberId = memberId;
+		this.title = title;
+		this.description = description;
+	}
 }

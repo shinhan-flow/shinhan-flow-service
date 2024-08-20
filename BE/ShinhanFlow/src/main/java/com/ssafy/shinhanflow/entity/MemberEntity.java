@@ -62,10 +62,11 @@ public class MemberEntity {
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public MemberEntity(String email, String password, String name) {
+	public MemberEntity(String email, String password, String name, String userKey) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
+		this.userKey = userKey;
 	}
 
 }
