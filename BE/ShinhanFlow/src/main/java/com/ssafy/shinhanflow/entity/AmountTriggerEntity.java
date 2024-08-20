@@ -6,46 +6,46 @@ import org.hibernate.annotations.ColumnDefault;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "member")
-@Entity
-public class MemberEntity {
-
+@Entity()
+@Table(name = "amount_trigger")
+public class AmountTriggerEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotNull
-	@Column(name = "email", length = 50, unique = true)
-	private String email;
+	@Column(name = "flow_id")
+	private Long flowId;
 
 	@NotNull
-	@Column(name = "password", length = 255)
-	private String password;
+	@Column(name = "code")
+	private Byte code;
 
 	@NotNull
-	@Column(name = "name", length = 15)
-	private String name;
+	@Column(name = "withdraw")
+	private String withdraw;
 
 	@NotNull
-	@Column(name = "user_key", length = 100, unique = true)
-	private String userKey;
+	@Column(name = "deposit")
+	private String deposit;
 
-	@ColumnDefault("00100")
+	@Enumerated(EnumType.STRING)
 	@NotNull
-	@Column(name = "institution_code", length = 20, insertable = false)
-	private String institutionCode;
+	@Column(name = "condition")
+	private Condition condition;
 
 	@ColumnDefault("CURRENT_TIMESTAMP")
 	@NotNull
@@ -61,11 +61,7 @@ public class MemberEntity {
 	@Column(name = "deleted_at", insertable = false)
 	private LocalDateTime deletedAt;
 
-	@Builder
-	public MemberEntity(String email, String password, String name) {
-		this.email = email;
-		this.password = password;
-		this.name = name;
+	private enum Condition{
+		LT, GT, EQ
 	}
-
 }
