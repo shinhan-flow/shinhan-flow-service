@@ -13,7 +13,9 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isSliver;
   final List<Widget>? actions;
   final Color? backgroundColor;
-  final String leadingIcon;
+
+  // final String leadingIcon;
+  final Widget? leading;
   final bool hasBorder;
 
   const DefaultAppBar({
@@ -23,13 +25,14 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.isSliver = false,
     this.actions,
     this.backgroundColor,
-    this.leadingIcon = "back_arrow",
+    // this.leadingIcon = "back_arrow",
     this.hasBorder = true,
+    this.leading,
   });
 
   @override
   Widget build(BuildContext context) {
-    log('context.canPop() = ${context.canPop()}');
+    // log('context.canPop() = ${context.canPop()}');
     if (isSliver) {
       return SliverAppBar(
         title: Text(
@@ -38,6 +41,9 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
               // color: MITIColor.white,
               ),
         ),
+        leadingWidth:
+            leading == null ? null : MediaQuery.of(context).size.width / 2,
+
         backgroundColor: backgroundColor ?? Colors.white,
 
         /// 앱바 pinned 시 surface 컬러
@@ -48,15 +54,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
               )
             : null,
         centerTitle: true,
-        // leading: context.canPop()
-        //     ? IconButton(
-        //         onPressed: () => context.pop(),
-        //         icon: SvgPicture.asset(
-        //           AssetUtil.getAssetPath(
-        //               type: AssetType.icon, name: leadingIcon),
-        //         ),
-        //       )
-        //     : null,
+        leading: leading,
         bottom: bottom,
         actions: actions,
         pinned: true,
@@ -79,14 +77,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
       /// 앱바 pinned 시 surface 컬러
       surfaceTintColor: backgroundColor ?? Colors.white,
       centerTitle: true,
-      // leading: context.canPop()
-      //     ? IconButton(
-      //         onPressed: () => context.pop(),
-      //         icon: SvgPicture.asset(
-      //           AssetUtil.getAssetPath(type: AssetType.icon, name: leadingIcon),
-      //         ),
-      //       )
-      //     : null,
+      leading: leading,
       bottom: bottom,
     );
   }
