@@ -104,8 +104,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                       ),
                     ),
                   ),
-                  minimumSize:
-                      WidgetStateProperty.all(Size(double.infinity, 48.h)),
+                  minimumSize: WidgetStateProperty.all(Size(0.w, 48.h)),
                   maximumSize:
                       WidgetStateProperty.all(Size(double.infinity, 48.h))),
             ),
