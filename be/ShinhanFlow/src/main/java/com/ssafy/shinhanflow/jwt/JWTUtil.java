@@ -42,22 +42,32 @@ public class JWTUtil {
 			.get("category", String.class);
 	}
 
-	public Boolean isExpired(String token) {
+	public String getRole(String token) {
 
 		return Jwts.parser()
 			.verifyWith(secretKey)
 			.build()
 			.parseSignedClaims(token)
 			.getPayload()
-			.getExpiration()
-			.before(new Date());
+			.get("role", String.class);
 	}
 
-	public String createJwt(String category, String userId, Long expiredMs) {
+	public void isExpired(String token) {
+
+		Jwts.parser()
+			.verifyWith(secretKey)
+			.build()
+			.parseSignedClaims(token)
+			.getPayload()
+			.getExpiration();
+	}
+
+	public String createJwt(String category, String userId, String role, Long expiredMs) {
 
 		return Jwts.builder()
 			.claim("category", category)
 			.claim("userId", userId)
+			.claim("role", role)
 			.issuedAt(new Date(System.currentTimeMillis()))
 			.expiration(new Date(System.currentTimeMillis() + expiredMs))
 			.signWith(secretKey)
