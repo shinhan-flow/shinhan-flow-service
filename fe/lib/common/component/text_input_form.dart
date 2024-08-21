@@ -12,6 +12,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final bool enable;
   final ValueChanged<String>? onChanged;
+  final bool isMultiLine;
 
   final Widget? side;
 
@@ -24,6 +25,7 @@ class CustomTextFormField extends StatelessWidget {
     this.side,
     this.initialValue,
     this.enable = true,
+    this.isMultiLine = false,
   });
 
   @override
@@ -49,8 +51,11 @@ class CustomTextFormField extends StatelessWidget {
                 initialValue: initialValue,
                 enabled: enable,
                 autofocus: false,
+                maxLines: isMultiLine ? null : 1,
+                // expands: true,
                 decoration: InputDecoration(
-                  constraints: BoxConstraints(maxHeight: 48.h, minHeight: 48.h),
+                  constraints:
+                      BoxConstraints(maxHeight: 200.h, minHeight: 48.h),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.r),
                     borderSide: BorderSide.none,

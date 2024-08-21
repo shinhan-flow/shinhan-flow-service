@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shinhan_flow/auth/view/login_screen.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
-import 'package:shinhan_flow/flow/view/flow_category_screen.dart';
+import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 import 'package:shinhan_flow/util/util.dart';
 
@@ -18,25 +18,25 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: ExpandableFab.location,
-      floatingActionButton: ExpandableFab(
-        type: ExpandableFabType.fan,
-        pos: ExpandableFabPos.center,
-        overlayStyle: ExpandableFabOverlayStyle(
-            color: Colors.black.withOpacity(0.5), blur: 2),
-        fanAngle: 60,
-        children: [
-          FloatingActionButton.small(
-            heroTag: null,
-            child: const Icon(Icons.edit),
-            onPressed: () {},
-          ),
-          FloatingActionButton.small(
-            heroTag: null,
-            child: const Icon(Icons.search),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      // floatingActionButton: ExpandableFab(
+      //   type: ExpandableFabType.fan,
+      //   pos: ExpandableFabPos.center,
+      //   overlayStyle: ExpandableFabOverlayStyle(
+      //       color: Colors.black.withOpacity(0.5), blur: 2),
+      //   fanAngle: 60,
+      //   children: [
+      //     FloatingActionButton.small(
+      //       heroTag: null,
+      //       child: const Icon(Icons.edit),
+      //       onPressed: () {},
+      //     ),
+      //     FloatingActionButton.small(
+      //       heroTag: null,
+      //       child: const Icon(Icons.search),
+      //       onPressed: () {},
+      //     ),
+      //   ],
+      // ),
       bottomNavigationBar: Container(
         constraints: BoxConstraints.tight(Size(
           double.infinity,
@@ -76,7 +76,7 @@ class HomeScreen extends StatelessWidget {
 
                 ElevatedButton(
                     onPressed: () {
-                      context.pushNamed(FlowCategoryScreen.routeName);
+                      context.pushNamed(TriggerCategoryScreen.routeName);
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,

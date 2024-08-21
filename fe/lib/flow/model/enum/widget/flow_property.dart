@@ -1,0 +1,4 @@
+enum FlowProperty {
+  trigger,
+  action;
+}

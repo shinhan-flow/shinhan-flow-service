@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:shinhan_flow/flow/view/flow_category_screen.dart';
+import 'package:shinhan_flow/trigger/view/account_trigger_screen.dart';
+import 'package:shinhan_flow/trigger/view/time_trigger_screen.dart';
+import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
+import 'package:shinhan_flow/flow/view/flow_init_screen.dart';
 import 'package:shinhan_flow/home_screen.dart';
 
 import '../../auth/view/login_screen.dart';
@@ -67,13 +70,39 @@ final routerProvider = Provider<GoRouter>((ref) {
             },
             routes: [
               GoRoute(
-                  path: 'flowCategory',
+                  path: 'triggerCategory',
                   parentNavigatorKey: rootNavKey,
-                  name: FlowCategoryScreen.routeName,
+                  name: TriggerCategoryScreen.routeName,
                   builder: (context, state) {
-                    return const FlowCategoryScreen();
+                    return const TriggerCategoryScreen();
                   },
-                  routes: []),
+                  routes: [
+                    GoRoute(
+                        path: 'flowInit',
+                        parentNavigatorKey: rootNavKey,
+                        name: FlowInitScreen.routeName,
+                        builder: (context, state) {
+                          return const FlowInitScreen();
+                        },
+                        routes: [
+                          GoRoute(
+                              path: 'timeTrigger',
+                              parentNavigatorKey: rootNavKey,
+                              name: TimeTriggerScreen.routeName,
+                              builder: (context, state) {
+                                return const TimeTriggerScreen();
+                              },
+                              routes: []),
+                          GoRoute(
+                              path: 'accountTrigger',
+                              parentNavigatorKey: rootNavKey,
+                              name: AccountTriggerScreen.routeName,
+                              builder: (context, state) {
+                                return const AccountTriggerScreen();
+                              },
+                              routes: []),
+                        ]),
+                  ]),
             ]),
       ]);
 });
