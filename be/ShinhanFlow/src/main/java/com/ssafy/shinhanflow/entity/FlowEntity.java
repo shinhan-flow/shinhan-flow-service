@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity(name = "flow")
+@Entity(name = "flows")
 public class FlowEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +51,7 @@ public class FlowEntity {
 	private LocalDateTime updatedAt;
 
 	@ColumnDefault("NULL")
-	@Column(name = "deleted_at", insertable = false)
+	@Column(name = "deleted_at", insertable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime deletedAt;
 
 	@Builder
