@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shinhan_flow/auth/provider/widget/login_form_provider.dart';
+import 'package:shinhan_flow/auth/provider/widget/widget/login_form_provider.dart';
 import 'package:shinhan_flow/auth/view/sign_up_screen.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/common/component/default_text_button.dart';

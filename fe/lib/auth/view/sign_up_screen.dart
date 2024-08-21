@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shinhan_flow/auth/provider/widget/sign_up_form_provider.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/common/component/text_input_form.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 import 'package:shinhan_flow/util/reg_exp_util.dart';
+
+import '../provider/widget/widget/sign_up_form_provider.dart';
 
 final signUpViewProvider = StateProvider.autoDispose<int>((ref) => 0);
 

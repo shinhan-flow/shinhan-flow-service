@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shinhan_flow/common/model/base_form_model.dart';
 
-import '../../param/sign_up_param.dart';
+import '../../../param/sign_up_param.dart';
 
 part 'sign_up_form_provider.g.dart';
 
