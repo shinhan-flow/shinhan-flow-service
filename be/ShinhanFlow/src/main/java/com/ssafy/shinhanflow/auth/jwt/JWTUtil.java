@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.jwt;
+package com.ssafy.shinhanflow.auth.jwt;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;

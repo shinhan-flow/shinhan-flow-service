@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.jwt;
+package com.ssafy.shinhanflow.auth.jwt;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -21,8 +21,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.ssafy.shinhanflow.jwt.JwtConstants.ACCESS_TOKEN_EXPIRE_TIME;
-import static com.ssafy.shinhanflow.jwt.JwtConstants.REFRESH_TOKEN_EXPIRE_TIME;
+import static com.ssafy.shinhanflow.auth.jwt.JwtConstants.ACCESS_TOKEN_EXPIRE_TIME;
+import static com.ssafy.shinhanflow.auth.jwt.JwtConstants.REFRESH_TOKEN_EXPIRE_TIME;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -54,7 +54,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		Authentication authentication) {
 
 		String username = authentication.getName();
-		log.info("{} login 요청 성공", username);
+		log.info("{}: login 요청 성공", username);
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 		Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -91,7 +91,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	@Override
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 		AuthenticationException failed) {
-		log.info("login 요청 실패");
+		log.error("login 요청 실패");
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
 	}
 }

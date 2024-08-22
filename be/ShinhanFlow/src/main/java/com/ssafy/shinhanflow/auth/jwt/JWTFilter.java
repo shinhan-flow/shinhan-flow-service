@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.jwt;
+package com.ssafy.shinhanflow.auth.jwt;
 
 import java.io.IOException;
 
@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.ssafy.shinhanflow.auth.login.CustomUserDetails;
+import com.ssafy.shinhanflow.auth.custom.CustomUserDetails;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

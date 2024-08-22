@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.auth.login;
+package com.ssafy.shinhanflow.auth.custom;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,6 +53,6 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return "test-username";
+		return "test@naver.com";
 	}
 }
