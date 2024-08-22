@@ -15,9 +15,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import com.ssafy.shinhanflow.jwt.JWTFilter;
-import com.ssafy.shinhanflow.jwt.JWTUtil;
-import com.ssafy.shinhanflow.jwt.LoginFilter;
+import com.ssafy.shinhanflow.auth.jwt.JWTFilter;
+import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
+import com.ssafy.shinhanflow.auth.jwt.LoginFilter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +77,7 @@ public class SecurityConfig {
 		http
 			.authorizeHttpRequests((auth) -> auth
 				.requestMatchers("/login").permitAll()
+					.requestMatchers("/api/v1/auth/access-token").permitAll()
 				.anyRequest().authenticated());
 
 		// JWT 필터 추가

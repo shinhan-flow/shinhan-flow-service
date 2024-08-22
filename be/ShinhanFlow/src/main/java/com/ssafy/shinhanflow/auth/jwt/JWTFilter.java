@@ -24,31 +24,32 @@ public class JWTFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-		FilterChain filterChain) throws ServletException, IOException {
+									FilterChain filterChain) throws ServletException, IOException {
+
 		// 헤더에서 Authorization 에 담긴 토큰을 꺼냄
 		String accessToken = request.getHeader("Authorization");
 
 		if (accessToken != null && accessToken.startsWith("Bearer ")) {
 			accessToken = accessToken.substring(7);
 		} else {
-			log.info("토큰이 없는 경우 로그인 필터로 넘어감");
 			filterChain.doFilter(request, response);
 			return;
 		}
 
+		// TODO: 토큰 에러 발생시 상태코드 정하기
 		try {
 			jwtUtil.isExpired(accessToken);
 			String category = jwtUtil.getCategory(accessToken);
 			if (!"access".equals(category)) {
-				throw new Exception("Invalid token category");
+				throw new Exception();
 			}
-		} catch (ExpiredJwtException e) {
+		} catch (ExpiredJwtException e) { //토큰 만료
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write("{\"error\": \"token has expired.\"}");
 			return;
-		} catch (Exception e) {
+		} catch (Exception e) { // 잘못된 토큰
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
@@ -65,7 +66,7 @@ public class JWTFilter extends OncePerRequestFilter {
 		CustomUserDetails customUserDetails = new CustomUserDetails();
 
 		Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null,
-			customUserDetails.getAuthorities());
+				customUserDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 		// ------------ 여기까지 ------------
 

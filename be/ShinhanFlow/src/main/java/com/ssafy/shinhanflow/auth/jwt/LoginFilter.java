@@ -1,8 +1,12 @@
 package com.ssafy.shinhanflow.jwt;
 
+import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +21,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.ssafy.shinhanflow.jwt.JwtConstants.ACCESS_TOKEN_EXPIRE_TIME;
+import static com.ssafy.shinhanflow.jwt.JwtConstants.REFRESH_TOKEN_EXPIRE_TIME;
+
 @RequiredArgsConstructor
 @Slf4j
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -24,8 +31,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
 	private final JWTUtil jwtUtil;
 
-	private final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 1000L; // 30초
-	private final long REFRESH_TOKEN_EXPIRE_TIME = 60 * 1000L; // 1분
+
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
@@ -56,13 +62,29 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		String role = auth.getAuthority();
 
 		//토큰 생성
-		String access = jwtUtil.createJwt("access", username, role, ACCESS_TOKEN_EXPIRE_TIME);
-		String refresh = jwtUtil.createJwt("refresh", username, role, REFRESH_TOKEN_EXPIRE_TIME);
+		String accessToken = jwtUtil.createJwt("access", username, role, ACCESS_TOKEN_EXPIRE_TIME);
+		String refreshToken = jwtUtil.createJwt("refresh", username, role, REFRESH_TOKEN_EXPIRE_TIME);
 
-		// 응답 설정
-		response.setHeader("access", access);
-		response.setHeader("refresh", refresh);
-		response.setStatus(HttpStatus.OK.value());
+		// 토큰 전송
+		respondWithTokens(response, accessToken, refreshToken);
+	}
+
+	private static void respondWithTokens(HttpServletResponse response, String accessToken, String refreshToken) {
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, String> tokenResponse = new HashMap<>();
+		tokenResponse.put("access", accessToken);
+		tokenResponse.put("refresh", refreshToken);
+
+		try {
+			String jsonResponse = objectMapper.writeValueAsString(tokenResponse);
+			response.getWriter().write(jsonResponse);
+			response.setStatus(HttpStatus.OK.value());
+		} catch (IOException e) {
+			log.error("Error writing JSON response", e);
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+		}
 	}
 
 	//로그인 실패시 실행하는 메소드
