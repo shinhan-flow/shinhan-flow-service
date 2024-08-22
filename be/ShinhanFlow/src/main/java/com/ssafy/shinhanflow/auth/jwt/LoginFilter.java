@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,14 +15,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import static com.ssafy.shinhanflow.auth.jwt.JwtConstants.ACCESS_TOKEN_EXPIRE_TIME;
-import static com.ssafy.shinhanflow.auth.jwt.JwtConstants.REFRESH_TOKEN_EXPIRE_TIME;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -31,7 +30,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
 	private final JWTUtil jwtUtil;
 
-
+	@Value("${jwt.access.expire-time}")
+	private long accessTokenExpireTime;
+	@Value("${jwt.refresh.expire-time}")
+	private long refreshTokenExpireTime;
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
@@ -62,8 +64,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		String role = auth.getAuthority();
 
 		//토큰 생성
-		String accessToken = jwtUtil.createJwt("access", username, role, ACCESS_TOKEN_EXPIRE_TIME);
-		String refreshToken = jwtUtil.createJwt("refresh", username, role, REFRESH_TOKEN_EXPIRE_TIME);
+		String accessToken = jwtUtil.createJwt("access", username, role, accessTokenExpireTime);
+		String refreshToken = jwtUtil.createJwt("refresh", username, role, refreshTokenExpireTime);
 
 		// 토큰 전송
 		respondWithTokens(response, accessToken, refreshToken);

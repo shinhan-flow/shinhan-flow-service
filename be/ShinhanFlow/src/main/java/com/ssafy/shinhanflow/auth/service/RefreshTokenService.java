@@ -1,35 +1,39 @@
 package com.ssafy.shinhanflow.auth.service;
 
-import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
-import io.jsonwebtoken.ExpiredJwtException;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import static com.ssafy.shinhanflow.auth.jwt.JwtConstants.ACCESS_TOKEN_EXPIRE_TIME;
+import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenService {
-    private final JWTUtil jwtUtil;
+	private final JWTUtil jwtUtil;
 
-    public String validateAndGenerateNewAccessToken(String refreshToken) {
-        //expired check
-        try {
-            jwtUtil.isExpired(refreshToken);
-        } catch (ExpiredJwtException e) {
-            throw new IllegalArgumentException("Refresh token expired");
-        }
+	@Value("${jwt.access.expire-time}")
+	private long accessTokenExpireTime;
 
-        // 토큰이 refresh 인지 확인 (발급시 페이로드에 명시)
-        String category = jwtUtil.getCategory(refreshToken);
-        if (!"refresh".equals(category)) {
-            throw new IllegalArgumentException("Invalid refresh token");
-        }
+	public String validateAndGenerateNewAccessToken(String refreshToken) {
+		//expired check
+		try {
+			jwtUtil.isExpired(refreshToken);
+		} catch (ExpiredJwtException e) {
+			throw new IllegalArgumentException("Refresh token expired");
+		}
 
-        // make new JWT
-        String username = jwtUtil.getUserId(refreshToken);
-        String role = jwtUtil.getRole(refreshToken);
+		// 토큰이 refresh 인지 확인 (발급시 페이로드에 명시)
+		String category = jwtUtil.getCategory(refreshToken);
+		if (!"refresh".equals(category)) {
+			throw new IllegalArgumentException("Invalid refresh token");
+		}
 
-        return jwtUtil.createJwt("access", username, role, ACCESS_TOKEN_EXPIRE_TIME);
-    }
+		// make new JWT
+		String username = jwtUtil.getUserId(refreshToken);
+		String role = jwtUtil.getRole(refreshToken);
+
+		return jwtUtil.createJwt("access", username, role, accessTokenExpireTime);
+	}
 }
