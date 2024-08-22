@@ -5,7 +5,9 @@ import java.time.LocalDate;
 
 import com.ssafy.shinhanflow.trigger.Trigger;
 
-public record DayOfWeekTrigger(DayOfWeek[] dayOfWeek) implements Trigger {
+import lombok.NonNull;
+
+public record DayOfWeekTrigger(@NonNull DayOfWeek[] dayOfWeek) implements Trigger {
 	@Override
 	public boolean isTriggered() {
 		LocalDate today = LocalDate.now();

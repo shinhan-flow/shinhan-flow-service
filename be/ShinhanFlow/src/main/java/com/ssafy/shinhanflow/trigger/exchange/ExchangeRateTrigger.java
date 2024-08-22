@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 
 import com.ssafy.shinhanflow.trigger.Trigger;
 
-public record ExchangeRateTrigger(Currency currency, BigDecimal rate) implements Trigger {
+import lombok.NonNull;
+
+public record ExchangeRateTrigger(@NonNull Currency currency, @NonNull BigDecimal rate) implements Trigger {
 
 	@Override
 	public boolean isTriggered() {

@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.ssafy.shinhanflow.trigger.Trigger;
 
-public record DepositTrigger(String account, Long amount) implements Trigger{
+import lombok.NonNull;
+
+public record DepositTrigger(@NonNull String account, @NonNull Long amount) implements Trigger{
 	@Override
 	public boolean isTriggered() {
 		//todo: 최근 입금내역 가져오기 몇건중에

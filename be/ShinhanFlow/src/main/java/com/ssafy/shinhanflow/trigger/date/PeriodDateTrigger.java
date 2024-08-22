@@ -4,7 +4,9 @@ import java.time.LocalDate;
 
 import com.ssafy.shinhanflow.trigger.Trigger;
 
-public record PeriodDateTrigger(LocalDate start, LocalDate end) implements Trigger {
+import lombok.NonNull;
+
+public record PeriodDateTrigger(@NonNull LocalDate start, @NonNull LocalDate end) implements Trigger {
 	@Override
 	public boolean isTriggered() {
 		LocalDate today = LocalDate.now();

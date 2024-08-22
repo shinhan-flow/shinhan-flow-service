@@ -4,8 +4,9 @@ package com.ssafy.shinhanflow.trigger.account;
 import com.ssafy.shinhanflow.trigger.Trigger;
 
 import lombok.Getter;
+import lombok.NonNull;
 
-public record BalanceTrigger(String account, Long balance, Condition condition) implements Trigger {
+public record BalanceTrigger(@NonNull String account, @NonNull Long balance, @NonNull Condition condition) implements Trigger {
 
 	@Override
 	public boolean isTriggered() {

@@ -6,7 +6,9 @@ import java.util.List;
 
 import com.ssafy.shinhanflow.trigger.Trigger;
 
-public record InterestRateTrigger(Product product, BigDecimal rate) implements Trigger {
+import lombok.NonNull;
+
+public record InterestRateTrigger(@NonNull Product product, @NonNull BigDecimal rate) implements Trigger {
 
 	public enum Product{
 		DEPOSIT, SAVING, LOAN

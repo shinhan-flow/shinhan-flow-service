@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.ssafy.shinhanflow.trigger.Trigger;
 
-public record TransferTrigger(String fromAccount, String toAccount, Long amount) implements Trigger{
+import lombok.NonNull;
+
+public record TransferTrigger(@NonNull String fromAccount, @NonNull String toAccount, @NonNull Long amount) implements Trigger{
 
 	@Override
 	public boolean isTriggered() {

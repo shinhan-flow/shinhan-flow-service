@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.ssafy.shinhanflow.trigger.Trigger;
 
-public record MultiDateTrigger(List<LocalDate> dates) implements Trigger {
+import lombok.NonNull;
+
+public record MultiDateTrigger(@NonNull List<LocalDate> dates) implements Trigger {
 	@Override
 	public boolean isTriggered() {
 		LocalDate today = LocalDate.now();
