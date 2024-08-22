@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "member")
+@Table(name = "members")
 @Entity
 public class MemberEntity {
 
@@ -58,7 +58,7 @@ public class MemberEntity {
 	private LocalDateTime updatedAt;
 
 	@ColumnDefault("NULL")
-	@Column(name = "deleted_at", insertable = false)
+	@Column(name = "deleted_at", insertable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime deletedAt;
 
 	@Builder
