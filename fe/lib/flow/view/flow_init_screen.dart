@@ -4,17 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shinhan_flow/auth/view/login_screen.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/flow/model/enum/action_category.dart';
 import 'package:shinhan_flow/flow/model/enum/trigger_category.dart';
 import 'package:shinhan_flow/flow/model/enum/widget/flow_property.dart';
-import 'package:shinhan_flow/flow/provider/trigger_category_provider.dart';
+import 'package:shinhan_flow/flow/provider/widget/trigger_category_provider.dart';
 import 'package:shinhan_flow/flow/provider/widget/flow_form_provider.dart';
 import 'package:shinhan_flow/trigger/view/account_trigger_screen.dart';
 import 'package:shinhan_flow/trigger/view/time_trigger_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
+
+import '../../common/component/bottom_nav_button.dart';
 
 class FlowInitScreen extends StatelessWidget {
   static String get routeName => 'flowInit';
@@ -24,6 +25,16 @@ class FlowInitScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          return BottomNavButton(
+              child: DefaultTextButton(
+            onPressed: () {},
+            text: '생성하기',
+            able: false,
+          ));
+        },
+      ),
       body: NestedScrollView(
           headerSliverBuilder: (_, __) {
             return [
@@ -326,93 +337,6 @@ class _TriggerComponent extends ConsumerWidget {
           getTriggerAddBtn(context, triggers as Set<TriggerCategoryType>, ref),
         if (cards.length != 3 && property == FlowProperty.action)
           getActionAddBtn(context, triggers as Set<ActionCategoryType>, ref)
-        // _AddButton(
-        //   onTap: () {
-        //     Set<TriggerCategoryType> tempSelected = {};
-        //     showModalBottomSheet(
-        //         showDragHandle: true,
-        //         isScrollControlled: true,
-        //         context: context,
-        //         builder: (_) {
-        //           final unSelectedTriggers = TriggerCategoryType.values
-        //               .toList()
-        //             ..removeWhere((t) => triggers.contains(t));
-        //           final cards = unSelectedTriggers
-        //               .map((t) => _FlowInitCard(
-        //                     triggerType: t,
-        //                     onTap: () {
-        //                       if (!tempSelected.add(t)) {
-        //                         tempSelected.remove(t);
-        //                       }
-        //                     },
-        //                   ))
-        //               .toList();
-        //
-        //           return StatefulBuilder(
-        //               builder: (BuildContext context, StateSetter setState) {
-        //             return Padding(
-        //               padding: EdgeInsets.symmetric(
-        //                 horizontal: 20.w,
-        //               ),
-        //               child: Column(
-        //                 mainAxisSize: MainAxisSize.min,
-        //                 crossAxisAlignment: CrossAxisAlignment.stretch,
-        //                 children: [
-        //                   Text(
-        //                     "추가로 선택하실 조건은 무엇인가요?",
-        //                     style: SHFlowTextStyle.subTitle,
-        //                   ),
-        //                   SizedBox(height: 20.h),
-        //                   ListView.separated(
-        //                       shrinkWrap: true,
-        //                       padding: EdgeInsets.zero,
-        //                       physics: const NeverScrollableScrollPhysics(),
-        //                       itemBuilder: (_, idx) {
-        //                         return _FlowInitCard(
-        //                           triggerType: unSelectedTriggers[idx],
-        //                           onTap: () {
-        //                             setState(() {
-        //                               if (!tempSelected
-        //                                   .add(unSelectedTriggers[idx])) {
-        //                                 tempSelected
-        //                                     .remove(unSelectedTriggers[idx]);
-        //                               }
-        //                             });
-        //                           },
-        //                           isSelected: tempSelected
-        //                               .contains(unSelectedTriggers[idx]),
-        //                         );
-        //                       },
-        //                       separatorBuilder: (_, idx) =>
-        //                           SizedBox(height: 12.h),
-        //                       itemCount: cards.length),
-        //                   SizedBox(height: 20.h),
-        //                   Align(
-        //                     child: DefaultTextButton(
-        //                       onPressed: tempSelected.isNotEmpty
-        //                           ? () {
-        //                               triggers.addAll(tempSelected);
-        //                               final newTriggers = triggers.toSet();
-        //
-        //                               ref
-        //                                   .read(triggerCategoryProvider
-        //                                       .notifier)
-        //                                   .update((t) => newTriggers);
-        //                               context.pop();
-        //                             }
-        //                           : null,
-        //                       text: "선택 완료",
-        //                       able: tempSelected.isNotEmpty,
-        //                     ),
-        //                   ),
-        //                   SizedBox(height: 20.h),
-        //                 ],
-        //               ),
-        //             );
-        //           });
-        //         });
-        //   },
-        // ),
       ],
     );
   }

@@ -6,7 +6,7 @@ import 'package:shinhan_flow/auth/view/login_screen.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/common/component/text_input_form.dart';
-import 'package:shinhan_flow/flow/provider/trigger_category_provider.dart';
+import 'package:shinhan_flow/flow/provider/widget/trigger_category_provider.dart';
 import 'package:shinhan_flow/flow/provider/widget/flow_form_provider.dart';
 import 'package:shinhan_flow/flow/view/flow_init_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
@@ -13,8 +14,9 @@ class CustomTextFormField extends StatelessWidget {
   final bool enable;
   final ValueChanged<String>? onChanged;
   final bool isMultiLine;
-
+  final TextInputType? keyboardType;
   final Widget? side;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextFormField({
     super.key,
@@ -26,6 +28,8 @@ class CustomTextFormField extends StatelessWidget {
     this.initialValue,
     this.enable = true,
     this.isMultiLine = false,
+    this.keyboardType,
+    this.inputFormatters,
   });
 
   @override
@@ -52,6 +56,8 @@ class CustomTextFormField extends StatelessWidget {
                 enabled: enable,
                 autofocus: false,
                 maxLines: isMultiLine ? null : 1,
+                keyboardType: keyboardType,
+                inputFormatters: inputFormatters,
                 // expands: true,
                 decoration: InputDecoration(
                   constraints:
