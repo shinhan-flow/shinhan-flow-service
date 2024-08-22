@@ -53,6 +53,8 @@ dependencies:
   flutter_svg: ^2.0.10+1
   # Toast 관련
   flash: ^3.1.1
+  # FAB 관련
+  flutter_expandable_fab: ^2.2.0
 
   # 상태관리 관련
   flutter_riverpod: ^2.5.1
@@ -75,6 +77,10 @@ dependencies:
   intl: ^0.19.0
   # debounce, throttle 관련
   debounce_throttle: ^2.0.0
+
+  # Equals Class 관련
+  equatable: ^2.0.5
+
 
   # 로그 관련
   logger: any  #for logging purpose
