@@ -27,6 +27,8 @@ public record BalanceTrigger(@NonNull String account, @NonNull Long balance, @No
 	}
 
 	public enum Condition {
-		LT, GT, EQ
+		LT,
+		GT,
+		EQ
 	}
 }
