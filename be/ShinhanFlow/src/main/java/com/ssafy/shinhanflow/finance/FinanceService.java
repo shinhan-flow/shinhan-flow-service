@@ -10,19 +10,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+@RequiredArgsConstructor
 public class FinanceService {
 	@Value("${financeApi.key}")
 	private String apiKey;
 
 	private final WebClient webClient;
 	private final ObjectMapper objectMapper;
-
-	public FinanceService(WebClient webClient, ObjectMapper objectMapper) {
-		this.webClient = webClient;
-		this.objectMapper = objectMapper;
-	}
 
 	private Mono<Map<String, Object>> fetch(String url, Map<String, Object> body) throws JsonProcessingException {
 		body.put("apiKey", apiKey);
