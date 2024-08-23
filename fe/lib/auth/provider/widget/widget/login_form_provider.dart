@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shinhan_flow/common/model/base_form_model.dart';
+import 'package:shinhan_flow/flow/param/trigger/trigger_param.dart';
 
+import '../../../../common/param/default_param.dart';
 import '../../../param/login_param.dart';
 
 part 'login_form_provider.g.dart';
@@ -28,6 +30,12 @@ class LoginFormModel extends LoginParam with BaseFormModel {
         email: email ?? this.email,
         password: password ?? this.password,
         valid: valid);
+  }
+
+  @override
+  DefaultParam toParam() {
+    // TODO: implement toParam
+    throw UnimplementedError();
   }
 }
 

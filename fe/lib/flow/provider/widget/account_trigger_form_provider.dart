@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shinhan_flow/flow/model/enum/widget/trigger_enum.dart';
 import 'package:shinhan_flow/flow/param/trigger/trigger_account_param.dart';
+import 'package:shinhan_flow/flow/param/trigger/trigger_param.dart';
 import 'package:shinhan_flow/trigger/model/enum/widget/account_property.dart';
 
 import '../../../common/model/base_form_model.dart';
+import '../../../common/param/default_param.dart';
 
 part 'account_trigger_form_provider.g.dart';
 
@@ -47,6 +49,12 @@ class TgAccountFormModel extends TgAccountParam with BaseFormModel {
       valid: valid,
       thanType: thanType ?? this.thanType,
     );
+  }
+
+  @override
+  DefaultParam toParam() {
+    // TODO: implement toParam
+    throw UnimplementedError();
   }
 }
 

@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:shinhan_flow/trigger/model/enum/product_property.dart';
 import 'package:shinhan_flow/trigger/view/account_trigger_screen.dart';
+import 'package:shinhan_flow/trigger/view/product_trigger_screen.dart';
 import 'package:shinhan_flow/trigger/view/time_trigger_screen.dart';
 import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
 import 'package:shinhan_flow/flow/view/flow_init_screen.dart';
@@ -99,6 +101,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                               name: AccountTriggerScreen.routeName,
                               builder: (context, state) {
                                 return const AccountTriggerScreen();
+                              },
+                              routes: []),
+                          GoRoute(
+                              path: 'productTrigger',
+                              parentNavigatorKey: rootNavKey,
+                              name: ProductTriggerScreen.routeName,
+                              builder: (context, state) {
+                                return const ProductTriggerScreen();
                               },
                               routes: []),
                         ]),

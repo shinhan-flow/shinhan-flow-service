@@ -17,12 +17,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../../common/param/default_param.dart';
 import '../enum/flow_type.dart';
 
 part 'trigger_param.g.dart';
 
 @JsonSerializable()
-class TriggerParam {
+class TriggerParam extends DefaultParam{
   final FlowType code;
   final TriggerBaseParam data;
 
@@ -35,6 +36,12 @@ class TriggerParam {
 
   factory TriggerParam.fromJson(Map<String, dynamic> json) =>
       _$TriggerParamFromJson(json);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [code, data];
+
+
 }
 
 @JsonSerializable()
