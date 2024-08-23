@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "trigger")
+@Table(name = "triggers")
 public class TriggerEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,7 +59,7 @@ public class TriggerEntity {
 	private LocalDateTime updatedAt;
 
 	@ColumnDefault("NULL")
-	@Column(name = "deleted_at", insertable = false)
+	@Column(name = "deleted_at", insertable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime deletedAt;
 
 	public enum Category {

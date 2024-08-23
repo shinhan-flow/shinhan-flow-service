@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 
+import '../../common/component/table_calendar.dart';
+
 class TimeTriggerScreen extends StatelessWidget {
   static String get routeName => 'timeTrigger';
 
@@ -21,7 +23,9 @@ class TimeTriggerScreen extends StatelessWidget {
           },
           body: CustomScrollView(
             slivers: [
-
+              SliverToBoxAdapter(
+                child: CalendarComponent(),
+              )
             ],
           )),
     );
