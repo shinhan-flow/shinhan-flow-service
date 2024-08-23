@@ -5,30 +5,33 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.ssafy.shinhanflow.entity.MemberEntity;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
+
+	private final MemberEntity memberEntity;
+
 	@Override
 	public boolean isAccountNonExpired() {
-		// return UserDetails.super.isAccountNonExpired();
 		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// return UserDetails.super.isAccountNonLocked();
 		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// return UserDetails.super.isCredentialsNonExpired();
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// return UserDetails.super.isEnabled();
 		return true;
 	}
 
@@ -47,12 +50,15 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		return encoder.encode("password");
+		return memberEntity.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return "test@naver.com";
+		return memberEntity.getEmail();
+	}
+
+	public long getUserId() {
+		return memberEntity.getId();
 	}
 }
