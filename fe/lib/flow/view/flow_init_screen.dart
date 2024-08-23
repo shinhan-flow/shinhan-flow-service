@@ -10,14 +10,17 @@ import 'package:shinhan_flow/flow/model/enum/action_category.dart';
 import 'package:shinhan_flow/flow/model/enum/trigger_category.dart';
 import 'package:shinhan_flow/flow/model/enum/widget/flow_property.dart';
 import 'package:shinhan_flow/flow/param/enum/flow_type.dart';
+import 'package:shinhan_flow/flow/param/trigger/trigger_product_param.dart';
 import 'package:shinhan_flow/flow/provider/widget/time_form_provider.dart';
 import 'package:shinhan_flow/flow/provider/widget/trigger_category_provider.dart';
 import 'package:shinhan_flow/flow/provider/widget/flow_form_provider.dart';
+import 'package:shinhan_flow/trigger/model/enum/product_property.dart';
 import 'package:shinhan_flow/trigger/view/account_trigger_screen.dart';
 import 'package:shinhan_flow/trigger/view/time_trigger_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 
 import '../../common/component/bottom_nav_button.dart';
+import '../../trigger/view/product_trigger_screen.dart';
 import '../param/trigger/trigger_date_time_param.dart';
 import '../param/trigger/trigger_param.dart';
 
@@ -285,7 +288,9 @@ class _TriggerComponent extends ConsumerWidget {
                   } else if (TriggerCategoryType.transfer == t) {
                     context.pushNamed(AccountTriggerScreen.routeName);
                   } else if (TriggerCategoryType.exchange == t) {
-                  } else {}
+                  } else {
+                    context.pushNamed(ProductTriggerScreen.routeName);
+                  }
                 },
                 visibleDelete: visibleDelete,
               ))
@@ -393,6 +398,18 @@ class _FlowInitCard extends ConsumerWidget {
             break;
           default:
             break;
+        }
+      } on Error catch (e) {
+        log("Error ${e}");
+      }
+    } else if (triggerType == TriggerCategoryType.product) {
+      final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
+      try {
+        final findTrigger =
+            triggers.singleWhere((t) => t.code == FlowType.interestRate);
+        final param = (findTrigger.data as TgProductParam);
+        if (param.product != null) {
+          content = "${param.product!.name} 금리 ${param.interestRate}%";
         }
       } on Error catch (e) {
         log("Error ${e}");

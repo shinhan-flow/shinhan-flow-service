@@ -17,6 +17,7 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../common/component/default_text_button.dart';
 import '../../common/component/table_calendar.dart';
 import '../../flow/param/enum/flow_type.dart';
+import '../../flow/param/trigger/trigger_param.dart';
 import '../model/enum/time_category.dart';
 
 class TimeTriggerScreen extends StatelessWidget {
@@ -37,9 +38,8 @@ class TimeTriggerScreen extends StatelessWidget {
                   ? () {
                       final trigger = ref.read(tgDateTimeFormProvider);
 
-                      ref
-                          .read(flowFormProvider.notifier)
-                          .addTrigger(trigger: trigger.toParam());
+                      ref.read(flowFormProvider.notifier).addTrigger(
+                          trigger: trigger.toParam() as TriggerParam);
                       context.pop();
                     }
                   : null,

@@ -57,4 +57,12 @@ extension FlowExtension on FlowType {
         FlowType.dayOfMonth == this ||
         FlowType.dayOfWeek == this;
   }
+
+  bool isProductType() {
+    return FlowType.interestRate == this;
+  }
+
+  bool isExchangeType() {
+    return FlowType.exchangeRate == this;
+  }
 }

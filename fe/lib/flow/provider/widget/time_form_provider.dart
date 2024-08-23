@@ -6,6 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shinhan_flow/flow/provider/widget/flow_form_provider.dart';
 
 import '../../../common/model/base_form_model.dart';
+import '../../../common/param/default_param.dart';
 import '../../../trigger/model/enum/time_category.dart';
 import '../../param/enum/flow_type.dart';
 import '../../param/trigger/trigger_date_time_param.dart';
@@ -134,7 +135,7 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
     );
   }
 
-  TriggerParam toParam() {
+  DefaultParam toParam() {
     return TriggerParam(
       code: flowType!,
       data: TgDateTimeParam.fromForm(form: this),
