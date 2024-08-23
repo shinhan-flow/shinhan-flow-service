@@ -57,4 +57,8 @@ public class CustomUserDetails implements UserDetails {
 	public String getUsername() {
 		return memberEntity.getEmail();
 	}
+
+	public long getUserId() {
+		return memberEntity.getId();
+	}
 }
