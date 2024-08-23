@@ -24,7 +24,22 @@ public class FinanceService {
 	private final WebClient webClient;
 	private final ObjectMapper objectMapper;
 
-	private Mono<Map<String, Object>> fetch(String url, Map<String, Object> body) throws JsonProcessingException {
+	private Mono<Map<String, Object>> get(String url) {
+		return webClient.get()
+			.uri(url)
+			.retrieve()
+			.bodyToMono(String.class)
+			.map(response -> {
+				try {
+					return objectMapper.readValue(response, new TypeReference<Map<String, Object>>() {
+					});
+				} catch (Exception e) {
+					throw new RuntimeException("Failed to parse JSON to Map", e);
+				}
+			});
+	}
+
+	private Mono<Map<String, Object>> post(String url, Map<String, Object> body) throws JsonProcessingException {
 		body.put("apiKey", apiKey);
 		return webClient.post()
 			.uri(url)
@@ -46,6 +61,6 @@ public class FinanceService {
 		String url = "https://finopenapi.ssafy.io/ssafy/api/v1/member/";
 		Map<String, Object> body = new HashMap<>();
 		body.put("userId", userEmail);
-		return fetch(url, body);
+		return post(url, body);
 	}
 }
