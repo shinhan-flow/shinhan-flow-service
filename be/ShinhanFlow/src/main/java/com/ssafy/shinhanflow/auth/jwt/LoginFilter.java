@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,11 +30,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 	private final AuthenticationManager authenticationManager;
 	private final JWTUtil jwtUtil;
-
-	@Value("${jwt.access.expire-time}")
-	private long accessTokenExpireTime;
-	@Value("${jwt.refresh.expire-time}")
-	private long refreshTokenExpireTime;
+	private final long accessTokenExpireTime;
+	private final long refreshTokenExpireTime;
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
