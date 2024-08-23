@@ -17,15 +17,17 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../enum/flow_type.dart';
+
 part 'trigger_param.g.dart';
 
 @JsonSerializable()
 class TriggerParam {
-  final int trigger;
+  final FlowType code;
   final TriggerBaseParam data;
 
   TriggerParam({
-    required this.trigger,
+    required this.code,
     required this.data,
   });
 

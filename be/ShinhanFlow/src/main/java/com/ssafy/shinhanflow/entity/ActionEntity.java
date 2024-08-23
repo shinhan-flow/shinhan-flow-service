@@ -35,11 +35,6 @@ public class ActionEntity {
 	private Long flowId;
 
 	@NotNull
-	@Enumerated(EnumType.STRING)
-	@Column(name = "category")
-	private Category category;
-
-	@NotNull
 	@Column(name = "code")
 	private int code;
 
@@ -48,13 +43,11 @@ public class ActionEntity {
 	private String data;
 
 	@ColumnDefault("CURRENT_TIMESTAMP")
-	@NotNull
-	@Column(name = "created_at", insertable = false, updatable = false, columnDefinition = "TIMESTAMP")
+	@Column(name = "created_at", nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime createdAt;
 
 	@ColumnDefault("CURRENT_TIMESTAMP")
-	@NotNull
-	@Column(name = "updated_at", insertable = false, columnDefinition = "TIMESTAMP")
+	@Column(name = "updated_at", nullable = false, insertable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime updatedAt;
 
 	@ColumnDefault("NULL")
@@ -65,10 +58,9 @@ public class ActionEntity {
 		NOTIFICATION, TRANSFER , EXCHANGE
 	}
 
-	public ActionEntity(Long memberId, Long flowId, Category category, int code, String data) {
+	public ActionEntity(Long memberId, Long flowId , int code, String data) {
 		this.memberId = memberId;
 		this.flowId = flowId;
-		this.category = category;
 		this.code = code;
 		this.data = data;
 	}

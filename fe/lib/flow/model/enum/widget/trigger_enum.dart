@@ -1,7 +1,7 @@
 enum AccountThanType {
-  lt("이하"),
-  gt("이상"),
-  eq("동일");
+  LT("이하"),
+  GT("이상"),
+  EQ("동일");
 
   final String name;
 
