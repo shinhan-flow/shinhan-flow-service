@@ -1,10 +1,12 @@
-package com.ssafy.shinhanflow.config.error;
+package com.ssafy.shinhanflow.config.error.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.ssafy.shinhanflow.config.error.ErrorCode;
+import com.ssafy.shinhanflow.config.error.ErrorResponse;
 import com.ssafy.shinhanflow.config.error.exception.BusinessBaseException;
 
 import lombok.extern.slf4j.Slf4j;
