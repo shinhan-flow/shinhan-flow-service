@@ -9,6 +9,8 @@ import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/flow/model/enum/action_category.dart';
 import 'package:shinhan_flow/flow/model/enum/trigger_category.dart';
 import 'package:shinhan_flow/flow/model/enum/widget/flow_property.dart';
+import 'package:shinhan_flow/flow/param/enum/flow_type.dart';
+import 'package:shinhan_flow/flow/provider/widget/time_form_provider.dart';
 import 'package:shinhan_flow/flow/provider/widget/trigger_category_provider.dart';
 import 'package:shinhan_flow/flow/provider/widget/flow_form_provider.dart';
 import 'package:shinhan_flow/trigger/view/account_trigger_screen.dart';
@@ -16,6 +18,8 @@ import 'package:shinhan_flow/trigger/view/time_trigger_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 
 import '../../common/component/bottom_nav_button.dart';
+import '../param/trigger/trigger_date_time_param.dart';
+import '../param/trigger/trigger_param.dart';
 
 class FlowInitScreen extends StatelessWidget {
   static String get routeName => 'flowInit';
@@ -359,6 +363,42 @@ class _FlowInitCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    String content = triggerType != null
+        ? '${triggerType!.name} 조건 선택'
+        : '${actionType!.name} 하기';
+    if (triggerType == TriggerCategoryType.time) {
+      final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
+      try {
+        final findTrigger = triggers.singleWhere((t) => t.code.isTimeType());
+        final param = (findTrigger.data as TgDateTimeParam);
+
+        switch (findTrigger.code) {
+          case FlowType.specificDate:
+            content = "${param.date}";
+            break;
+          case FlowType.periodDate:
+            content = "${param.startDate}부터\n${param.endDate}까지";
+            break;
+          case FlowType.dayOfWeek:
+            final dayOfWeek = param.dayOfWeek
+                ?.map((d) => d.name)
+                .reduce((v, e) => "$v, ${e}");
+            content = "매주 $dayOfWeek 반복";
+            break;
+          case FlowType.dayOfMonth:
+            final dayOfWeek = param.dayOfMonth
+                ?.map((d) => d.toString())
+                .reduce((v, e) => "$v, $e");
+            content = "매월 $dayOfWeek일 반복";
+            break;
+          default:
+            break;
+        }
+      } on Error catch (e) {
+        log("Error ${e}");
+      }
+    }
+
     return ConstrainedBox(
       constraints: BoxConstraints.tight(Size(double.infinity, 100.h)),
       child: Stack(
@@ -379,10 +419,11 @@ class _FlowInitCard extends ConsumerWidget {
                           ? const Color(0xFF0057FF)
                           : const Color(0xFFa3c9ff)),
                   alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Text(
-                    triggerType != null
-                        ? '${triggerType!.name} 조건 선택'
-                        : '${actionType!.name} 하기',
+                    content,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: SHFlowTextStyle.subTitle.copyWith(
                         color: isSelected ? Colors.white : Colors.black),
                   ),
