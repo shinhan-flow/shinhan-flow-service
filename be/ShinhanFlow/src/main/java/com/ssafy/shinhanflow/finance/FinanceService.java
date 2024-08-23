@@ -1,5 +1,6 @@
 package com.ssafy.shinhanflow.finance;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +43,8 @@ public class FinanceService {
 
 	public Mono<Map<String, Object>> createMember(String userEmail) throws JsonProcessingException {
 		String url = "https://finopenapi.ssafy.io/ssafy/api/v1/member/";
-		Map<String, Object> body = Map.of("userId", userEmail);
+		Map<String, Object> body = new HashMap<>();
+		body.put("userId", userEmail);
 		return fetch(url, body);
 	}
 }
