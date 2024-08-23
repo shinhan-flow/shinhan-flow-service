@@ -2,6 +2,7 @@ package com.ssafy.shinhanflow.config;
 
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +32,10 @@ public class SecurityConfig {
 	private final AuthenticationConfiguration authenticationConfiguration;
 	private final JWTUtil jwtUtil;
 	private final MemberRepository memberRepository;
+	@Value("${jwt.access.expire-time}")
+	private long accessTokenExpireTime;
+	@Value("${jwt.refresh.expire-time}")
+	private long refreshTokenExpireTime;
 
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -88,7 +93,9 @@ public class SecurityConfig {
 
 		// 로그인 처리 필터 추가
 		http
-			.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
+			.addFilterAt(
+				new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, accessTokenExpireTime,
+					refreshTokenExpireTime),
 				UsernamePasswordAuthenticationFilter.class);
 
 		// 세션 비활성화
