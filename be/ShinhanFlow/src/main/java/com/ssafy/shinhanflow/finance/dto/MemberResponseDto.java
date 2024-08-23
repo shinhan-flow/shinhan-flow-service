@@ -8,9 +8,9 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class MemberResponseDto extends FinanceApiResponseDto {
-	private String userId;
-	private String userName;
+	private String userId; // userName@host
+	private String username;
 	private String institutionCode;
-	private String userKey;
+	private String userKey; // 이게 중요해요
 	private String created, modified;
 }
