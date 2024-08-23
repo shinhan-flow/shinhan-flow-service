@@ -23,6 +23,7 @@ import '../../common/component/bottom_nav_button.dart';
 import '../../trigger/view/exchange_trigger_screen.dart';
 import '../../trigger/view/product_trigger_screen.dart';
 import '../param/trigger/trigger_date_time_param.dart';
+import '../param/trigger/trigger_exchange_param.dart';
 import '../param/trigger/trigger_param.dart';
 
 class FlowInitScreen extends StatelessWidget {
@@ -412,6 +413,18 @@ class _FlowInitCard extends ConsumerWidget {
         final param = (findTrigger.data as TgProductParam);
         if (param.product != null) {
           content = "${param.product!.name} 금리 ${param.interestRate}%";
+        }
+      } on Error catch (e) {
+        log("Error ${e}");
+      }
+    } else if (triggerType == TriggerCategoryType.exchange) {
+      final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
+      try {
+        final findTrigger =
+            triggers.singleWhere((t) => t.code == FlowType.exchangeRate);
+        final param = (findTrigger.data as TgExchangeParam);
+        if (param.currency != null) {
+          content = "${param.currency!.displayName}가 ${param.exRate} 이하";
         }
       } on Error catch (e) {
         log("Error ${e}");
