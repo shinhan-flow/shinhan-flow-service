@@ -31,9 +31,9 @@ public class RefreshTokenService {
 		}
 
 		// make new JWT
-		String username = jwtUtil.getUserId(refreshToken);
+		long userId = jwtUtil.getUserId(refreshToken);
 		String role = jwtUtil.getRole(refreshToken);
 
-		return jwtUtil.createJwt("access", username, role, accessTokenExpireTime);
+		return jwtUtil.createJwt("access", userId, role, accessTokenExpireTime);
 	}
 }
