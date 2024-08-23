@@ -1,7 +1,7 @@
 ---
 name: "✅test"
 about: 테스트를 추가합니다.
-title: "✅test #이슈번호: 이슈내용"
+title: "✅test: 이슈내용"
 labels: ✅test
 assignees: ""
 ---

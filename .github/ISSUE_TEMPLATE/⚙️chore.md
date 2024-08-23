@@ -1,7 +1,7 @@
 ---
 name: "⚙️chore"
 about: 프로젝트의 설정을 변경합니다.
-title: "⚙️chore #이슈번호: 이슈내용"
+title: "⚙️chore: 이슈내용"
 labels: ⚙️chore
 assignees: ""
 ---
