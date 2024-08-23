@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import reactor.core.publisher.Mono;
 
 public class FinanceService {
-	@Value("${financialApi.key}")
+	@Value("${financeApi.key}")
 	private String apiKey;
 
 	private final WebClient webClient;
