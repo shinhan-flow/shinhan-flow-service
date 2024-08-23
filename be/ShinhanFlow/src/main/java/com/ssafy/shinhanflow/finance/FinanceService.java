@@ -33,8 +33,8 @@ public class FinanceService {
 			try {
 				return objectMapper.readValue(response, new TypeReference<Map<String, Object>>() {
 				});
-			} catch (Exception e) {
-				throw new RuntimeException("Failed to parse JSON to Map", e);
+			} catch (JsonProcessingException e) {
+				throw new RuntimeException(e);
 			}
 		});
 	}
