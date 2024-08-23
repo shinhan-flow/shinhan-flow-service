@@ -1,10 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:shinhan_flow/flow/provider/widget/time_form_provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class CalendarComponent extends StatelessWidget {
-  const CalendarComponent({super.key});
+class CalendarComponent extends ConsumerWidget {
+  final RangeSelectionMode rangeSelectionMode;
+
+  const CalendarComponent({super.key, required this.rangeSelectionMode});
 
   HeaderStyle getHeaderStyle() {
     final format = DateFormat('y년 M월');
@@ -58,23 +64,13 @@ class CalendarComponent extends StatelessWidget {
       // isTodayHighlighted: false,
       rangeHighlightScale: 1.0,
       rangeHighlightColor: const Color(0xFF4065F6),
-      // rangeStartDecoration: rangeEndDay != null
-      //     ? boxDecoration.copyWith(
-      //         color: validRangeDate()
-      //             ? const Color(0xFF4065F6)
-      //             : const Color(0xFFFC0000),
-      //         borderRadius: BorderRadiusDirectional.horizontal(
-      //             start: Radius.circular(8.r)))
-      //     : boxDecoration.copyWith(
-      //         color: validRangeStartDay()
-      //             ? const Color(0xFF4065F6)
-      //             : const Color(0xFFFC0000)),
-      // rangeEndDecoration: boxDecoration.copyWith(
-      //     color: validRangeDate()
-      //         ? const Color(0xFF4065F6)
-      //         : const Color(0xFFFC0000),
-      //     borderRadius:
-      //         BorderRadiusDirectional.horizontal(end: Radius.circular(8.r))),
+      rangeStartDecoration: boxDecoration.copyWith(
+        color: const Color(0xFF4065F6),
+      ),
+      rangeEndDecoration: boxDecoration.copyWith(
+          color: const Color(0xFF4065F6),
+          borderRadius:
+              BorderRadiusDirectional.horizontal(end: Radius.circular(8.r))),
       weekendDecoration: boxDecoration.copyWith(color: Colors.transparent),
       defaultDecoration: boxDecoration.copyWith(color: Colors.transparent),
       outsideDecoration: boxDecoration.copyWith(color: Colors.transparent),
@@ -96,11 +92,46 @@ class CalendarComponent extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dateFormat = DateFormat('yyyy-MM-dd');
+    final form = ref.watch(tgDateTimeFormProvider);
+    DateTime? focusDay = form.date != null ? DateTime.parse(form.date!) : null;
+    DateTime? rangeStartDay =
+        form.startDate != null ? DateTime.parse(form.startDate!) : null;
+    DateTime? rangeEndDay =
+        form.endDate != null ? DateTime.parse(form.endDate!) : null;
+
     return TableCalendar(
-      focusedDay: DateTime.now(),
-      firstDay: DateTime.now(),
+      onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+        log('selectedDay = ${selectedDay}');
+        log('focusedDay = ${focusedDay}');
+        String date = dateFormat.format(selectedDay);
+        ref.read(tgDateTimeFormProvider.notifier).update(date: date);
+      },
+      onRangeSelected: (DateTime? start, DateTime? end, DateTime focusedDay) {
+        log('start = ${start}');
+        log('end = ${end}');
+        log('focusedDay = ${focusedDay}');
+        String? startDate = start != null ? dateFormat.format(start) : null;
+        String? endDate = end != null ? dateFormat.format(end) : null;
+        String focusDay = dateFormat.format(focusedDay);
+        if (endDate == null) {
+          ref
+              .read(tgDateTimeFormProvider.notifier)
+              .clearEndDate(startDate: startDate, date: startDate);
+        } else {
+          ref
+              .read(tgDateTimeFormProvider.notifier)
+              .update(startDate: startDate, endDate: endDate, date: focusDay);
+        }
+      },
+      focusedDay: focusDay ?? DateTime.now(),
+      firstDay: DateTime(2024),
       lastDay: DateTime(2999),
+      currentDay: focusDay,
+      rangeSelectionMode: rangeSelectionMode,
+      rangeStartDay: rangeStartDay,
+      rangeEndDay: rangeEndDay,
       headerStyle: getHeaderStyle(),
       calendarStyle: getCalendarStyle(),
       daysOfWeekStyle: getDaysOfWeekStyle(),

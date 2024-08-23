@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shinhan_flow/common/model/base_form_model.dart';
+import 'package:shinhan_flow/flow/param/enum/flow_type.dart';
 
 import '../../model/enum/widget/flow_property.dart';
 import '../../param/flow_param.dart';
@@ -62,5 +63,13 @@ class FlowForm extends _$FlowForm {
       description: description,
       triggers: triggers,
     );
+  }
+
+  void addTrigger({required TriggerParam trigger}) {
+    /// final 로 설정한 List 는 add 를 하지 못하기 때문에 deepCopy 한 후 값 추가
+    final triggers = state.triggers.toList();
+    triggers.removeWhere((t) => t.code.isTimeType());
+    final newTriggers = triggers..add(trigger);
+    state = state.copyWith(triggers: newTriggers);
   }
 }
