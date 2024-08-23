@@ -19,10 +19,10 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @Service
 public class FinanceService {
-	@Value("${financeApi.key}")
+	@Value("${finance-api.key}")
 	private String apiKey;
 
-	@Value("${financeApi.baseUrl}")
+	@Value("${finance-api.base-url}")
 	private String baseUrl;
 
 	private final WebClient webClient;
