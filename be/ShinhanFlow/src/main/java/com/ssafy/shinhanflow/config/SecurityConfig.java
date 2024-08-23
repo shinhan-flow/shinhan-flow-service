@@ -76,8 +76,8 @@ public class SecurityConfig {
 		// 인증 규칙
 		http
 			.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/login").permitAll()
-					.requestMatchers("/api/v1/auth/access-token").permitAll()
+				.requestMatchers("/login", "/api/v1/member").permitAll()
+				.requestMatchers("/api/v1/auth/access-token").permitAll()
 				.anyRequest().authenticated());
 
 		// JWT 필터 추가
