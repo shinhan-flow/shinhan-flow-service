@@ -76,7 +76,7 @@ public class SecurityConfig {
 		// 인증 규칙
 		http
 			.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/login", "/api/v1/member").permitAll()
+				.requestMatchers("/login", "/api/v1/member/create").permitAll()
 				.requestMatchers("/api/v1/auth/access-token").permitAll()
 				.anyRequest().authenticated());
 
