@@ -20,6 +20,7 @@ import 'package:shinhan_flow/trigger/view/time_trigger_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 
 import '../../common/component/bottom_nav_button.dart';
+import '../../trigger/view/exchange_trigger_screen.dart';
 import '../../trigger/view/product_trigger_screen.dart';
 import '../param/trigger/trigger_date_time_param.dart';
 import '../param/trigger/trigger_param.dart';
@@ -288,6 +289,7 @@ class _TriggerComponent extends ConsumerWidget {
                   } else if (TriggerCategoryType.transfer == t) {
                     context.pushNamed(AccountTriggerScreen.routeName);
                   } else if (TriggerCategoryType.exchange == t) {
+                    context.pushNamed(ExchangeTriggerScreen.routeName);
                   } else {
                     context.pushNamed(ProductTriggerScreen.routeName);
                   }

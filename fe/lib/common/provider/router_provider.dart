@@ -15,6 +15,7 @@ import 'package:shinhan_flow/home_screen.dart';
 
 import '../../auth/view/login_screen.dart';
 import '../../auth/view/sign_up_screen.dart';
+import '../../trigger/view/exchange_trigger_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> shellNavKey = GlobalKey<NavigatorState>();
@@ -109,6 +110,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                               name: ProductTriggerScreen.routeName,
                               builder: (context, state) {
                                 return const ProductTriggerScreen();
+                              },
+                              routes: []),
+                          GoRoute(
+                              path: 'exchangeTrigger',
+                              parentNavigatorKey: rootNavKey,
+                              name: ExchangeTriggerScreen.routeName,
+                              builder: (context, state) {
+                                return const ExchangeTriggerScreen();
                               },
                               routes: []),
                         ]),
