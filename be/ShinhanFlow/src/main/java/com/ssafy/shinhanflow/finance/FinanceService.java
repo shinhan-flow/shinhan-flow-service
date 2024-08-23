@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -27,6 +28,7 @@ public class FinanceService {
 		body.put("apiKey", apiKey);
 		return webClient.post()
 			.uri(url)
+			.contentType(MediaType.APPLICATION_JSON)
 			.bodyValue(objectMapper.writeValueAsString(body))
 			.retrieve()
 			.bodyToMono(String.class)
