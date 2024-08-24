@@ -27,9 +27,12 @@ public class MemberService {
 		MemberRequestDto memberRequestDto = new MemberRequestDto(apiKey, signUpRequestDto.email());
 		MemberResponseDto memberResponseDto = financeApiFetcher.createMember(memberRequestDto);
 		// save member info
-		MemberEntity memberEntity = new MemberEntity(memberResponseDto.getUserId(),
-			securityConfig.bCryptPasswordEncoder().encode(signUpRequestDto.password()),
-			signUpRequestDto.name(), memberResponseDto.getUserKey());
+		MemberEntity memberEntity = MemberEntity.builder()
+			.email(signUpRequestDto.email())
+			.password(securityConfig.bCryptPasswordEncoder().encode(signUpRequestDto.password()))
+			.name(signUpRequestDto.name())
+			.userKey(memberResponseDto.getUserKey())
+			.build();
 		memberRepository.save(memberEntity);
 		// return response
 		return memberResponseDto;
