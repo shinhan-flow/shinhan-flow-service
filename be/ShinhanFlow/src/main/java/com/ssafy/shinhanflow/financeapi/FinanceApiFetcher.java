@@ -48,7 +48,12 @@ public class FinanceApiFetcher {
 					if (clientResponse.statusCode() == HttpStatus.BAD_REQUEST) {
 						return clientResponse.bodyToMono(FinanceApiErrorBody.class)
 							.flatMap(errorBody -> {
+
 								FinanceApiErrorBody.Header header = errorBody.getHeader();
+								if (header == null) {
+									throw new FinanceApiException(errorBody.getResponseCode(),
+										errorBody.getResponseMessage());
+								}
 								throw new FinanceApiException(header.getResponseCode(), header.getResponseMessage());
 							});
 					}
