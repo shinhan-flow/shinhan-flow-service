@@ -15,7 +15,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -38,6 +37,9 @@ public class MemberEntity {
 	@NotNull
 	@Column(name = "name", length = 15)
 	private String name;
+
+	@Column(name = "fcm_token", length = 50)
+	private String fcmToken;
 
 	@NotNull
 	@Column(name = "user_key", length = 100, unique = true)
