@@ -16,15 +16,19 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class MemberService {
 	@Value("${finance-api.key}")
-	private final String apiKey;
+	private String apiKey;
 	private final MemberRepository memberRepository;
 	private final FinanceApiFetcher financeApiFetcher;
 
 	public MemberResponseDto createMember(SignUpRequestDto signUpRequestDto) {
+		// communicate with finance api
 		MemberRequestDto memberRequestDto = new MemberRequestDto(apiKey, signUpRequestDto.email());
 		MemberResponseDto memberResponseDto = financeApiFetcher.createMember(memberRequestDto);
-		memberRepository.save(new MemberEntity(memberResponseDto.getUserId(), signUpRequestDto.password(),
-			memberResponseDto.getUsername(), memberResponseDto.getUserKey()));
+		// save member info
+		MemberEntity memberEntity = new MemberEntity(memberResponseDto.getUserId(), signUpRequestDto.password(),
+			signUpRequestDto.name(), memberResponseDto.getUserKey());
+		memberRepository.save(memberEntity);
+		// return response
 		return memberResponseDto;
 	}
 }
