@@ -58,8 +58,7 @@ class SignUpFormModel extends SignUpParam with BaseFormModel {
 
   @override
   DefaultParam toParam() {
-    // TODO: implement toParam
-    throw UnimplementedError();
+    return SignUpParam(email: email, password: password, name: name);
   }
 }
 

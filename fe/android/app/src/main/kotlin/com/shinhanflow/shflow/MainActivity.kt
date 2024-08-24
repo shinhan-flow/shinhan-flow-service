@@ -1,4 +1,4 @@
-package com.shinhanflow.shflow.fe
+package com.shinhanflow.shflow
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -34,8 +34,7 @@ class LoginFormModel extends LoginParam with BaseFormModel {
 
   @override
   DefaultParam toParam() {
-    // TODO: implement toParam
-    throw UnimplementedError();
+    return LoginParam(email: email, password: password);
   }
 }
 

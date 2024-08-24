@@ -24,7 +24,5 @@ class LoginParam extends DefaultParam {
     );
   }
 
-
-
   Map<String, dynamic> toJson() => _$LoginParamToJson(this);
 }

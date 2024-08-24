@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:shinhan_flow/permission_screen.dart';
+import 'package:shinhan_flow/splash_screen.dart';
 import 'package:shinhan_flow/trigger/model/enum/product_property.dart';
 import 'package:shinhan_flow/trigger/view/account_trigger_screen.dart';
 import 'package:shinhan_flow/trigger/view/product_trigger_screen.dart';
@@ -13,6 +15,7 @@ import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
 import 'package:shinhan_flow/flow/view/flow_init_screen.dart';
 import 'package:shinhan_flow/home_screen.dart';
 
+import '../../auth/provider/auth_provider.dart';
 import '../../auth/view/login_screen.dart';
 import '../../auth/view/sign_up_screen.dart';
 import '../../trigger/view/exchange_trigger_screen.dart';
@@ -40,13 +43,29 @@ class DialogPage<T> extends Page<T> {
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
-  // final provider = ref.read(tokenProvider);
+  final provider = ref.read(tokenProvider);
   return GoRouter(
-      initialLocation: '/home',
+      initialLocation: '/splash',
       debugLogDiagnostics: true,
       navigatorKey: rootNavKey,
-      // refreshListenable: TokenProvider(ref: ref),
+      refreshListenable: TokenProvider(ref: ref),
       routes: <RouteBase>[
+        GoRoute(
+          path: '/splash',
+          parentNavigatorKey: rootNavKey,
+          name: SplashScreen.routeName,
+          builder: (context, state) {
+            return const SplashScreen();
+          },
+        ),
+        GoRoute(
+          path: '/permission',
+          parentNavigatorKey: rootNavKey,
+          name: PermissionScreen.routeName,
+          builder: (context, state) {
+            return const PermissionScreen();
+          },
+        ),
         GoRoute(
             path: '/login',
             parentNavigatorKey: rootNavKey,
@@ -66,6 +85,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             ]),
         GoRoute(
             path: '/home',
+            redirect: (_, state) => provider.redirectLogic(state),
             parentNavigatorKey: rootNavKey,
             name: HomeScreen.routeName,
             builder: (context, state) {
