@@ -60,8 +60,6 @@ public class DemandDepositService {
 		String userKey = memberEntity.getUserKey();
 		String institutionCode = memberEntity.getInstitutionCode();
 
-		//TODO: accountNo가 null일 경우 BadRequestException을 던지도록 수정
-
 		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireDemandDepositAccountHolderName",
 			userKey,
 			institutionCode);
@@ -80,8 +78,6 @@ public class DemandDepositService {
 
 		String userKey = memberEntity.getUserKey();
 		String institutionCode = memberEntity.getInstitutionCode();
-
-		//TODO: accountNo가 null일 경우 BadRequestException을 던지도록 수정
 
 		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireDemandDepositAccountBalance", userKey,
 			institutionCode);
