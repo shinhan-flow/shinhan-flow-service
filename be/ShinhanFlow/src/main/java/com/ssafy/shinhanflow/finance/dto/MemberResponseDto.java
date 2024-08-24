@@ -1,7 +1,5 @@
 package com.ssafy.shinhanflow.finance.dto;
 
-import com.ssafy.shinhanflow.entity.MemberEntity;
-
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
@@ -15,8 +13,4 @@ public class MemberResponseDto extends FinanceApiResponseDto {
 	String institutionCode;
 	String userKey; // 이게 중요해요
 	String created, modified;
-
-	public MemberEntity toMemberEntity(String password) {
-		return new MemberEntity(this.userId, password, this.username, this.userKey);
-	}
 }
