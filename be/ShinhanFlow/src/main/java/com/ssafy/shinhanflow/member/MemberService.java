@@ -8,8 +8,8 @@ import com.ssafy.shinhanflow.config.SecurityConfig;
 import com.ssafy.shinhanflow.entity.MemberEntity;
 import com.ssafy.shinhanflow.finance.dto.MemberRequestDto;
 import com.ssafy.shinhanflow.finance.dto.MemberResponseDto;
-import com.ssafy.shinhanflow.financeapi.FinanceApiFetcher;
 import com.ssafy.shinhanflow.member.dto.SignUpRequestDto;
+import com.ssafy.shinhanflow.util.FinanceApiFetcher;
 
 import lombok.RequiredArgsConstructor;
 

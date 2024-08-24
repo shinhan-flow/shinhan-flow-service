@@ -22,6 +22,19 @@ public class JWTUtil {
 			Jwts.SIG.HS256.key().build().getAlgorithm());
 	}
 
+	/**
+	 * Bearer 있는 토큰에서 userId 추출
+	 */
+	public long getId(String token) {
+		token = token.substring(7);
+		return Jwts.parser()
+			.verifyWith(secretKey)
+			.build()
+			.parseSignedClaims(token)
+			.getPayload()
+			.get("userId", Long.class);
+	}
+
 	public long getUserId(String token) {
 
 		return Jwts.parser()
