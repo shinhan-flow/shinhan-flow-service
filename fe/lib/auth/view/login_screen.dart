@@ -9,8 +9,11 @@ import 'package:shinhan_flow/auth/view/sign_up_screen.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/common/component/text_input_form.dart';
+import 'package:shinhan_flow/common/model/default_model.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 import 'package:shinhan_flow/util/util.dart';
+
+import '../provider/auth_provider.dart';
 
 class LoginScreen extends StatelessWidget {
   static String get routeName => 'login';
@@ -58,12 +61,10 @@ class LoginScreen extends StatelessWidget {
                   builder:
                       (BuildContext context, WidgetRef ref, Widget? child) {
                     return CustomTextFormField(
-                      label: '아이디',
-                      hintText: '아이디를 입력해주세요.',
+                      label: '이메일',
+                      hintText: '이메일를 입력해주세요.',
                       onChanged: (v) {
-                        ref
-                            .read(loginFormProvider.notifier)
-                            .update(username: v);
+                        ref.read(loginFormProvider.notifier).update(email: v);
                       },
                     );
                   },
@@ -94,6 +95,15 @@ class LoginScreen extends StatelessWidget {
                     return DefaultTextButton(
                       onPressed: () async {
                         final result = await ref.read(loginProvider.future);
+
+                        if (result is ErrorModel) {
+                        } else {
+                          if (context.mounted) {
+                            await ref
+                                .read(authProvider.notifier)
+                                .autoLogin(context: context);
+                          }
+                        }
                       },
                       text: '로그인',
                       able: valid,

@@ -1,32 +1,34 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shinhan_flow/auth/provider/auth_provider.dart';
-import 'package:shinhan_flow/auth/provider/widget/widget/login_form_provider.dart';
+import 'package:shinhan_flow/auth/provider/widget/widget/sign_up_form_provider.dart';
 
 import '../../common/logger/custom_logger.dart';
 import '../../common/model/default_model.dart';
 import '../../common/provider/secure_storage_provider.dart';
-import '../param/login_param.dart';
+import '../param/sign_up_param.dart';
 import '../repository/auth_repository.dart';
 
-part 'login_provider.g.dart';
+part 'sign_up_provider.g.dart';
 
 @riverpod
-Future<BaseModel> login(LoginRef ref) async {
+Future<BaseModel> signUp(SignUpRef ref) async {
   // final fcmToken = ref.read(fcmTokenProvider)!;
   // print("login fcm_token ${fcmToken}");
-  final form = ref.read(loginFormProvider);
-  final param = form.toParam() as LoginParam;
+  final form = ref.read(signUpFormProvider);
+  final param = form.toParam() as SignUpParam;
 
   return await ref
       .watch(authRepositoryProvider)
-      .login(username: param.email, password: param.password)
+      .signUp(
+        username: param.email,
+        password: param.password,
+        name: param.name,
+      )
       .then<BaseModel>((value) async {
-    logger.i('login $param!');
+    logger.i('signUp $param!');
     // final model = value.data!;
     final storage = ref.read(secureStorageProvider);
 
-    await storage.write(key: 'accessToken', value: value.access);
-    await storage.write(key: 'refreshToken', value: value.refresh);
+    // storage.write(key: 'accessToken', value: );
     // await saveUserInfo(storage, model, ref);
     return value;
   }).catchError((e) {

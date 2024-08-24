@@ -26,8 +26,16 @@ abstract class AuthRepository {
 
   @POST('/login')
   @FormUrlEncoded()
-  Future<LoginModel> login({
+  Future<AuthModel> login({
     @Field() required String username,
     @Field() required String password,
+  });
+
+  @POST('/api/v1/members')
+  @FormUrlEncoded()
+  Future<AuthModel> signUp({
+    @Field() required String username,
+    @Field() required String password,
+    @Field() required String name,
   });
 }

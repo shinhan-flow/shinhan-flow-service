@@ -11,12 +11,12 @@ class LoadingModel extends BaseModel {}
 
 @JsonSerializable()
 class CompletedModel extends BaseModel {
-  final int status_code;
+  final int statusCode;
   final String message;
   final String? data;
 
   CompletedModel({
-    required this.status_code,
+    required this.statusCode,
     required this.message,
     required this.data,
   });
@@ -26,35 +26,35 @@ class CompletedModel extends BaseModel {
 }
 
 class ErrorModel<T> extends BaseModel {
-  final int status_code;
+  final int statusCode;
   final String message;
   final T? data;
-  final int error_code;
+  final int errorCode;
 
   ErrorModel({
-    required this.status_code,
+    required this.statusCode,
     required this.message,
     required this.data,
-    required this.error_code,
+    required this.errorCode,
   });
 
   static ErrorModel respToError(e) {
     logger.e(e);
     switch (e.runtimeType) {
-      case DioException:
+      case DioException _:
         final resp = (e as DioException).response!.data;
         return ErrorModel(
-          status_code: resp['status_code'],
+          statusCode: resp['statusCode'],
           message: resp['message'],
           data: resp['data'],
-          error_code: resp['error_code'],
+          errorCode: resp['errorCode'],
         );
       default:
         return ErrorModel(
-          status_code: 500,
+          statusCode: 500,
           message: 'JsonSerializable 에러',
           data: '',
-          error_code: 0,
+          errorCode: 0,
         );
     }
   }
@@ -64,12 +64,12 @@ class ErrorModel<T> extends BaseModel {
   genericArgumentFactories: true,
 )
 class ResponseModel<T> extends BaseModel {
-  final int status_code;
+  final int statusCode;
   final String message;
   final T? data;
 
   ResponseModel({
-    required this.status_code,
+    required this.statusCode,
     required this.message,
     required this.data,
   });
@@ -80,12 +80,12 @@ class ResponseModel<T> extends BaseModel {
   }
 
   ResponseModel<T> copyWith({
-    int? status_code,
+    int? statusCode,
     String? message,
     T? data,
   }) {
     return ResponseModel<T>(
-      status_code: status_code ?? this.status_code,
+      statusCode: statusCode ?? this.statusCode,
       message: message ?? this.message,
       data: data ?? this.data,
     );
@@ -96,12 +96,12 @@ class ResponseModel<T> extends BaseModel {
   genericArgumentFactories: true,
 )
 class ResponseListModel<T> extends BaseModel {
-  final int status_code;
+  final int statusCode;
   final String message;
   final List<T>? data;
 
   ResponseListModel({
-    required this.status_code,
+    required this.statusCode,
     required this.message,
     required this.data,
   });

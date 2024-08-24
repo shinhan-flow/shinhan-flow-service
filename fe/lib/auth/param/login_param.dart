@@ -6,20 +6,20 @@ part 'login_param.g.dart';
 
 @JsonSerializable()
 class LoginParam extends DefaultParam {
-  final String username;
+  final String email;
   final String password;
 
-  LoginParam({this.username = '', this.password = ''});
+  LoginParam({this.email = '', this.password = ''});
 
   @override
-  List<Object?> get props => [username, password];
+  List<Object?> get props => [email, password];
 
   LoginParam copyWith({
-    String? username,
+    String? email,
     String? password,
   }) {
     return LoginParam(
-      username: username ?? this.username,
+      email: email ?? this.email,
       password: password ?? this.password,
     );
   }
