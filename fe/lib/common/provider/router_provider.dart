@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:shinhan_flow/permission_screen.dart';
 import 'package:shinhan_flow/trigger/model/enum/product_property.dart';
 import 'package:shinhan_flow/trigger/view/account_trigger_screen.dart';
 import 'package:shinhan_flow/trigger/view/product_trigger_screen.dart';
@@ -42,11 +43,19 @@ class DialogPage<T> extends Page<T> {
 final routerProvider = Provider<GoRouter>((ref) {
   // final provider = ref.read(tokenProvider);
   return GoRouter(
-      initialLocation: '/home',
+      initialLocation: '/permission',
       debugLogDiagnostics: true,
       navigatorKey: rootNavKey,
       // refreshListenable: TokenProvider(ref: ref),
       routes: <RouteBase>[
+        GoRoute(
+          path: '/permission',
+          parentNavigatorKey: rootNavKey,
+          name: PermissionScreen.routeName,
+          builder: (context, state) {
+            return const PermissionScreen();
+          },
+        ),
         GoRoute(
             path: '/login',
             parentNavigatorKey: rootNavKey,

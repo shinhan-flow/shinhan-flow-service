@@ -1,15 +1,88 @@
+import 'dart:developer';
 import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 
+import 'auth/view/login_screen.dart';
 import 'common/provider/provider_observer.dart';
 import 'common/provider/router_provider.dart';
+import 'firebase_options.dart';
+import 'notification/provider/notification_provider.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  // await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
+}
+
+void _foregroundRouting(NotificationResponse details) {
+  rootNavKey.currentState?.context.goNamed(LoginScreen.routeName);
+  log('_foregroundRouting = $details');
+}
+
+void _backgroundRouting(NotificationResponse details) {
+  log('_backgroundRouting = $details');
+}
+
+Future<FlutterLocalNotificationsPlugin> _initLocalNotification() async {
+  final FlutterLocalNotificationsPlugin localNotification =
+      FlutterLocalNotificationsPlugin();
+
+  /// Android 세팅
+  const AndroidInitializationSettings initSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  /// IOS 세팅
+  const initSettingsIOS = DarwinInitializationSettings(
+    requestSoundPermission: true,
+    requestBadgePermission: true,
+    requestAlertPermission: true,
+  );
+
+  const InitializationSettings initSettings = InitializationSettings(
+    android: initSettingsAndroid,
+    iOS: initSettingsIOS,
+  );
+
+  await localNotification.initialize(
+    initSettings,
+    onDidReceiveBackgroundNotificationResponse: _backgroundRouting,
+    onDidReceiveNotificationResponse: _foregroundRouting,
+  );
+
+  return localNotification;
+}
+
+Future<void> getFcmToken(WidgetRef ref) async {
+  String? token;
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  log('FCM Token 가져오기');
+
+  // 플랫폼 별 토큰 가져오기
+  if (defaultTargetPlatform == TargetPlatform.iOS) {
+    final apnToken = await messaging.getAPNSToken();
+    print("apnToken : $apnToken");
+    token = await messaging.getToken();
+  } else {
+    token = await messaging.getToken();
+  }
+  // ref.read(fcmTokenProvider.notifier).update((state) => token);
+  print("FCM Token: $token");
+  log('FCM Token: $token');
+}
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
@@ -19,6 +92,10 @@ void main() async {
       overlays: SystemUiOverlay.values);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await initializeDateFormatting('ko');
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     ProviderScope(
       observers: [
@@ -37,7 +114,87 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-  // This widget is the root of your application.
+  @override
+  void initState() {
+    super.initState();
+    _notificationSetting();
+    setupInteractedMessage();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getFcmToken(ref);
+    });
+  }
+
+  void _notificationSetting() {
+    _localNotificationSetting();
+    _fcmSetting();
+  }
+
+  void _fcmSetting() async {
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      log("message.data= ${message.data}");
+
+      RemoteNotification? notification = message.notification;
+
+      if (notification != null) {
+        final flutterLocalNotificationsPlugin =
+            ref.read(notificationProvider.notifier).getNotification;
+
+        await flutterLocalNotificationsPlugin?.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            const NotificationDetails(
+              android: AndroidNotificationDetails(
+                'high_importance_channel',
+                'high_importance_notification',
+                importance: Importance.max,
+              ),
+              // iOS: DarwinNotificationDetails(),
+            ),
+            payload: message.data['test_paremeter1']);
+
+        log('notification.title = ${notification.title}');
+        log('notification.body = ${notification.body}');
+        // log("수신자 측 메시지 수신");
+      }
+    });
+  }
+
+  Future<void> setupInteractedMessage() async {
+    // 앱을 껐을 때 알림을 클릭한 경우
+    RemoteMessage? message =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    log('remoteMessage = $message');
+    if (message != null) {
+      // 액션 부분 -> 파라미터는 message.data['test_parameter1'] 이런 방식으로...
+      _handleMessage(message);
+    }
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    rootNavKey.currentState?.context.goNamed(LoginScreen.routeName);
+  }
+
+  void _localNotificationSetting() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final notification = await _initLocalNotification();
+      ref
+          .read(notificationProvider.notifier)
+          .setNotificationPlugin(notification);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final router = ref.read(routerProvider);

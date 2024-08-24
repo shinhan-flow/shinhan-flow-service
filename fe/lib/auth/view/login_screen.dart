@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shinhan_flow/auth/provider/login_provider.dart';
 import 'package:shinhan_flow/auth/provider/widget/widget/login_form_provider.dart';
 import 'package:shinhan_flow/auth/view/sign_up_screen.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
@@ -60,7 +61,9 @@ class LoginScreen extends StatelessWidget {
                       label: '아이디',
                       hintText: '아이디를 입력해주세요.',
                       onChanged: (v) {
-                        ref.read(loginFormProvider.notifier).update(email: v);
+                        ref
+                            .read(loginFormProvider.notifier)
+                            .update(username: v);
                       },
                     );
                   },
@@ -89,9 +92,8 @@ class LoginScreen extends StatelessWidget {
                         ref.watch(loginFormProvider.select((p) => p.valid));
 
                     return DefaultTextButton(
-                      onPressed: () {
-                        final form = ref.read(loginFormProvider);
-
+                      onPressed: () async {
+                        final result = await ref.read(loginProvider.future);
                       },
                       text: '로그인',
                       able: valid,

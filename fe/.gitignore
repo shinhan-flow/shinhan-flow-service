@@ -44,3 +44,12 @@ app.*.map.json
 
 # generator file
 *.g.dart
+
+# firebase setting
+lib/firebase_options.dart
+firebase.json
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+firepit-log.txt
+
+Podfile.lock

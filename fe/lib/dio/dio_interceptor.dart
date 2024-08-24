@@ -6,7 +6,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../common/logger/custom_logger.dart';
 
-const String serverURL = "https://dev.makeittakeit.kr";
+const String serverURL = "http://3.36.53.116:8080";
 
 class CustomDioInterceptor extends Interceptor {
   final FlutterSecureStorage storage;

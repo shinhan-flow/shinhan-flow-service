@@ -1,30 +1,97 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!--    firebase notification setting-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!--    재부팅시 앱 실행-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!--    진동 사용-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!--    화면 켜짐 유지-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!--    정확한 알림-->
+    <uses-permission
+        android:name="android.permission.SCHEDULE_EXACT_ALARM"
+        android:maxSdkVersion="32" />
+    <!--    전체 화면 인텐트 사용-->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+
     <application
-        android:label="fe"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:label="shflow"
+        android:usesCleartextTraffic="true"
+        android:enableOnBackInvokedCallback="true"
+        >
+
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="high_importance_channel" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:taskAffinity=""
-            android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:exported="true"
             android:hardwareAccelerated="true"
+            android:launchMode="singleTop"
+            android:showWhenLocked="true"
+            android:theme="@style/LaunchTheme"
+            android:turnScreenOn="true"
             android:windowSoftInputMode="adjustResize">
+            <!--            디바이스 잠금시 알림 보여주기-->
+
+
+
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme" />
+
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!--fcm setting-->
+
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <!--        fcm setting-->
+        <service
+            android:name="com.dexterous.flutterlocalnotifications.ForegroundService"
+            android:exported="false"
+            android:stopWithTask="false" />
+        <receiver
+            android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"
+            android:exported="false" />
+        <!--        푸시 알림을 화면에 출력-->
+        <receiver
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"
+            android:exported="false" />
+        <!--        디바이스 재부팅시 알림 스케쥴 유지-->
+        <receiver
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
@@ -32,14 +99,14 @@
             android:value="2" />
     </application>
     <!-- Required to query activities that can process text, see:
-         https://developer.android.com/training/package-visibility and
+         https://developer.android.com/training/package-visibility?hl=en and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
         <intent>
-            <action android:name="android.intent.action.PROCESS_TEXT"/>
-            <data android:mimeType="text/plain"/>
+            <action android:name="android.intent.action.PROCESS_TEXT" />
+            <data android:mimeType="text/plain" />
         </intent>
     </queries>
 </manifest>

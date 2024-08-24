@@ -13,7 +13,7 @@ part 'login_form_provider.g.dart';
 @immutable
 class LoginFormModel extends LoginParam with BaseFormModel {
   LoginFormModel({
-    super.email = '',
+    super.username = '',
     super.password = '',
     bool valid = false,
   }) {
@@ -21,21 +21,20 @@ class LoginFormModel extends LoginParam with BaseFormModel {
   }
 
   @override
-  LoginFormModel copyWith({String? email, String? password}) {
-    final validEmail = email ?? this.email;
+  LoginFormModel copyWith({String? username, String? password}) {
+    final validEmail = username ?? this.username;
     final validPassword = password ?? this.password;
     final valid = validEmail.isNotEmpty && validPassword.isNotEmpty;
 
     return LoginFormModel(
-        email: email ?? this.email,
+        username: username ?? this.username,
         password: password ?? this.password,
         valid: valid);
   }
 
   @override
   DefaultParam toParam() {
-    // TODO: implement toParam
-    throw UnimplementedError();
+    return LoginParam(username: username, password: password);
   }
 }
 
@@ -46,7 +45,7 @@ class LoginForm extends _$LoginForm {
     return LoginFormModel();
   }
 
-  void update({String? email, String? password}) {
-    state = state.copyWith(email: email, password: password);
+  void update({String? username, String? password}) {
+    state = state.copyWith(username: username, password: password);
   }
 }
