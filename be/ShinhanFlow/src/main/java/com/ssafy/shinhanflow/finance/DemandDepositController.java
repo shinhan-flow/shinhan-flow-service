@@ -20,45 +20,45 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/finances")
+@RequestMapping("/api/v1/finances/demand-deposit-account")
 @RequiredArgsConstructor
-public class FinanceController {
+public class DemandDepositController {
 
-	private final FinanceService financeService;
+	private final DemandDepositService demandDepositService;
 	private final JWTUtil jwtUtil;
 
 	/**
 	 * 수시 입출금 계좌 생성
 	 */
-	@PostMapping("/demand-deposit-account")
+	@PostMapping()
 	public SuccessResponse<DemandDepositResponseDto> createDemandDepositAccount(
 		@RequestHeader("Authorization") String token,
 		@RequestBody DemandDepositRequestDto dto) {
 		return SuccessResponse.of(
-			financeService.createDemandDepositAccount(jwtUtil.getId(token),
+			demandDepositService.createDemandDepositAccount(jwtUtil.getId(token),
 				dto.getAccountTypeUniqueNo()));
 	}
 
 	/**
 	 * 수시 입출금 계좌의 예금주 조회
 	 */
-	@GetMapping("/demand-deposit-account/{accountNo}/account-holder")
+	@GetMapping("/{accountNo}/account-holder")
 	public SuccessResponse<DemandDepositHolderResponseDto> inquireDemandDepositAccountHolderName(
 		@RequestHeader("Authorization") String token,
 		@PathVariable String accountNo) {
 		return SuccessResponse.of(
-			financeService.inquireDemandDepositAccountHolderName(jwtUtil.getId(token), accountNo));
+			demandDepositService.inquireDemandDepositAccountHolderName(jwtUtil.getId(token), accountNo));
 	}
 
 	/**
 	 *  수시 입출금 게좌의 잔액 조회
 	 */
-	@GetMapping("/demand-deposit-account/{accountNo}/balance")
+	@GetMapping("/{accountNo}/balance")
 	public SuccessResponse<DemandDepositBalanceResponseDto> inquireDemandDepositAccountBalance(
 		@RequestHeader("Authorization") String token,
 		@PathVariable String accountNo) {
 		return SuccessResponse.of(
-			financeService.inquireDemandDepositAccountBalance(jwtUtil.getId(token), accountNo));
+			demandDepositService.inquireDemandDepositAccountBalance(jwtUtil.getId(token), accountNo));
 	}
 
 }

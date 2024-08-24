@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class FinanceService {
+public class DemandDepositService {
 	@Value("${finance-api.key}")
 	private String apiKey;
 
