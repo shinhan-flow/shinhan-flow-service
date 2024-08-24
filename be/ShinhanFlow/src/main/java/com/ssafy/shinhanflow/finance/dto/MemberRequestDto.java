@@ -8,5 +8,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class MemberRequestDto extends FinanceApiRequestDto {
+	private String apiKey;
 	private String userId;
 }
