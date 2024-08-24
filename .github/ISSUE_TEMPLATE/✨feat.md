@@ -1,7 +1,7 @@
 ---
 name: "✨feat"
 about: 새로운 기능을 추가합니다.
-title: "✨feat #이슈번호: 이슈내용"
+title: "✨feat: 이슈내용"
 labels: ✨feat
 assignees: ""
 ---

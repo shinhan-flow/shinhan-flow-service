@@ -7,6 +7,7 @@ import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 
 class CustomTextFormField extends StatelessWidget {
+  final TextEditingController? textEditingController;
   final String? initialValue;
   final String? label;
   final String hintText;
@@ -30,6 +31,7 @@ class CustomTextFormField extends StatelessWidget {
     this.isMultiLine = false,
     this.keyboardType,
     this.inputFormatters,
+    this.textEditingController,
   });
 
   @override
@@ -49,6 +51,7 @@ class CustomTextFormField extends StatelessWidget {
             Expanded(
               /// constraints 으로 크기를 지정해도 align을 지정 안하면 안됨!
               child: TextFormField(
+                controller: textEditingController,
                 obscuringCharacter: '●',
                 obscureText: obscureText,
                 onChanged: onChanged,

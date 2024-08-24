@@ -1,7 +1,7 @@
 ---
 name: "🌐infra"
 about: 인프라 관련 작업을 처리합니다.
-title: "🌐infra #이슈번호: 이슈내용"
+title: "🌐infra: 이슈내용"
 labels: 🌐infra
 assignees: ""
 ---

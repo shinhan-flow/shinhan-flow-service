@@ -1,7 +1,7 @@
 ---
 name: "🐞bug"
 about: 버그를 수정합니다.
-title: "🐞bug #이슈번호: 이슈내용"
+title: "🐞bug: 이슈내용"
 labels: 🐞bug
 assignees: ""
 ---

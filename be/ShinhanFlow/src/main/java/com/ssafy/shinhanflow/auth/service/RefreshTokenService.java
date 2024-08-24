@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
+import com.ssafy.shinhanflow.config.error.ErrorCode;
+import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -17,23 +19,29 @@ public class RefreshTokenService {
 	private long accessTokenExpireTime;
 
 	public String validateAndGenerateNewAccessToken(String refreshToken) {
-		//expired check
+
+		// 토큰 형태 검증
+		if (refreshToken == null || !refreshToken.startsWith("Bearer")) {
+			throw new BadRequestException(ErrorCode.INVALID_TOKEN);
+		}
+
+		refreshToken = refreshToken.substring(7);
+
+		String category = jwtUtil.getCategory(refreshToken);
+		if (!"refresh".equals(category)) {
+			throw new BadRequestException(ErrorCode.INVALID_TOKEN);
+		}
+
+		// 만료됐는지 확인
 		try {
 			jwtUtil.isExpired(refreshToken);
 		} catch (ExpiredJwtException e) {
-			throw new IllegalArgumentException("Refresh token expired");
+			throw new BadRequestException(ErrorCode.EXPIRED_TOKEN);
 		}
-
-		// 토큰이 refresh 인지 확인 (발급시 페이로드에 명시)
-		String category = jwtUtil.getCategory(refreshToken);
-		if (!"refresh".equals(category)) {
-			throw new IllegalArgumentException("Invalid refresh token");
-		}
-
 		// make new JWT
-		String username = jwtUtil.getUserId(refreshToken);
+		long userId = jwtUtil.getUserId(refreshToken);
 		String role = jwtUtil.getRole(refreshToken);
 
-		return jwtUtil.createJwt("access", username, role, accessTokenExpireTime);
+		return jwtUtil.createJwt("access", userId, role, accessTokenExpireTime);
 	}
 }

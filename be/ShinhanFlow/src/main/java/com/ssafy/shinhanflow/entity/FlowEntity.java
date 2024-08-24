@@ -35,19 +35,16 @@ public class FlowEntity {
 	@Column(name = "description", length = 100)
 	private String description;
 
-	@NotNull
 	@ColumnDefault("true")
-	@Column(name = "enable")
+	@Column(name = "enable", nullable = false)
 	private Boolean enable;
 
 	@ColumnDefault("CURRENT_TIMESTAMP")
-	@NotNull
-	@Column(name = "created_at", insertable = false, updatable = false, columnDefinition = "TIMESTAMP")
+	@Column(name = "created_at", nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime createdAt;
 
 	@ColumnDefault("CURRENT_TIMESTAMP")
-	@NotNull
-	@Column(name = "updated_at", insertable = false, columnDefinition = "TIMESTAMP")
+	@Column(name = "updated_at", nullable = false, insertable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime updatedAt;
 
 	@ColumnDefault("NULL")

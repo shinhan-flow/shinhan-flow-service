@@ -1,7 +1,7 @@
 ---
 name: "🔧refactor"
 about: 코드를 리팩토링합니다.
-title: "🔧refactor #이슈번호: 이슈내용"
+title: "🔧refactor: 이슈내용"
 labels: 🔧refactor
 assignees: ""
 ---
