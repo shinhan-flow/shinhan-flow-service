@@ -3,12 +3,12 @@ package com.ssafy.shinhanflow.member;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.shinhanflow.auth.dto.SignUpRequestDto;
 import com.ssafy.shinhanflow.auth.repository.MemberRepository;
 import com.ssafy.shinhanflow.entity.MemberEntity;
 import com.ssafy.shinhanflow.finance.dto.MemberRequestDto;
 import com.ssafy.shinhanflow.finance.dto.MemberResponseDto;
 import com.ssafy.shinhanflow.financeapi.FinanceApiFetcher;
+import com.ssafy.shinhanflow.member.dto.SignUpRequestDto;
 
 import lombok.RequiredArgsConstructor;
 
