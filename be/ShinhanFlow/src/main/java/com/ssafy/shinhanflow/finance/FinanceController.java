@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
 import com.ssafy.shinhanflow.config.error.SuccessResponse;
-import com.ssafy.shinhanflow.finance.dto.account.demandDepositAccountRequestDto;
-import com.ssafy.shinhanflow.finance.dto.account.demandDepositAccountResponseDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositAccountRequestDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositAccountResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +24,9 @@ public class FinanceController {
 	private final JWTUtil jwtUtil;
 
 	@PostMapping
-	public SuccessResponse<demandDepositAccountResponseDto> createDemandDepositAccount(
+	public SuccessResponse<DemandDepositAccountResponseDto> createDemandDepositAccount(
 		@RequestHeader("Authorization") String token,
-		@RequestBody demandDepositAccountRequestDto dto) {
+		@RequestBody DemandDepositAccountRequestDto dto) {
 		return SuccessResponse.of(
 			financeService.createDemandDepositAccount(jwtUtil.getUserId(token.substring(7)),
 				dto.getAccountTypeUniqueNo()));

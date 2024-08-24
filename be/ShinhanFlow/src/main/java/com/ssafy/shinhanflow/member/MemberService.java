@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.shinhanflow.finance.dto.MemberRequestDto;
 import com.ssafy.shinhanflow.finance.dto.MemberResponseDto;
-import com.ssafy.shinhanflow.financeapi.FinanceApiFetcher;
+import com.ssafy.shinhanflow.util.FinanceApiFetcher;
 
 import lombok.RequiredArgsConstructor;
 

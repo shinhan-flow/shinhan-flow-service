@@ -7,7 +7,7 @@ import com.ssafy.shinhanflow.finance.dto.header.ResponseHeaderDto;
 import lombok.Value;
 
 @Value
-public class demandDepositAccountResponseDto extends FinanceApiResponseDto {
+public class DemandDepositAccountResponseDto extends FinanceApiResponseDto {
 
 	@JsonProperty("Header")
 	ResponseHeaderDto header;

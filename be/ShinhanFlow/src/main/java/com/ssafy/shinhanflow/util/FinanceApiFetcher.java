@@ -15,8 +15,8 @@ import com.ssafy.shinhanflow.finance.dto.FinanceApiRequestDto;
 import com.ssafy.shinhanflow.finance.dto.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.finance.dto.MemberRequestDto;
 import com.ssafy.shinhanflow.finance.dto.MemberResponseDto;
-import com.ssafy.shinhanflow.finance.dto.account.demandDepositAccountRequestDto;
-import com.ssafy.shinhanflow.finance.dto.account.demandDepositAccountResponseDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositAccountRequestDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositAccountResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,9 +59,9 @@ public class FinanceApiFetcher {
 	/**
 	 * 수시 입출금 계좌 등록 메서드
 	 */
-	public demandDepositAccountResponseDto createDemandDepositAccount(
-		demandDepositAccountRequestDto demandDepositAccountRequestDto) {
+	public DemandDepositAccountResponseDto createDemandDepositAccount(
+		DemandDepositAccountRequestDto demandDepositAccountRequestDto) {
 		return fetch("/edu/demandDeposit/createDemandDepositAccount", demandDepositAccountRequestDto,
-			demandDepositAccountResponseDto.class);
+			DemandDepositAccountResponseDto.class);
 	}
 }

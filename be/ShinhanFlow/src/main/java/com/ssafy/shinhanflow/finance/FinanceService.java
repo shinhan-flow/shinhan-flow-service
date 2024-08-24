@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import com.ssafy.shinhanflow.auth.repository.MemberRepository;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
-import com.ssafy.shinhanflow.finance.dto.account.demandDepositAccountRequestDto;
-import com.ssafy.shinhanflow.finance.dto.account.demandDepositAccountResponseDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositAccountRequestDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositAccountResponseDto;
 import com.ssafy.shinhanflow.finance.dto.header.RequestHeaderDto;
 import com.ssafy.shinhanflow.util.FinanceApiFetcher;
 
@@ -26,7 +26,7 @@ public class FinanceService {
 	// @Value("${finance.api-key}")
 	private String apiKey = "317ea1cf50b044559dbeaa4de319fe52";
 
-	public demandDepositAccountResponseDto createDemandDepositAccount(long userId, String accountTypeUniqueNo) {
+	public DemandDepositAccountResponseDto createDemandDepositAccount(long userId, String accountTypeUniqueNo) {
 
 		log.info("createDemandDepositAccount - userId: {}, accountTypeUniqueNo: {}", userId, accountTypeUniqueNo);
 		if (accountTypeUniqueNo == null) {
@@ -36,7 +36,7 @@ public class FinanceService {
 		String userKey = memberRepository.findUserKeyById(userId);
 
 		RequestHeaderDto header = generateHeader("createDemandDepositAccount", userKey);
-		demandDepositAccountRequestDto dto = demandDepositAccountRequestDto.builder()
+		DemandDepositAccountRequestDto dto = DemandDepositAccountRequestDto.builder()
 			.header(header)
 			.accountTypeUniqueNo(accountTypeUniqueNo)
 			.build();

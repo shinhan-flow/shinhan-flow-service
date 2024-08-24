@@ -9,7 +9,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class demandDepositAccountRequestDto extends FinanceApiRequestDto {
+public class DemandDepositAccountRequestDto extends FinanceApiRequestDto {
 	@JsonProperty("Header")
 	RequestHeaderDto header;
 	String accountTypeUniqueNo;
