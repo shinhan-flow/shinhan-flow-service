@@ -11,12 +11,12 @@ import com.ssafy.shinhanflow.finance.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/member")
+@RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
 public class MemberController {
 	private final MemberService memberService;
 
-	@PostMapping("/create")
+	@PostMapping
 	public MemberResponseDto createMember(@RequestBody MemberRequestDto memberRequestDto) {
 		return memberService.createMember(memberRequestDto);
 	}
