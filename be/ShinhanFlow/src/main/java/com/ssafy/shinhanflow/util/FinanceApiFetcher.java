@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.financeapi;
+package com.ssafy.shinhanflow.util;
 
 import static com.ssafy.shinhanflow.config.error.ErrorCode.INTERNAL_SERVER_ERROR;
 
@@ -15,13 +15,15 @@ import com.ssafy.shinhanflow.finance.dto.FinanceApiRequestDto;
 import com.ssafy.shinhanflow.finance.dto.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.finance.dto.MemberRequestDto;
 import com.ssafy.shinhanflow.finance.dto.MemberResponseDto;
-import com.ssafy.shinhanflow.finance.dto.account.NewAccountRequestDto;
-import com.ssafy.shinhanflow.finance.dto.account.NewAccountResponseDto;
+import com.ssafy.shinhanflow.finance.dto.account.demandDepositAccountRequestDto;
+import com.ssafy.shinhanflow.finance.dto.account.demandDepositAccountResponseDto;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class FinanceApiFetcher {
 	@Value("${finance-api.key}")
 	private String apiKey;
@@ -34,7 +36,6 @@ public class FinanceApiFetcher {
 
 	private <T extends FinanceApiResponseDto> T fetch(String urlPath, FinanceApiRequestDto financeApiRequestDto,
 		Class<T> responseType) {
-		financeApiRequestDto.setApiKey(apiKey);
 		T response;
 		try {
 			response = webClient.post()
@@ -51,11 +52,16 @@ public class FinanceApiFetcher {
 	}
 
 	public MemberResponseDto createMember(MemberRequestDto memberRequestDto) {
+		memberRequestDto.setApiKey(apiKey);
 		return fetch("/member", memberRequestDto, MemberResponseDto.class);
 	}
 
-	public NewAccountResponseDto createAccount(NewAccountRequestDto newAccountRequestDto) {
-		return fetch("/edu/demandDeposit/createDemandDepositAccount", newAccountRequestDto,
-			NewAccountResponseDto.class);
+	/**
+	 * 수시 입출금 계좌 등록 메서드
+	 */
+	public demandDepositAccountResponseDto createDemandDepositAccount(
+		demandDepositAccountRequestDto demandDepositAccountRequestDto) {
+		return fetch("/edu/demandDeposit/createDemandDepositAccount", demandDepositAccountRequestDto,
+			demandDepositAccountResponseDto.class);
 	}
 }

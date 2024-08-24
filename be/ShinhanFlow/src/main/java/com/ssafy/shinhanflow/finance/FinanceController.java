@@ -1,12 +1,34 @@
 package com.ssafy.shinhanflow.finance;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.RequiredArgsConstructor;
+import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
+import com.ssafy.shinhanflow.config.error.SuccessResponse;
+import com.ssafy.shinhanflow.finance.dto.account.demandDepositAccountRequestDto;
+import com.ssafy.shinhanflow.finance.dto.account.demandDepositAccountResponseDto;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
-@RequestMapping("/api/v1/finance")
+@RequestMapping("/api/v1/finances")
 @RequiredArgsConstructor
 public class FinanceController {
+
+	private final FinanceService financeService;
+	private final JWTUtil jwtUtil;
+
+	@PostMapping
+	public SuccessResponse<demandDepositAccountResponseDto> createDemandDepositAccount(
+		@RequestHeader("Authorization") String token,
+		@RequestBody demandDepositAccountRequestDto dto) {
+		return SuccessResponse.of(
+			financeService.createDemandDepositAccount(jwtUtil.getUserId(token.substring(7)),
+				dto.getAccountTypeUniqueNo()));
+	}
 }
