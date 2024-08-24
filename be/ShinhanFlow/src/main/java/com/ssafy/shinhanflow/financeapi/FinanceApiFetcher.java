@@ -32,7 +32,6 @@ public class FinanceApiFetcher {
 
 	private <T extends FinanceApiResponseDto> T fetch(String urlPath, FinanceApiRequestDto financeApiRequestDto,
 		Class<T> responseType) {
-		financeApiRequestDto.setApiKey(apiKey);
 		T response;
 		try {
 			response = webClient.post()
