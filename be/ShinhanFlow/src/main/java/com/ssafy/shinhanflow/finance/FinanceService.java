@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.ssafy.shinhanflow.auth.repository.MemberRepository;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositBalanceRequestDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositBalanceResponseDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderRequestDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderResponseDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositRequestDto;
@@ -65,6 +67,22 @@ public class FinanceService {
 		return financeApiFetcher.inquireDemandDepositAccountHolderName(dto);
 	}
 
+	public DemandDepositBalanceResponseDto inquireDemandDepositAccountBalance(long userId, String accountNo) {
+
+		String userKey = memberRepository.findUserKeyById(userId);
+		if (userKey == null) {
+			throw new BadRequestException(ErrorCode.NOT_FOUND);
+		}
+
+		RequestHeaderDto header = generateHeader("inquireDemandDepositAccountBalance", userKey);
+		DemandDepositBalanceRequestDto dto = DemandDepositBalanceRequestDto.builder()
+			.header(header)
+			.accountNo(accountNo)
+			.build();
+
+		return financeApiFetcher.inquireDemandDepositAccountBalance(dto);
+	}
+
 	private RequestHeaderDto generateHeader(String apiName, String userKey) {
 		LocalDateTime now = LocalDateTime.now();
 		String datePart = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -85,4 +103,5 @@ public class FinanceService {
 			.userKey(userKey)
 			.build();
 	}
+
 }

@@ -15,6 +15,8 @@ import com.ssafy.shinhanflow.finance.dto.FinanceApiRequestDto;
 import com.ssafy.shinhanflow.finance.dto.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.finance.dto.MemberRequestDto;
 import com.ssafy.shinhanflow.finance.dto.MemberResponseDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositBalanceRequestDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositBalanceResponseDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderRequestDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderResponseDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositRequestDto;
@@ -74,5 +76,10 @@ public class FinanceApiFetcher {
 		DemandDepositHolderRequestDto dto) {
 		return fetch("/edu/demandDeposit/inquireDemandDepositAccountHolderName", dto,
 			DemandDepositHolderResponseDto.class);
+	}
+
+	public DemandDepositBalanceResponseDto inquireDemandDepositAccountBalance(DemandDepositBalanceRequestDto dto) {
+		return fetch("/edu/demandDeposit/inquireDemandDepositAccountBalance", dto,
+			DemandDepositBalanceResponseDto.class);
 	}
 }

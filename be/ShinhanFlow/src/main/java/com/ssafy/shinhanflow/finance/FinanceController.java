@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
 import com.ssafy.shinhanflow.config.error.SuccessResponse;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositBalanceResponseDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderResponseDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositRequestDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositResponseDto;
@@ -47,6 +48,17 @@ public class FinanceController {
 		@PathVariable String accountNo) {
 		return SuccessResponse.of(
 			financeService.inquireDemandDepositAccountHolderName(jwtUtil.getUserId(token.substring(7)), accountNo));
+	}
+
+	/**
+	 *  수시 입출금 게좌의 잔액 조회
+	 */
+	@GetMapping("/demand-deposit-account/{accountNo}/balance")
+	public SuccessResponse<DemandDepositBalanceResponseDto> inquireDemandDepositAccountBalance(
+		@RequestHeader("Authorization") String token,
+		@PathVariable String accountNo) {
+		return SuccessResponse.of(
+			financeService.inquireDemandDepositAccountBalance(jwtUtil.getUserId(token.substring(7)), accountNo));
 	}
 
 }
