@@ -13,10 +13,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.shinhanflow.config.error.exception.BusinessBaseException;
+import com.ssafy.shinhanflow.config.error.exception.FinanceApiException;
 import com.ssafy.shinhanflow.finance.dto.FinanceApiRequestDto;
 import com.ssafy.shinhanflow.finance.dto.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.finance.dto.MemberRequestDto;
 import com.ssafy.shinhanflow.finance.dto.MemberResponseDto;
+import com.ssafy.shinhanflow.financeapi.dto.FinanceApiErrorBody;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -44,9 +46,10 @@ public class FinanceApiFetcher {
 				.retrieve()
 				.onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
 					if (clientResponse.statusCode() == HttpStatus.BAD_REQUEST) {
-						return clientResponse.bodyToMono(String.class)
+						return clientResponse.bodyToMono(FinanceApiErrorBody.class)
 							.flatMap(errorBody -> {
-								throw new BusinessBaseException("Bad Request: " + errorBody, INTERNAL_SERVER_ERROR);
+								FinanceApiErrorBody.Header header = errorBody.getHeader();
+								throw new FinanceApiException(header.getResponseCode(), header.getResponseMessage());
 							});
 					}
 					return clientResponse.createException().flatMap(Mono::error);
