@@ -35,7 +35,7 @@ public class FinanceController {
 		@RequestHeader("Authorization") String token,
 		@RequestBody DemandDepositRequestDto dto) {
 		return SuccessResponse.of(
-			financeService.createDemandDepositAccount(jwtUtil.getUserId(token.substring(7)),
+			financeService.createDemandDepositAccount(jwtUtil.getId(token),
 				dto.getAccountTypeUniqueNo()));
 	}
 
@@ -47,7 +47,7 @@ public class FinanceController {
 		@RequestHeader("Authorization") String token,
 		@PathVariable String accountNo) {
 		return SuccessResponse.of(
-			financeService.inquireDemandDepositAccountHolderName(jwtUtil.getUserId(token.substring(7)), accountNo));
+			financeService.inquireDemandDepositAccountHolderName(jwtUtil.getId(token), accountNo));
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class FinanceController {
 		@RequestHeader("Authorization") String token,
 		@PathVariable String accountNo) {
 		return SuccessResponse.of(
-			financeService.inquireDemandDepositAccountBalance(jwtUtil.getUserId(token.substring(7)), accountNo));
+			financeService.inquireDemandDepositAccountBalance(jwtUtil.getId(token), accountNo));
 	}
 
 }

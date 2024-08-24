@@ -2,6 +2,7 @@ package com.ssafy.shinhanflow.finance;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ssafy.shinhanflow.auth.repository.MemberRepository;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
+import com.ssafy.shinhanflow.entity.MemberEntity;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositBalanceRequestDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositBalanceResponseDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderRequestDto;
@@ -26,9 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class FinanceService {
-	@Value("${finance.api-key}")
+	@Value("${finance-api.key}")
 	private String apiKey;
-	// private String apiKey = "317ea1cf50b044559dbeaa4de319fe52";
 
 	private final FinanceApiFetcher financeApiFetcher;
 	private final MemberRepository memberRepository;
@@ -40,12 +41,12 @@ public class FinanceService {
 			throw new BadRequestException(ErrorCode.NULL_REQUIRED_VALUE);
 		}
 
-		String userKey = memberRepository.findUserKeyById(userId);
-		if (userKey == null) {
-			throw new BadRequestException(ErrorCode.NOT_FOUND);
-		}
+		MemberEntity memberEntity = findMemberOrThrow(userId);
 
-		RequestHeaderDto header = generateHeader("createDemandDepositAccount", userKey);
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = generateHeader("createDemandDepositAccount", userKey, institutionCode);
 		DemandDepositRequestDto dto = DemandDepositRequestDto.builder()
 			.header(header)
 			.accountTypeUniqueNo(accountTypeUniqueNo)
@@ -56,12 +57,13 @@ public class FinanceService {
 
 	public DemandDepositHolderResponseDto inquireDemandDepositAccountHolderName(long userId, String accountNo) {
 
-		String userKey = memberRepository.findUserKeyById(userId);
-		if (userKey == null) {
-			throw new BadRequestException(ErrorCode.NOT_FOUND);
-		}
+		log.info("inquireDemandDepositAccountHolderName - userId: {}, accountNo: {}", userId, accountNo);
+		MemberEntity memberEntity = findMemberOrThrow(userId);
 
-		RequestHeaderDto header = generateHeader("inquireDemandDepositAccountHolderName", userKey);
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = generateHeader("inquireDemandDepositAccountHolderName", userKey, institutionCode);
 		DemandDepositHolderRequestDto dto = DemandDepositHolderRequestDto.builder()
 			.header(header)
 			.accountNo(accountNo)
@@ -72,12 +74,13 @@ public class FinanceService {
 
 	public DemandDepositBalanceResponseDto inquireDemandDepositAccountBalance(long userId, String accountNo) {
 
-		String userKey = memberRepository.findUserKeyById(userId);
-		if (userKey == null) {
-			throw new BadRequestException(ErrorCode.NOT_FOUND);
-		}
+		log.info("inquireDemandDepositAccountBalance - userId: {}, accountNo: {}", userId, accountNo);
+		MemberEntity memberEntity = findMemberOrThrow(userId);
 
-		RequestHeaderDto header = generateHeader("inquireDemandDepositAccountBalance", userKey);
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = generateHeader("inquireDemandDepositAccountBalance", userKey, institutionCode);
 		DemandDepositBalanceRequestDto dto = DemandDepositBalanceRequestDto.builder()
 			.header(header)
 			.accountNo(accountNo)
@@ -86,7 +89,16 @@ public class FinanceService {
 		return financeApiFetcher.inquireDemandDepositAccountBalance(dto);
 	}
 
-	private RequestHeaderDto generateHeader(String apiName, String userKey) {
+	private MemberEntity findMemberOrThrow(long userId) {
+		Optional<MemberEntity> memberEntityOptional = memberRepository.findById(userId);
+		if (memberEntityOptional.isEmpty()) {
+			throw new BadRequestException(ErrorCode.NOT_FOUND);
+		} else {
+			return memberEntityOptional.get();
+		}
+	}
+
+	private RequestHeaderDto generateHeader(String apiName, String userKey, String institutionCode) {
 		LocalDateTime now = LocalDateTime.now();
 		String datePart = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 		String timePart = now.format(DateTimeFormatter.ofPattern("HHmmss"));
@@ -98,7 +110,7 @@ public class FinanceService {
 			.apiName(apiName)
 			.transmissionDate(datePart)
 			.transmissionTime(timePart)
-			.institutionCode("00100")
+			.institutionCode(institutionCode)
 			.fintechAppNo("001")
 			.apiServiceCode(apiName)
 			.institutionTransactionUniqueNo(datePart + timePart + formattedNumber)
