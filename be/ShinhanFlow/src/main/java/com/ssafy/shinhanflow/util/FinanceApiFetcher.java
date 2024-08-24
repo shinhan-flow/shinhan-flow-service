@@ -78,6 +78,9 @@ public class FinanceApiFetcher {
 			DemandDepositHolderResponseDto.class);
 	}
 
+	/**
+	 * 수시 입출금 계좌 잔액 조회
+	 */
 	public DemandDepositBalanceResponseDto inquireDemandDepositAccountBalance(DemandDepositBalanceRequestDto dto) {
 		return fetch("/edu/demandDeposit/inquireDemandDepositAccountBalance", dto,
 			DemandDepositBalanceResponseDto.class);
