@@ -1,11 +1,7 @@
-package com.ssafy.shinhanflow.finance;
+package com.ssafy.shinhanflow.finance.service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.shinhanflow.auth.repository.MemberRepository;
@@ -20,6 +16,7 @@ import com.ssafy.shinhanflow.finance.dto.account.DemandDepositRequestDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositResponseDto;
 import com.ssafy.shinhanflow.finance.dto.header.RequestHeaderDto;
 import com.ssafy.shinhanflow.util.FinanceApiFetcher;
+import com.ssafy.shinhanflow.util.FinanceApiHeaderGenerator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class DemandDepositService {
-	@Value("${finance-api.key}")
-	private String apiKey;
 
 	private final FinanceApiFetcher financeApiFetcher;
 	private final MemberRepository memberRepository;
+	private final FinanceApiHeaderGenerator financeApiHeaderGenerator;
 
 	public DemandDepositResponseDto createDemandDepositAccount(long userId, String accountTypeUniqueNo) {
 
@@ -46,7 +42,8 @@ public class DemandDepositService {
 		String userKey = memberEntity.getUserKey();
 		String institutionCode = memberEntity.getInstitutionCode();
 
-		RequestHeaderDto header = generateHeader("createDemandDepositAccount", userKey, institutionCode);
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("createDemandDepositAccount", userKey,
+			institutionCode);
 		DemandDepositRequestDto dto = DemandDepositRequestDto.builder()
 			.header(header)
 			.accountTypeUniqueNo(accountTypeUniqueNo)
@@ -63,7 +60,11 @@ public class DemandDepositService {
 		String userKey = memberEntity.getUserKey();
 		String institutionCode = memberEntity.getInstitutionCode();
 
-		RequestHeaderDto header = generateHeader("inquireDemandDepositAccountHolderName", userKey, institutionCode);
+		//TODO: accountNo가 null일 경우 BadRequestException을 던지도록 수정
+
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireDemandDepositAccountHolderName",
+			userKey,
+			institutionCode);
 		DemandDepositHolderRequestDto dto = DemandDepositHolderRequestDto.builder()
 			.header(header)
 			.accountNo(accountNo)
@@ -80,7 +81,10 @@ public class DemandDepositService {
 		String userKey = memberEntity.getUserKey();
 		String institutionCode = memberEntity.getInstitutionCode();
 
-		RequestHeaderDto header = generateHeader("inquireDemandDepositAccountBalance", userKey, institutionCode);
+		//TODO: accountNo가 null일 경우 BadRequestException을 던지도록 수정
+
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireDemandDepositAccountBalance", userKey,
+			institutionCode);
 		DemandDepositBalanceRequestDto dto = DemandDepositBalanceRequestDto.builder()
 			.header(header)
 			.accountNo(accountNo)
@@ -97,26 +101,4 @@ public class DemandDepositService {
 			return memberEntityOptional.get();
 		}
 	}
-
-	private RequestHeaderDto generateHeader(String apiName, String userKey, String institutionCode) {
-		LocalDateTime now = LocalDateTime.now();
-		String datePart = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		String timePart = now.format(DateTimeFormatter.ofPattern("HHmmss"));
-		Random random = new Random();
-		int randomNumber = random.nextInt(1000000);
-		String formattedNumber = String.format("%06d", randomNumber);
-
-		return RequestHeaderDto.builder()
-			.apiName(apiName)
-			.transmissionDate(datePart)
-			.transmissionTime(timePart)
-			.institutionCode(institutionCode)
-			.fintechAppNo("001")
-			.apiServiceCode(apiName)
-			.institutionTransactionUniqueNo(datePart + timePart + formattedNumber)
-			.apiKey(apiKey)
-			.userKey(userKey)
-			.build();
-	}
-
 }

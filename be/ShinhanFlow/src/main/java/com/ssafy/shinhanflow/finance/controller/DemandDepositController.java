@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.finance;
+package com.ssafy.shinhanflow.finance.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +14,7 @@ import com.ssafy.shinhanflow.finance.dto.account.DemandDepositBalanceResponseDto
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderResponseDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositRequestDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositResponseDto;
+import com.ssafy.shinhanflow.finance.service.DemandDepositService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
