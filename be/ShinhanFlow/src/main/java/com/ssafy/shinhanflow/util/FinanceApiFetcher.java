@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.shinhanflow.config.error.exception.BusinessBaseException;
+import com.ssafy.shinhanflow.config.error.exception.FinanceApiException;
 import com.ssafy.shinhanflow.finance.dto.FinanceApiRequestDto;
 import com.ssafy.shinhanflow.finance.dto.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.finance.dto.MemberRequestDto;
@@ -23,6 +24,7 @@ import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderRequestDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderResponseDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositRequestDto;
 import com.ssafy.shinhanflow.finance.dto.account.DemandDepositResponseDto;
+import com.ssafy.shinhanflow.financeapi.dto.FinanceApiErrorBody;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,9 +55,15 @@ public class FinanceApiFetcher {
 				.retrieve()
 				.onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
 					if (clientResponse.statusCode() == HttpStatus.BAD_REQUEST) {
-						return clientResponse.bodyToMono(String.class)
+						return clientResponse.bodyToMono(FinanceApiErrorBody.class)
 							.flatMap(errorBody -> {
-								throw new BusinessBaseException("Bad Request: " + errorBody, INTERNAL_SERVER_ERROR);
+
+								FinanceApiErrorBody.Header header = errorBody.getHeader();
+								if (header == null) {
+									throw new FinanceApiException(errorBody.getResponseCode(),
+										errorBody.getResponseMessage());
+								}
+								throw new FinanceApiException(header.getResponseCode(), header.getResponseMessage());
 							});
 					}
 					return clientResponse.createException().flatMap(Mono::error);
