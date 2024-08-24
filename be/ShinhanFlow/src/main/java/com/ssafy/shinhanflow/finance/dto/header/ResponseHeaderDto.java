@@ -1,8 +1,8 @@
 package com.ssafy.shinhanflow.finance.dto.header;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class ResponseHeaderDto {
 	private String responseCode;
 	private String responseMessage;

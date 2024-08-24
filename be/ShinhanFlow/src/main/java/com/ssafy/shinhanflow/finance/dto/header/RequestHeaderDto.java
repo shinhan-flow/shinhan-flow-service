@@ -1,8 +1,10 @@
 package com.ssafy.shinhanflow.finance.dto.header;
 
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
+@Data
+@Builder
 public class RequestHeaderDto {
 	private String apiName;
 	private String transmissionDate;

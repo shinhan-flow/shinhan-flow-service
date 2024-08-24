@@ -15,6 +15,8 @@ import com.ssafy.shinhanflow.finance.dto.FinanceApiRequestDto;
 import com.ssafy.shinhanflow.finance.dto.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.finance.dto.MemberRequestDto;
 import com.ssafy.shinhanflow.finance.dto.MemberResponseDto;
+import com.ssafy.shinhanflow.finance.dto.account.NewAccountRequestDto;
+import com.ssafy.shinhanflow.finance.dto.account.NewAccountResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,6 +51,11 @@ public class FinanceApiFetcher {
 	}
 
 	public MemberResponseDto createMember(MemberRequestDto memberRequestDto) {
-		return fetch("member", memberRequestDto, MemberResponseDto.class);
+		return fetch("/member", memberRequestDto, MemberResponseDto.class);
+	}
+
+	public NewAccountResponseDto createAccount(NewAccountRequestDto newAccountRequestDto) {
+		return fetch("/edu/demandDeposit/createDemandDepositAccount", newAccountRequestDto,
+			NewAccountResponseDto.class);
 	}
 }
