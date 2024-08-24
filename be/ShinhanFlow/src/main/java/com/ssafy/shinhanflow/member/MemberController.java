@@ -5,8 +5,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.shinhanflow.finance.dto.MemberRequestDto;
+import com.ssafy.shinhanflow.config.error.SuccessResponse;
 import com.ssafy.shinhanflow.finance.dto.MemberResponseDto;
+import com.ssafy.shinhanflow.member.dto.SignUpRequestDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +18,7 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping
-	public MemberResponseDto createMember(@RequestBody MemberRequestDto memberRequestDto) {
-		return memberService.createMember(memberRequestDto);
+	public SuccessResponse<MemberResponseDto> createMember(@RequestBody SignUpRequestDto signUpRequestDto) {
+		return SuccessResponse.of(memberService.createMember(signUpRequestDto));
 	}
 }

@@ -3,6 +3,8 @@ package com.ssafy.shinhanflow.util;
 import static com.ssafy.shinhanflow.config.error.ErrorCode.INTERNAL_SERVER_ERROR;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -24,6 +26,7 @@ import com.ssafy.shinhanflow.finance.dto.account.DemandDepositResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Service
@@ -40,23 +43,30 @@ public class FinanceApiFetcher {
 
 	private <T extends FinanceApiResponseDto> T fetch(String urlPath, FinanceApiRequestDto financeApiRequestDto,
 		Class<T> responseType) {
-		T response;
+		WebClient.ResponseSpec response;
+
 		try {
 			response = webClient.post()
 				.uri(UriComponentsBuilder.fromHttpUrl(baseUrl).path(urlPath).toUriString())
 				.contentType(MediaType.APPLICATION_JSON)
 				.bodyValue(objectMapper.writeValueAsString(financeApiRequestDto))
 				.retrieve()
-				.bodyToMono(responseType)
-				.block();
+				.onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+					if (clientResponse.statusCode() == HttpStatus.BAD_REQUEST) {
+						return clientResponse.bodyToMono(String.class)
+							.flatMap(errorBody -> {
+								throw new BusinessBaseException("Bad Request: " + errorBody, INTERNAL_SERVER_ERROR);
+							});
+					}
+					return clientResponse.createException().flatMap(Mono::error);
+				});
+			return response.bodyToMono(responseType).block();
 		} catch (JsonProcessingException e) {
 			throw new BusinessBaseException("Failed to serialize request", INTERNAL_SERVER_ERROR);
 		}
-		return response;
 	}
 
 	public MemberResponseDto createMember(MemberRequestDto memberRequestDto) {
-		memberRequestDto.setApiKey(apiKey);
 		return fetch("/member", memberRequestDto, MemberResponseDto.class);
 	}
 

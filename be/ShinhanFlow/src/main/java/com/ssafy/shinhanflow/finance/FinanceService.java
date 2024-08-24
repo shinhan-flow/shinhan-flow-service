@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.shinhanflow.auth.repository.MemberRepository;
@@ -25,10 +26,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class FinanceService {
+	@Value("${finance.api-key}")
+	private String apiKey;
+	// private String apiKey = "317ea1cf50b044559dbeaa4de319fe52";
+
 	private final FinanceApiFetcher financeApiFetcher;
 	private final MemberRepository memberRepository;
-	// @Value("${finance.api-key}")
-	private String apiKey = "317ea1cf50b044559dbeaa4de319fe52";
 
 	public DemandDepositResponseDto createDemandDepositAccount(long userId, String accountTypeUniqueNo) {
 
