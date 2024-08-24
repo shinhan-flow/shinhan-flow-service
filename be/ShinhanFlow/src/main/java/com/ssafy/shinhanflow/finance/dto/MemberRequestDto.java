@@ -1,12 +1,11 @@
 package com.ssafy.shinhanflow.finance.dto;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.Value;
 
-@Data
+@Value
 @EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 public class MemberRequestDto extends FinanceApiRequestDto {
-	private String userId;
+	String apiKey;
+	String userId;
 }
