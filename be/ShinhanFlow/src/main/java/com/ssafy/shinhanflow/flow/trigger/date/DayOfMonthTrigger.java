@@ -1,6 +1,7 @@
-package com.ssafy.shinhanflow.trigger.date;
+package com.ssafy.shinhanflow.flow.trigger.date;
 
-import com.ssafy.shinhanflow.trigger.Trigger;
+import com.ssafy.shinhanflow.flow.trigger.Trigger;
+
 import lombok.NonNull;
 
 import java.time.LocalDate;

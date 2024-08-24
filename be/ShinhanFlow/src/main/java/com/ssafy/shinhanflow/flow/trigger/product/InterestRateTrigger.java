@@ -1,10 +1,10 @@
-package com.ssafy.shinhanflow.trigger.product;
+package com.ssafy.shinhanflow.flow.trigger.product;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ssafy.shinhanflow.trigger.Trigger;
+import com.ssafy.shinhanflow.flow.trigger.Trigger;
 
 import lombok.NonNull;
 

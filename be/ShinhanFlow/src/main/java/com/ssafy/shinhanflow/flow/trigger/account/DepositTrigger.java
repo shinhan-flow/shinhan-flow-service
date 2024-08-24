@@ -1,16 +1,16 @@
-package com.ssafy.shinhanflow.trigger.account;
+package com.ssafy.shinhanflow.flow.trigger.account;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ssafy.shinhanflow.trigger.Trigger;
+import com.ssafy.shinhanflow.flow.trigger.Trigger;
 
 import lombok.NonNull;
 
-public record WithDrawTrigger(@NonNull String account, @NonNull Long amount) implements Trigger{
+public record DepositTrigger(@NonNull String account, @NonNull Long amount) implements Trigger {
 	@Override
 	public boolean isTriggered() {
-		//todo: 최근 거래내역 가져오기
+		//todo: 최근 입금내역 가져오기 몇건중에
 		List<Long> amounts = new ArrayList<>();
 		for(Long amount: amounts){
 			if(Long.compare(amount, this.amount) >= 0){

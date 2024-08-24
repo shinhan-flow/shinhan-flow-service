@@ -1,16 +1,20 @@
-package com.ssafy.shinhanflow.trigger;
+package com.ssafy.shinhanflow.flow.trigger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.shinhanflow.trigger.account.BalanceTrigger;
-import com.ssafy.shinhanflow.trigger.account.DepositTrigger;
-import com.ssafy.shinhanflow.trigger.account.TransferTrigger;
-import com.ssafy.shinhanflow.trigger.account.WithDrawTrigger;
-import com.ssafy.shinhanflow.trigger.date.*;
-import com.ssafy.shinhanflow.trigger.exchange.ExchangeRateTrigger;
-import com.ssafy.shinhanflow.trigger.product.InterestRateTrigger;
-import com.ssafy.shinhanflow.trigger.time.SpecificTimeTrigger;
+import com.ssafy.shinhanflow.flow.trigger.account.BalanceTrigger;
+import com.ssafy.shinhanflow.flow.trigger.account.DepositTrigger;
+import com.ssafy.shinhanflow.flow.trigger.account.TransferTrigger;
+import com.ssafy.shinhanflow.flow.trigger.account.WithDrawTrigger;
+import com.ssafy.shinhanflow.flow.trigger.date.DayOfMonthTrigger;
+import com.ssafy.shinhanflow.flow.trigger.date.DayOfWeekTrigger;
+import com.ssafy.shinhanflow.flow.trigger.date.MultiDateTrigger;
+import com.ssafy.shinhanflow.flow.trigger.date.PeriodDateTrigger;
+import com.ssafy.shinhanflow.flow.trigger.date.SpecificDateTrigger;
+import com.ssafy.shinhanflow.flow.trigger.exchange.ExchangeRateTrigger;
+import com.ssafy.shinhanflow.flow.trigger.product.InterestRateTrigger;
+import com.ssafy.shinhanflow.flow.trigger.time.SpecificTimeTrigger;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

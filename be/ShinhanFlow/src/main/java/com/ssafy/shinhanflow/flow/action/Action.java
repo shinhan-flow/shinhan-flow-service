@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.action;
+package com.ssafy.shinhanflow.flow.action;
 
 /**
  * Action interface
@@ -6,9 +6,9 @@ package com.ssafy.shinhanflow.action;
  * Action 클래스는 execute 메소드를 구현해야 한다.
  */
 public interface Action {
-    /**
-     * Action을 실행하는 메소드
-     * @return Action이 성공적으로 실행되었는지 여부
-     */
-    boolean execute();
+	/**
+	 * Action을 실행하는 메소드
+	 * @return Action이 성공적으로 실행되었는지 여부
+	 */
+	boolean execute();
 }
