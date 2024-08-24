@@ -1,4 +1,20 @@
 package com.ssafy.shinhanflow.flow.action;
 
-public class TransferAction {
+import lombok.Builder;
+
+@Builder
+public record TransferAction(
+
+	Long memberId,
+	Long flowId,
+	String fromAccount,
+	String toAccount,
+	Long amount
+
+) implements Action {
+
+	@Override
+	public boolean execute() {
+		return false;
+	}
 }
