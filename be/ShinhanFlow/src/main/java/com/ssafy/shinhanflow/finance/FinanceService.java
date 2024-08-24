@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import com.ssafy.shinhanflow.auth.repository.MemberRepository;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
-import com.ssafy.shinhanflow.finance.dto.account.DemandDepositAccountRequestDto;
-import com.ssafy.shinhanflow.finance.dto.account.DemandDepositAccountResponseDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderRequestDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderResponseDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositRequestDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositResponseDto;
 import com.ssafy.shinhanflow.finance.dto.header.RequestHeaderDto;
 import com.ssafy.shinhanflow.util.FinanceApiFetcher;
 
@@ -26,7 +28,7 @@ public class FinanceService {
 	// @Value("${finance.api-key}")
 	private String apiKey = "317ea1cf50b044559dbeaa4de319fe52";
 
-	public DemandDepositAccountResponseDto createDemandDepositAccount(long userId, String accountTypeUniqueNo) {
+	public DemandDepositResponseDto createDemandDepositAccount(long userId, String accountTypeUniqueNo) {
 
 		log.info("createDemandDepositAccount - userId: {}, accountTypeUniqueNo: {}", userId, accountTypeUniqueNo);
 		if (accountTypeUniqueNo == null) {
@@ -34,14 +36,33 @@ public class FinanceService {
 		}
 
 		String userKey = memberRepository.findUserKeyById(userId);
+		if (userKey == null) {
+			throw new BadRequestException(ErrorCode.NOT_FOUND);
+		}
 
 		RequestHeaderDto header = generateHeader("createDemandDepositAccount", userKey);
-		DemandDepositAccountRequestDto dto = DemandDepositAccountRequestDto.builder()
+		DemandDepositRequestDto dto = DemandDepositRequestDto.builder()
 			.header(header)
 			.accountTypeUniqueNo(accountTypeUniqueNo)
 			.build();
 
 		return financeApiFetcher.createDemandDepositAccount(dto);
+	}
+
+	public DemandDepositHolderResponseDto inquireDemandDepositAccountHolderName(long userId, String accountNo) {
+
+		String userKey = memberRepository.findUserKeyById(userId);
+		if (userKey == null) {
+			throw new BadRequestException(ErrorCode.NOT_FOUND);
+		}
+
+		RequestHeaderDto header = generateHeader("inquireDemandDepositAccountHolderName", userKey);
+		DemandDepositHolderRequestDto dto = DemandDepositHolderRequestDto.builder()
+			.header(header)
+			.accountNo(accountNo)
+			.build();
+
+		return financeApiFetcher.inquireDemandDepositAccountHolderName(dto);
 	}
 
 	private RequestHeaderDto generateHeader(String apiName, String userKey) {

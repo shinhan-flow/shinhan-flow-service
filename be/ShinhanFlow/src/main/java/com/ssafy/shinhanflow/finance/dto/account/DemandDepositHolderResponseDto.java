@@ -4,26 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.shinhanflow.finance.dto.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.finance.dto.header.ResponseHeaderDto;
 
+import lombok.Builder;
 import lombok.Value;
 
 @Value
-public class DemandDepositAccountResponseDto extends FinanceApiResponseDto {
-
+@Builder
+public class DemandDepositHolderResponseDto extends FinanceApiResponseDto {
 	@JsonProperty("Header")
 	ResponseHeaderDto header;
 	@JsonProperty("REC")
 	Rec rec;
 
-	@Value
-	private static class Rec {
-		String bankCode;
-		String accountNo;
-		Currency currency;
-	}
-
-	@Value
-	private static class Currency {
-		String currency;
-		String currencyName;
+	private record Rec(String bankCode, String bankName, String userName, String currency) {
 	}
 }

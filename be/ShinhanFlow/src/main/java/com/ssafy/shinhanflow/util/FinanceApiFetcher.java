@@ -15,8 +15,10 @@ import com.ssafy.shinhanflow.finance.dto.FinanceApiRequestDto;
 import com.ssafy.shinhanflow.finance.dto.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.finance.dto.MemberRequestDto;
 import com.ssafy.shinhanflow.finance.dto.MemberResponseDto;
-import com.ssafy.shinhanflow.finance.dto.account.DemandDepositAccountRequestDto;
-import com.ssafy.shinhanflow.finance.dto.account.DemandDepositAccountResponseDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderRequestDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderResponseDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositRequestDto;
+import com.ssafy.shinhanflow.finance.dto.account.DemandDepositResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,11 +59,20 @@ public class FinanceApiFetcher {
 	}
 
 	/**
-	 * 수시 입출금 계좌 등록 메서드
+	 * 수시 입출금 계좌 등록
 	 */
-	public DemandDepositAccountResponseDto createDemandDepositAccount(
-		DemandDepositAccountRequestDto demandDepositAccountRequestDto) {
-		return fetch("/edu/demandDeposit/createDemandDepositAccount", demandDepositAccountRequestDto,
-			DemandDepositAccountResponseDto.class);
+	public DemandDepositResponseDto createDemandDepositAccount(
+		DemandDepositRequestDto dto) {
+		return fetch("/edu/demandDeposit/createDemandDepositAccount", dto,
+			DemandDepositResponseDto.class);
+	}
+
+	/**
+	 * 수시 입출금 계좌 예금주 확인
+	 */
+	public DemandDepositHolderResponseDto inquireDemandDepositAccountHolderName(
+		DemandDepositHolderRequestDto dto) {
+		return fetch("/edu/demandDeposit/inquireDemandDepositAccountHolderName", dto,
+			DemandDepositHolderResponseDto.class);
 	}
 }
