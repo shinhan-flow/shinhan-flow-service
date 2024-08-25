@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -20,6 +21,7 @@ import com.ssafy.shinhanflow.dto.finance.FinanceApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+@Component
 @RequiredArgsConstructor
 public class FinanceApiFetcher {
 	@Value("${finance-api.key}")
