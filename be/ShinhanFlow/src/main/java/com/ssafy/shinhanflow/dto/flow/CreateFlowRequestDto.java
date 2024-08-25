@@ -15,6 +15,7 @@ import com.ssafy.shinhanflow.domain.trigger.account.TransferTrigger;
 import com.ssafy.shinhanflow.domain.trigger.account.WithDrawTrigger;
 import com.ssafy.shinhanflow.domain.trigger.date.DayOfMonthTrigger;
 import com.ssafy.shinhanflow.domain.trigger.date.DayOfWeekTrigger;
+import com.ssafy.shinhanflow.domain.trigger.date.MultiDateTrigger;
 import com.ssafy.shinhanflow.domain.trigger.date.PeriodDateTrigger;
 import com.ssafy.shinhanflow.domain.trigger.date.SpecificDateTrigger;
 import com.ssafy.shinhanflow.domain.trigger.exchange.ExchangeRateTrigger;
@@ -39,6 +40,7 @@ public record CreateFlowRequestDto(
 		@JsonSubTypes.Type(value = WithDrawTrigger.class, name = "withDraw"),
 		@JsonSubTypes.Type(value = DayOfWeekTrigger.class, name = "dayOfWeek"),
 		@JsonSubTypes.Type(value = DayOfMonthTrigger.class, name = "dayOfMonth"),
+		@JsonSubTypes.Type(value = MultiDateTrigger.class, name = "multiDate"),
 		@JsonSubTypes.Type(value = PeriodDateTrigger.class, name = "periodDate"),
 		@JsonSubTypes.Type(value = SpecificDateTrigger.class, name = "specificDate"),
 		@JsonSubTypes.Type(value = ExchangeRateTrigger.class, name = "exchangeRate"),

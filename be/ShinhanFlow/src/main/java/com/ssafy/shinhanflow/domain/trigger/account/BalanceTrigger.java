@@ -3,10 +3,20 @@ package com.ssafy.shinhanflow.domain.trigger.account;
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 import com.ssafy.shinhanflow.util.constants.Condition;
 
-import lombok.NonNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
-public record BalanceTrigger(@NonNull String account, @NonNull Long balance, @NonNull Condition condition) implements
-	Trigger {
+public record BalanceTrigger(
+	@NotBlank
+	String account,
+	@NotNull
+	@Positive
+	Long balance,
+	@NotNull
+	Condition condition
+
+) implements Trigger {
 
 	@Override
 	public boolean isTriggered() {

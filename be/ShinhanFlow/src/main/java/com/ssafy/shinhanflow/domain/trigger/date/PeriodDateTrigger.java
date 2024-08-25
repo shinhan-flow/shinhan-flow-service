@@ -4,12 +4,23 @@ import java.time.LocalDate;
 
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 
-import lombok.NonNull;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
 
-public record PeriodDateTrigger(@NonNull LocalDate start, @NonNull LocalDate end) implements Trigger {
+public record PeriodDateTrigger(
+	@NotNull
+	@FutureOrPresent
+	LocalDate startDate,
+	@NotNull
+	@FutureOrPresent
+	LocalDate endDate
+
+) implements Trigger {
 	@Override
 	public boolean isTriggered() {
 		LocalDate today = LocalDate.now();
-		return today.isEqual(start) || today.isEqual(end) || (today.isAfter(start) && today.isBefore(end));
+		return
+			today.isEqual(startDate) || today.isEqual(endDate)
+				|| (today.isAfter(startDate) && today.isBefore(endDate));
 	}
 }

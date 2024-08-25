@@ -7,9 +7,17 @@ import java.util.List;
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 import com.ssafy.shinhanflow.util.constants.AccountProduct;
 
-import lombok.NonNull;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
-public record InterestRateTrigger(@NonNull AccountProduct accountProduct, @NonNull BigDecimal rate) implements Trigger {
+public record InterestRateTrigger(
+	@NotNull
+	AccountProduct accountProduct,
+	@NotNull
+	@Positive
+	BigDecimal rate
+
+) implements Trigger {
 
 	@Override
 	public boolean isTriggered() {

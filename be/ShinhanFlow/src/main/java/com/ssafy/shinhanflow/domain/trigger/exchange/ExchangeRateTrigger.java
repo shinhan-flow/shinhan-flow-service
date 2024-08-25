@@ -5,9 +5,17 @@ import java.math.BigDecimal;
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 import com.ssafy.shinhanflow.util.constants.Currency;
 
-import lombok.NonNull;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
-public record ExchangeRateTrigger(@NonNull Currency currency, @NonNull BigDecimal rate) implements Trigger {
+public record ExchangeRateTrigger(
+	@NotNull
+	Currency currency,
+	@NotNull
+	@Positive
+	BigDecimal rate
+
+) implements Trigger {
 
 	@Override
 	public boolean isTriggered() {

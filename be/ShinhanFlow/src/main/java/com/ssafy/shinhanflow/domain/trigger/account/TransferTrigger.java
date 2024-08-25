@@ -5,10 +5,20 @@ import java.util.List;
 
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 
-import lombok.NonNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
-public record TransferTrigger(@NonNull String fromAccount, @NonNull String toAccount, @NonNull Long amount) implements
-	Trigger {
+public record TransferTrigger(
+	@NotBlank
+	String fromAccount,
+	@NotBlank
+	String toAccount,
+	@NotNull
+	@Positive
+	Long amount
+
+) implements Trigger {
 
 	@Override
 	public boolean isTriggered() {

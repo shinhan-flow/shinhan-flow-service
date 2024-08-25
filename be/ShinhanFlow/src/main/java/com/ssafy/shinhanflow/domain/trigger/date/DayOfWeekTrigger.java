@@ -6,9 +6,12 @@ import java.util.Set;
 
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 
-import lombok.NonNull;
+import jakarta.validation.constraints.NotEmpty;
 
-public record DayOfWeekTrigger(@NonNull Set<DayOfWeek> daysOfWeek) implements Trigger {
+public record DayOfWeekTrigger(
+	@NotEmpty Set<DayOfWeek> daysOfWeek
+
+) implements Trigger {
 	@Override
 	public boolean isTriggered() {
 		LocalDate today = LocalDate.now();

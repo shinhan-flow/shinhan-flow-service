@@ -4,9 +4,15 @@ import java.time.LocalDate;
 
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 
-import lombok.NonNull;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
 
-public record SpecificDateTrigger(@NonNull LocalDate localDate) implements Trigger {
+public record SpecificDateTrigger(
+	@NotNull
+	@FutureOrPresent
+	LocalDate localDate
+
+) implements Trigger {
 	@Override
 	public boolean isTriggered() {
 		LocalDate today = LocalDate.now();

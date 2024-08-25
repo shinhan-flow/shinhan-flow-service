@@ -5,9 +5,13 @@ import java.util.Set;
 
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 
-import lombok.NonNull;
+import jakarta.validation.constraints.NotEmpty;
 
-public record DayOfMonthTrigger(@NonNull Set<Integer> days) implements Trigger {
+public record DayOfMonthTrigger(
+	@NotEmpty
+	Set<Integer> days
+
+) implements Trigger {
 
 	@Override
 	public boolean isTriggered() {

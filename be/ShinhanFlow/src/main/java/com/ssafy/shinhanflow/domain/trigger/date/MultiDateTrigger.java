@@ -5,9 +5,17 @@ import java.util.Set;
 
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 
-import lombok.NonNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
-public record MultiDateTrigger(@NonNull Set<LocalDate> dates) implements Trigger {
+public record MultiDateTrigger(
+	@NotEmpty
+	@Valid
+	Set<@NotNull @FutureOrPresent LocalDate> dates
+
+) implements Trigger {
 	@Override
 	public boolean isTriggered() {
 		LocalDate today = LocalDate.now();
