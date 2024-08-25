@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.trigger;
+package com.ssafy.shinhanflow.flow.trigger;
 
 /**
  * Trigger interface

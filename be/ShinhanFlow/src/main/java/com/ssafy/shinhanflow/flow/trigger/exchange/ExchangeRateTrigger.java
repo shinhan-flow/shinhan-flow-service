@@ -1,8 +1,8 @@
-package com.ssafy.shinhanflow.trigger.exchange;
+package com.ssafy.shinhanflow.flow.trigger.exchange;
 
 import java.math.BigDecimal;
 
-import com.ssafy.shinhanflow.trigger.Trigger;
+import com.ssafy.shinhanflow.flow.trigger.Trigger;
 
 import lombok.NonNull;
 

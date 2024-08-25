@@ -1,10 +1,10 @@
-package com.ssafy.shinhanflow.trigger.date;
+package com.ssafy.shinhanflow.flow.trigger.date;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Set;
 
-import com.ssafy.shinhanflow.trigger.Trigger;
+import com.ssafy.shinhanflow.flow.trigger.Trigger;
 
 import lombok.NonNull;
 

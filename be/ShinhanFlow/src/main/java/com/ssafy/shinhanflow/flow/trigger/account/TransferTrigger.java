@@ -1,13 +1,14 @@
-package com.ssafy.shinhanflow.trigger.account;
+package com.ssafy.shinhanflow.flow.trigger.account;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ssafy.shinhanflow.trigger.Trigger;
+import com.ssafy.shinhanflow.flow.trigger.Trigger;
 
 import lombok.NonNull;
 
-public record TransferTrigger(@NonNull String fromAccount, @NonNull String toAccount, @NonNull Long amount) implements Trigger{
+public record TransferTrigger(@NonNull String fromAccount, @NonNull String toAccount, @NonNull Long amount) implements
+	Trigger {
 
 	@Override
 	public boolean isTriggered() {

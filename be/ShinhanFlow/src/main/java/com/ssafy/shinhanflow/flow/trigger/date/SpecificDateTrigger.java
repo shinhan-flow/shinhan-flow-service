@@ -1,10 +1,9 @@
-package com.ssafy.shinhanflow.trigger.date;
+package com.ssafy.shinhanflow.flow.trigger.date;
 
 import java.time.LocalDate;
 
-import com.ssafy.shinhanflow.trigger.Trigger;
+import com.ssafy.shinhanflow.flow.trigger.Trigger;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 
 public record SpecificDateTrigger(@NonNull LocalDate localDate) implements Trigger {

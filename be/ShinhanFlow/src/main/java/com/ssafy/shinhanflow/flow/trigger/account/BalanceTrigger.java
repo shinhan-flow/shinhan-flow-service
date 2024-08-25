@@ -1,9 +1,8 @@
-package com.ssafy.shinhanflow.trigger.account;
+package com.ssafy.shinhanflow.flow.trigger.account;
 
 
-import com.ssafy.shinhanflow.trigger.Trigger;
+import com.ssafy.shinhanflow.flow.trigger.Trigger;
 
-import lombok.Getter;
 import lombok.NonNull;
 
 public record BalanceTrigger(@NonNull String account, @NonNull Long balance, @NonNull Condition condition) implements Trigger {
