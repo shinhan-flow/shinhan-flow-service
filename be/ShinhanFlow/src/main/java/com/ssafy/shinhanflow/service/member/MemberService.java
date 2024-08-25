@@ -9,7 +9,7 @@ import com.ssafy.shinhanflow.dto.finance.MemberResponseDto;
 import com.ssafy.shinhanflow.dto.member.SignUpRequestDto;
 import com.ssafy.shinhanflow.entity.MemberEntity;
 import com.ssafy.shinhanflow.repository.MemberRepository;
-import com.ssafy.shinhanflow.util.FinanceApiFetcher;
+import com.ssafy.shinhanflow.util.FinanceApiService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ public class MemberService {
 	@Value("${finance-api.key}")
 	private String apiKey;
 	private final MemberRepository memberRepository;
-	private final FinanceApiFetcher financeApiFetcher;
+	private final FinanceApiService financeApiFetcher;
 	private final SecurityConfig securityConfig;
 
 	public Boolean createMember(SignUpRequestDto signUpRequestDto) {

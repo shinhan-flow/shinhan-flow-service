@@ -15,8 +15,8 @@ import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
 import com.ssafy.shinhanflow.entity.MemberEntity;
 import com.ssafy.shinhanflow.repository.MemberRepository;
-import com.ssafy.shinhanflow.util.FinanceApiFetcher;
 import com.ssafy.shinhanflow.util.FinanceApiHeaderGenerator;
+import com.ssafy.shinhanflow.util.FinanceApiService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DemandDepositService {
 
-	private final FinanceApiFetcher financeApiFetcher;
+	private final FinanceApiService financeApiFetcher;
 	private final MemberRepository memberRepository;
 	private final FinanceApiHeaderGenerator financeApiHeaderGenerator;
 

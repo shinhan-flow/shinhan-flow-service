@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -17,22 +16,11 @@ import com.ssafy.shinhanflow.config.error.exception.BusinessBaseException;
 import com.ssafy.shinhanflow.config.error.exception.FinanceApiException;
 import com.ssafy.shinhanflow.dto.finance.FinanceApiRequestDto;
 import com.ssafy.shinhanflow.dto.finance.FinanceApiResponseDto;
-import com.ssafy.shinhanflow.dto.finance.MemberRequestDto;
-import com.ssafy.shinhanflow.dto.finance.MemberResponseDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositBalanceRequestDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositBalanceResponseDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositHolderRequestDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositHolderResponseDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositRequestDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositResponseDto;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
-@Service
-@Slf4j
 public class FinanceApiFetcher {
 	@Value("${finance-api.key}")
 	private String apiKey;
@@ -43,7 +31,7 @@ public class FinanceApiFetcher {
 	private final WebClient webClient;
 	private final ObjectMapper objectMapper;
 
-	private <T extends FinanceApiResponseDto> T fetch(String urlPath, FinanceApiRequestDto financeApiRequestDto,
+	public <T extends FinanceApiResponseDto> T fetch(String urlPath, FinanceApiRequestDto financeApiRequestDto,
 		Class<T> responseType) {
 		WebClient.ResponseSpec response;
 
@@ -72,35 +60,5 @@ public class FinanceApiFetcher {
 		} catch (JsonProcessingException e) {
 			throw new BusinessBaseException("Failed to serialize request", INTERNAL_SERVER_ERROR);
 		}
-	}
-
-	public MemberResponseDto createMember(MemberRequestDto memberRequestDto) {
-		return fetch("/member", memberRequestDto, MemberResponseDto.class);
-	}
-
-	/**
-	 * 수시 입출금 계좌 등록
-	 */
-	public DemandDepositResponseDto createDemandDepositAccount(
-		DemandDepositRequestDto dto) {
-		return fetch("/edu/demandDeposit/createDemandDepositAccount", dto,
-			DemandDepositResponseDto.class);
-	}
-
-	/**
-	 * 수시 입출금 계좌 예금주 확인
-	 */
-	public DemandDepositHolderResponseDto inquireDemandDepositAccountHolderName(
-		DemandDepositHolderRequestDto dto) {
-		return fetch("/edu/demandDeposit/inquireDemandDepositAccountHolderName", dto,
-			DemandDepositHolderResponseDto.class);
-	}
-
-	/**
-	 * 수시 입출금 계좌 잔액 조회
-	 */
-	public DemandDepositBalanceResponseDto inquireDemandDepositAccountBalance(DemandDepositBalanceRequestDto dto) {
-		return fetch("/edu/demandDeposit/inquireDemandDepositAccountBalance", dto,
-			DemandDepositBalanceResponseDto.class);
 	}
 }
