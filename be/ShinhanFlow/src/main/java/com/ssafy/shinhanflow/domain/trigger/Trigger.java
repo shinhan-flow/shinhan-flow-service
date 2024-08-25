@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.flow.trigger;
+package com.ssafy.shinhanflow.domain.trigger;
 
 /**
  * Trigger interface
@@ -6,9 +6,9 @@ package com.ssafy.shinhanflow.flow.trigger;
  * Trigger 클래스는 isTriggered 메소드를 구현해야 한다.
  */
 public interface Trigger {
-    /**
-     * Trigger가 발생했는지 확인하는 메소드
-     * @return Trigger가 발생했는지 여부
-     */
-    boolean isTriggered();
+	/**
+	 * Trigger가 발생했는지 확인하는 메소드
+	 * @return Trigger가 발생했는지 여부
+	 */
+	boolean isTriggered();
 }

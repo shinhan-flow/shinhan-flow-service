@@ -1,14 +1,10 @@
-package com.ssafy.shinhanflow.flow.action.notification;
-
-import com.ssafy.shinhanflow.flow.action.Action;
+package com.ssafy.shinhanflow.domain.action;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 @Builder
 public record TextNotificationAction(
-	Long memberId,
-	Long flowId,
 	@NotBlank
 	String text
 

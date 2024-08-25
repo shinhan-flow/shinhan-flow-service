@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.entity;
+package com.ssafy.shinhanflow.domain.entity;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,36 +17,27 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "members")
-@Entity
-public class MemberEntity {
-
+@Entity(name = "flows")
+public class FlowEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotNull
-	@Column(name = "email", length = 50, unique = true)
-	private String email;
+	@Column(name = "member_id")
+	private Long memberId;
 
 	@NotNull
-	@Column(name = "password", length = 255)
-	private String password;
+	@Column(name = "title", length = 30)
+	private String title;
 
 	@NotNull
-	@Column(name = "name", length = 15)
-	private String name;
+	@Column(name = "description", length = 100)
+	private String description;
 
-	@Column(name = "fcm_token", length = 50)
-	private String fcmToken;
-
-	@NotNull
-	@Column(name = "user_key", length = 100, unique = true)
-	private String userKey;
-
-	@ColumnDefault("'00100'")
-	@Column(name = "institution_code", length = 20, nullable = false, insertable = false)
-	private String institutionCode;
+	@ColumnDefault("true")
+	@Column(name = "enable", nullable = false)
+	private Boolean enable;
 
 	@ColumnDefault("CURRENT_TIMESTAMP")
 	@Column(name = "created_at", nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP")
@@ -62,11 +52,9 @@ public class MemberEntity {
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public MemberEntity(String email, String password, String name, String userKey) {
-		this.email = email;
-		this.password = password;
-		this.name = name;
-		this.userKey = userKey;
+	public FlowEntity(Long memberId, String title, String description) {
+		this.memberId = memberId;
+		this.title = title;
+		this.description = description;
 	}
-
 }

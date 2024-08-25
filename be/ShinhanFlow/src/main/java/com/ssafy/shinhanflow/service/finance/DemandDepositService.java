@@ -13,7 +13,7 @@ import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositHolderResponseDto;
 import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositRequestDto;
 import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
-import com.ssafy.shinhanflow.entity.MemberEntity;
+import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 import com.ssafy.shinhanflow.repository.MemberRepository;
 import com.ssafy.shinhanflow.util.FinanceApiHeaderGenerator;
 import com.ssafy.shinhanflow.util.FinanceApiService;

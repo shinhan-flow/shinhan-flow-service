@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.flow.action;
+package com.ssafy.shinhanflow.domain.action;
 
 /**
  * Action interface

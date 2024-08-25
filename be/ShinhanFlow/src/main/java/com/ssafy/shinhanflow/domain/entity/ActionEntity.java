@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.entity;
+package com.ssafy.shinhanflow.domain.entity;
 
 import java.time.LocalDateTime;
 
@@ -55,10 +55,10 @@ public class ActionEntity {
 	private LocalDateTime deletedAt;
 
 	public enum Category {
-		NOTIFICATION, TRANSFER , EXCHANGE
+		NOTIFICATION, TRANSFER, EXCHANGE
 	}
 
-	public ActionEntity(Long memberId, Long flowId , int code, String data) {
+	public ActionEntity(Long memberId, Long flowId, int code, String data) {
 		this.memberId = memberId;
 		this.flowId = flowId;
 		this.code = code;

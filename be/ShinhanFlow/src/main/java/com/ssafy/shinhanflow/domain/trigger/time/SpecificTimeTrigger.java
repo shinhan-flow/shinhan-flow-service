@@ -1,8 +1,8 @@
-package com.ssafy.shinhanflow.flow.trigger.time;
+package com.ssafy.shinhanflow.domain.trigger.time;
 
 import java.time.LocalTime;
 
-import com.ssafy.shinhanflow.flow.trigger.Trigger;
+import com.ssafy.shinhanflow.domain.trigger.Trigger;
 
 public record SpecificTimeTrigger(LocalTime time) implements Trigger {
 

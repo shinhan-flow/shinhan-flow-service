@@ -1,8 +1,9 @@
-package com.ssafy.shinhanflow.flow.trigger.exchange;
+package com.ssafy.shinhanflow.domain.trigger.exchange;
 
 import java.math.BigDecimal;
 
-import com.ssafy.shinhanflow.flow.trigger.Trigger;
+import com.ssafy.shinhanflow.domain.trigger.Trigger;
+import com.ssafy.shinhanflow.util.constants.Currency;
 
 import lombok.NonNull;
 
@@ -15,7 +16,4 @@ public record ExchangeRateTrigger(@NonNull Currency currency, @NonNull BigDecima
 		return this.rate.compareTo(rate) >= 0;
 	}
 
-	public enum Currency{
-		USD, EUR, JPY, CNY, GBP, CHF, CAD
-	}
 }

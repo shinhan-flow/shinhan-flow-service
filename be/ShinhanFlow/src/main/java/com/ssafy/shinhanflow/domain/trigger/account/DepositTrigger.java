@@ -1,9 +1,9 @@
-package com.ssafy.shinhanflow.flow.trigger.account;
+package com.ssafy.shinhanflow.domain.trigger.account;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ssafy.shinhanflow.flow.trigger.Trigger;
+import com.ssafy.shinhanflow.domain.trigger.Trigger;
 
 import lombok.NonNull;
 
@@ -12,8 +12,8 @@ public record DepositTrigger(@NonNull String account, @NonNull Long amount) impl
 	public boolean isTriggered() {
 		//todo: 최근 입금내역 가져오기 몇건중에
 		List<Long> amounts = new ArrayList<>();
-		for(Long amount: amounts){
-			if(Long.compare(amount, this.amount) >= 0){
+		for (Long amount : amounts) {
+			if (Long.compare(amount, this.amount) >= 0) {
 				return true;
 			}
 		}

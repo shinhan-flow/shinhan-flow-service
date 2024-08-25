@@ -1,13 +1,11 @@
-package com.ssafy.shinhanflow.flow.action.notification;
+package com.ssafy.shinhanflow.domain.action;
 
-import com.ssafy.shinhanflow.flow.action.Action;
-
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 @Builder
 public record BalanceNotificationAction(
-	Long memberId,
-	Long flowId,
+	@NotBlank
 	String account
 
 ) implements Action {
