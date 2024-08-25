@@ -10,33 +10,33 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
 import com.ssafy.shinhanflow.config.error.SuccessResponse;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositBalanceResponseDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositHolderResponseDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositRequestDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositResponseDto;
-import com.ssafy.shinhanflow.service.finance.DemandDepositService;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
+import com.ssafy.shinhanflow.service.finance.CurrentAccountService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/finances/demand-deposit-account")
+@RequestMapping("/api/v1/finances/current-accounts")
 @RequiredArgsConstructor
-public class DemandDepositController {
+public class CurrentAccountController {
 
-	private final DemandDepositService demandDepositService;
+	private final CurrentAccountService currentAccountService;
 	private final JWTUtil jwtUtil;
 
 	/**
 	 * 수시 입출금 계좌 생성
 	 */
 	@PostMapping()
-	public SuccessResponse<DemandDepositResponseDto> createDemandDepositAccount(
+	public SuccessResponse<CurrentAccountResponseDto> createDemandDepositAccount(
 		@RequestHeader("Authorization") String token,
-		@RequestBody DemandDepositRequestDto dto) {
+		@RequestBody CurrentAccountRequestDto dto) {
 		return SuccessResponse.of(
-			demandDepositService.createDemandDepositAccount(jwtUtil.getId(token),
+			currentAccountService.createCurrentAccount(jwtUtil.getId(token),
 				dto.getAccountTypeUniqueNo()));
 	}
 
@@ -44,22 +44,22 @@ public class DemandDepositController {
 	 * 수시 입출금 계좌의 예금주 조회
 	 */
 	@GetMapping("/{accountNo}/account-holder")
-	public SuccessResponse<DemandDepositHolderResponseDto> inquireDemandDepositAccountHolderName(
+	public SuccessResponse<CurrentAccountHolderResponseDto> inquireDemandDepositAccountHolderName(
 		@RequestHeader("Authorization") String token,
 		@PathVariable String accountNo) {
 		return SuccessResponse.of(
-			demandDepositService.inquireDemandDepositAccountHolderName(jwtUtil.getId(token), accountNo));
+			currentAccountService.currentAccountHolderName(jwtUtil.getId(token), accountNo));
 	}
 
 	/**
 	 *  수시 입출금 게좌의 잔액 조회
 	 */
 	@GetMapping("/{accountNo}/balance")
-	public SuccessResponse<DemandDepositBalanceResponseDto> inquireDemandDepositAccountBalance(
+	public SuccessResponse<CurrentAccountBalanceResponseDto> inquireDemandDepositAccountBalance(
 		@RequestHeader("Authorization") String token,
 		@PathVariable String accountNo) {
 		return SuccessResponse.of(
-			demandDepositService.inquireDemandDepositAccountBalance(jwtUtil.getId(token), accountNo));
+			currentAccountService.currentAccountBalance(jwtUtil.getId(token), accountNo));
 	}
 
 }

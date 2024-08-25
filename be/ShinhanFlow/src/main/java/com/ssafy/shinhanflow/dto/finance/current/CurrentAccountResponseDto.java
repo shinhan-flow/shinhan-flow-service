@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.dto.finance.deposit;
+package com.ssafy.shinhanflow.dto.finance.current;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.shinhanflow.dto.finance.FinanceApiResponseDto;
@@ -7,7 +7,7 @@ import com.ssafy.shinhanflow.dto.finance.header.ResponseHeaderDto;
 import lombok.Value;
 
 @Value
-public class DemandDepositResponseDto extends FinanceApiResponseDto {
+public class CurrentAccountResponseDto extends FinanceApiResponseDto {
 
 	@JsonProperty("Header")
 	ResponseHeaderDto header;
