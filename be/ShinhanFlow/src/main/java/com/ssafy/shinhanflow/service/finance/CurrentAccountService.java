@@ -8,6 +8,8 @@ import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
@@ -137,6 +139,29 @@ public class CurrentAccountService {
 			.build();
 
 		return financeApiFetcher.withdrawCurrentAccount(requestDto);
+	}
+
+	public CurrentAccountDepositResponseDto depositCurrentAccount(long userId, CurrentAccountDepositRequestDto dto) {
+		log.info("depositCurrentAccount - userId: {}", userId);
+		log.info("입금 계좌번호: {}, 금액: {}", dto.getAccountNo(), dto.getTransactionBalance());
+
+		MemberEntity memberEntity = findMemberOrThrow(userId);
+
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("updateDemandDepositAccountDeposit",
+			userKey,
+			institutionCode);
+
+		CurrentAccountDepositRequestDto requestDto = CurrentAccountDepositRequestDto.builder()
+			.header(header)
+			.accountNo(dto.getAccountNo())
+			.transactionBalance(dto.getTransactionBalance())
+			.transactionSummary(dto.getTransactionSummary())
+			.build();
+		
+		return financeApiFetcher.depositCurrentAccount(requestDto);
 	}
 
 	private MemberEntity findMemberOrThrow(long userId) {

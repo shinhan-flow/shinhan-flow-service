@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
 import com.ssafy.shinhanflow.config.error.SuccessResponse;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
@@ -84,5 +86,15 @@ public class CurrentAccountController {
 		@RequestHeader("Authorization") String token,
 		@RequestBody CurrentAccountWithdrawRequestDto dto) {
 		return SuccessResponse.of(currentAccountService.withdrawCurrentAccount(jwtUtil.getId(token), dto));
+	}
+
+	/**
+	 * 수시 입출금 계좌 입금
+	 */
+	@PostMapping("/deposit")
+	public SuccessResponse<CurrentAccountDepositResponseDto> depositCurrentAccount(
+		@RequestHeader("Authorization") String token,
+		@RequestBody CurrentAccountDepositRequestDto dto) {
+		return SuccessResponse.of(currentAccountService.depositCurrentAccount(jwtUtil.getId(token), dto));
 	}
 }
