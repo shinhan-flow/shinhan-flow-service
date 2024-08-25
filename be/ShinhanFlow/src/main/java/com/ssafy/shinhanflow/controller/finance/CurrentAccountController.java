@@ -14,6 +14,7 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDt
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDto;
 import com.ssafy.shinhanflow.service.finance.CurrentAccountService;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class CurrentAccountController {
 	 * 수시 입출금 계좌 생성
 	 */
 	@PostMapping()
-	public SuccessResponse<CurrentAccountResponseDto> createDemandDepositAccount(
+	public SuccessResponse<CurrentAccountResponseDto> createCurrentAccount(
 		@RequestHeader("Authorization") String token,
 		@RequestBody CurrentAccountRequestDto dto) {
 		return SuccessResponse.of(
@@ -44,7 +45,7 @@ public class CurrentAccountController {
 	 * 수시 입출금 계좌의 예금주 조회
 	 */
 	@GetMapping("/{accountNo}/account-holder")
-	public SuccessResponse<CurrentAccountHolderResponseDto> inquireDemandDepositAccountHolderName(
+	public SuccessResponse<CurrentAccountHolderResponseDto> currentAccountHolderName(
 		@RequestHeader("Authorization") String token,
 		@PathVariable String accountNo) {
 		return SuccessResponse.of(
@@ -55,11 +56,21 @@ public class CurrentAccountController {
 	 *  수시 입출금 게좌의 잔액 조회
 	 */
 	@GetMapping("/{accountNo}/balance")
-	public SuccessResponse<CurrentAccountBalanceResponseDto> inquireDemandDepositAccountBalance(
+	public SuccessResponse<CurrentAccountBalanceResponseDto> currentAccountBalance(
 		@RequestHeader("Authorization") String token,
 		@PathVariable String accountNo) {
 		return SuccessResponse.of(
 			currentAccountService.currentAccountBalance(jwtUtil.getId(token), accountNo));
+	}
+
+	/**
+	 * 수시 입출금 계좌 이체
+	 */
+	@PostMapping("/transfer")
+	public SuccessResponse<?> transferCurrentAccount(
+		@RequestHeader("Authorization") String token,
+		@RequestBody CurrentAccountTransferRequestDto dto) {
+		return SuccessResponse.of(currentAccountService.transferCurrentAccount(jwtUtil.getId(token), dto));
 	}
 
 }
