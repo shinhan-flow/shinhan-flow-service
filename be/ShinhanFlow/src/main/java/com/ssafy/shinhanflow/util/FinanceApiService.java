@@ -4,12 +4,18 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.shinhanflow.dto.finance.MemberRequestDto;
 import com.ssafy.shinhanflow.dto.finance.MemberResponseDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositBalanceRequestDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositBalanceResponseDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositHolderRequestDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositHolderResponseDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositRequestDto;
-import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,27 +33,50 @@ public class FinanceApiService {
 	/**
 	 * 수시 입출금 계좌 등록
 	 */
-	public DemandDepositResponseDto createDemandDepositAccount(
-		DemandDepositRequestDto dto) {
+	public CurrentAccountResponseDto createCurrentAccount(
+		CurrentAccountRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/demandDeposit/createDemandDepositAccount", dto,
-			DemandDepositResponseDto.class);
+			CurrentAccountResponseDto.class);
 	}
 
 	/**
 	 * 수시 입출금 계좌 예금주 확인
 	 */
-	public DemandDepositHolderResponseDto inquireDemandDepositAccountHolderName(
-		DemandDepositHolderRequestDto dto) {
+	public CurrentAccountHolderResponseDto currentAccountHolderName(
+		CurrentAccountHolderRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/demandDeposit/inquireDemandDepositAccountHolderName", dto,
-			DemandDepositHolderResponseDto.class);
+			CurrentAccountHolderResponseDto.class);
 	}
 
 	/**
 	 * 수시 입출금 계좌 잔액 조회
 	 */
-	public DemandDepositBalanceResponseDto inquireDemandDepositAccountBalance(DemandDepositBalanceRequestDto dto) {
+	public CurrentAccountBalanceResponseDto currentAccountBalance(CurrentAccountBalanceRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/demandDeposit/inquireDemandDepositAccountBalance", dto,
-			DemandDepositBalanceResponseDto.class);
+			CurrentAccountBalanceResponseDto.class);
 	}
 
+	/**
+	 * 수시 입출금 계좌 이체
+	 */
+	public CurrentAccountTransferResponseDto transferCurrentAccount(CurrentAccountTransferRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/demandDeposit/updateDemandDepositAccountTransfer", dto,
+			CurrentAccountTransferResponseDto.class);
+	}
+
+	/**
+	 * 수시 입출금 계좌 출금
+	 */
+	public CurrentAccountWithdrawResponseDto withdrawCurrentAccount(CurrentAccountWithdrawRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/demandDeposit/updateDemandDepositAccountWithdrawal", dto,
+			CurrentAccountWithdrawResponseDto.class);
+	}
+
+	/**
+	 * 수시 입출금 계좌 입금
+	 */
+	public CurrentAccountDepositResponseDto depositCurrentAccount(CurrentAccountDepositRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/demandDeposit/updateDemandDepositAccountDeposit", dto,
+			CurrentAccountDepositResponseDto.class);
+	}
 }
