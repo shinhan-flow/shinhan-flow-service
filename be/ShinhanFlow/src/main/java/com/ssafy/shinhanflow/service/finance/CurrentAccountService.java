@@ -14,6 +14,8 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
 import com.ssafy.shinhanflow.entity.MemberEntity;
 import com.ssafy.shinhanflow.repository.MemberRepository;
@@ -56,7 +58,7 @@ public class CurrentAccountService {
 
 	public CurrentAccountHolderResponseDto currentAccountHolderName(long userId, String accountNo) {
 
-		log.info("inquireDemandDepositAccountHolderName - userId: {}, accountNo: {}", userId, accountNo);
+		log.info("currentAccountHolderName - userId: {}, accountNo: {}", userId, accountNo);
 		MemberEntity memberEntity = findMemberOrThrow(userId);
 
 		String userKey = memberEntity.getUserKey();
@@ -75,7 +77,7 @@ public class CurrentAccountService {
 
 	public CurrentAccountBalanceResponseDto currentAccountBalance(long userId, String accountNo) {
 
-		log.info("inquireDemandDepositAccountBalance - userId: {}, accountNo: {}", userId, accountNo);
+		log.info("currentAccountBalance - userId: {}, accountNo: {}", userId, accountNo);
 		MemberEntity memberEntity = findMemberOrThrow(userId);
 
 		String userKey = memberEntity.getUserKey();
@@ -92,7 +94,7 @@ public class CurrentAccountService {
 	}
 
 	public CurrentAccountTransferResponseDto transferCurrentAccount(long userId, CurrentAccountTransferRequestDto dto) {
-		log.info("transferDemandDepositAccount - userId: {}", userId);
+		log.info("transferCurrentAccount - userId: {}", userId);
 		log.info("입금 계좌번호: {}, 출금 계좌번호: {}, 금액: {}", dto.getDepositAccountNo(), dto.getWithdrawalAccountNo(),
 			dto.getTransactionBalance());
 
@@ -113,6 +115,30 @@ public class CurrentAccountService {
 		return financeApiFetcher.transferCurrentAccount(requestDto);
 	}
 
+	public CurrentAccountWithdrawResponseDto withdrawCurrentAccount(long userId, CurrentAccountWithdrawRequestDto dto) {
+
+		log.info("withdrawCurrentAccount - userId: {}", userId);
+		log.info("출금 계좌번호: {}, 금액: {}", dto.getAccountNo(), dto.getTransactionBalance());
+
+		MemberEntity memberEntity = findMemberOrThrow(userId);
+
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("updateDemandDepositAccountWithdrawal",
+			userKey,
+			institutionCode);
+
+		CurrentAccountWithdrawRequestDto requestDto = CurrentAccountWithdrawRequestDto.builder()
+			.header(header)
+			.accountNo(dto.getAccountNo())
+			.transactionBalance(dto.getTransactionBalance())
+			.transactionSummary(dto.getTransactionSummary())
+			.build();
+
+		return financeApiFetcher.withdrawCurrentAccount(requestDto);
+	}
+
 	private MemberEntity findMemberOrThrow(long userId) {
 		Optional<MemberEntity> memberEntityOptional = memberRepository.findById(userId);
 		if (memberEntityOptional.isEmpty()) {
@@ -121,4 +147,5 @@ public class CurrentAccountService {
 			return memberEntityOptional.get();
 		}
 	}
+
 }

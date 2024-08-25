@@ -12,6 +12,8 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,5 +60,13 @@ public class FinanceApiService {
 	public CurrentAccountTransferResponseDto transferCurrentAccount(CurrentAccountTransferRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/demandDeposit/updateDemandDepositAccountTransfer", dto,
 			CurrentAccountTransferResponseDto.class);
+	}
+
+	/**
+	 * 수시 입출금 계좌 출금
+	 */
+	public CurrentAccountWithdrawResponseDto withdrawCurrentAccount(CurrentAccountWithdrawRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/demandDeposit/updateDemandDepositAccountWithdrawal", dto,
+			CurrentAccountWithdrawResponseDto.class);
 	}
 }

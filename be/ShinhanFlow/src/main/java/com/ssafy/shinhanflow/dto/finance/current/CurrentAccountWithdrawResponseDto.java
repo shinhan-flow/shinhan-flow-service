@@ -9,14 +9,13 @@ import lombok.Value;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class CurrentAccountTransferResponseDto extends FinanceApiResponseDto {
+public class CurrentAccountWithdrawResponseDto extends FinanceApiResponseDto {
 	@JsonProperty("Header")
 	ResponseHeaderDto header;
 	@JsonProperty("REC")
 	Rec rec;
 
-	private record Rec(Long transactionUniqueNo, String accountNo, String transactionDate, String transactionType,
-					   String transactionTypeName, String transactionAccountNO) {
-
+	private record Rec(Long transactionUniqueNo, String transactionDate) {
 	}
+
 }

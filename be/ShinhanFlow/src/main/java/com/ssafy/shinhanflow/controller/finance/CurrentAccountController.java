@@ -15,6 +15,9 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawResponseDto;
 import com.ssafy.shinhanflow.service.finance.CurrentAccountService;
 
 import lombok.RequiredArgsConstructor;
@@ -67,10 +70,19 @@ public class CurrentAccountController {
 	 * 수시 입출금 계좌 이체
 	 */
 	@PostMapping("/transfer")
-	public SuccessResponse<?> transferCurrentAccount(
+	public SuccessResponse<CurrentAccountTransferResponseDto> transferCurrentAccount(
 		@RequestHeader("Authorization") String token,
 		@RequestBody CurrentAccountTransferRequestDto dto) {
 		return SuccessResponse.of(currentAccountService.transferCurrentAccount(jwtUtil.getId(token), dto));
 	}
 
+	/**
+	 * 수시 입출금 계좌 출금
+	 */
+	@PostMapping("/withdraw")
+	public SuccessResponse<CurrentAccountWithdrawResponseDto> withdrawCurrentAccount(
+		@RequestHeader("Authorization") String token,
+		@RequestBody CurrentAccountWithdrawRequestDto dto) {
+		return SuccessResponse.of(currentAccountService.withdrawCurrentAccount(jwtUtil.getId(token), dto));
+	}
 }
