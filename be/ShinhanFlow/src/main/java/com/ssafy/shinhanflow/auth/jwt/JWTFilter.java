@@ -9,8 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ssafy.shinhanflow.auth.custom.CustomUserDetails;
-import com.ssafy.shinhanflow.auth.repository.MemberRepository;
 import com.ssafy.shinhanflow.entity.MemberEntity;
+import com.ssafy.shinhanflow.repository.MemberRepository;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
