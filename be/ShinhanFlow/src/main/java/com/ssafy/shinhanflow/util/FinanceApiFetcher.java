@@ -41,11 +41,10 @@ public class FinanceApiFetcher {
 				.contentType(MediaType.APPLICATION_JSON)
 				.bodyValue(objectMapper.writeValueAsString(financeApiRequestDto))
 				.retrieve()
-				.onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+				.onStatus(HttpStatusCode::isError, clientResponse -> {
 					if (clientResponse.statusCode() == HttpStatus.BAD_REQUEST) {
 						return clientResponse.bodyToMono(FinanceApiErrorBody.class)
 							.flatMap(errorBody -> {
-
 								FinanceApiErrorBody.Header header = errorBody.getHeader();
 								if (header == null) {
 									throw new FinanceApiException(clientResponse.statusCode(),
