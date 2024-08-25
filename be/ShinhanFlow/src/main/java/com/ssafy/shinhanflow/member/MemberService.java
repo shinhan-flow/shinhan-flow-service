@@ -22,7 +22,7 @@ public class MemberService {
 	private final FinanceApiFetcher financeApiFetcher;
 	private final SecurityConfig securityConfig;
 
-	public MemberResponseDto createMember(SignUpRequestDto signUpRequestDto) {
+	public Boolean createMember(SignUpRequestDto signUpRequestDto) {
 		// communicate with finance api
 		MemberRequestDto memberRequestDto = new MemberRequestDto(apiKey, signUpRequestDto.email());
 		MemberResponseDto memberResponseDto = financeApiFetcher.createMember(memberRequestDto);
@@ -35,6 +35,6 @@ public class MemberService {
 			.build();
 		memberRepository.save(memberEntity);
 		// return response
-		return memberResponseDto;
+		return true;
 	}
 }
