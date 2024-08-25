@@ -1,6 +1,6 @@
 package com.ssafy.shinhanflow.util;
 
-import static com.ssafy.shinhanflow.config.error.ErrorCode.*;
+import static com.ssafy.shinhanflow.config.error.ErrorCode.INTERNAL_SERVER_ERROR;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -48,10 +48,13 @@ public class FinanceApiFetcher {
 
 								FinanceApiErrorBody.Header header = errorBody.getHeader();
 								if (header == null) {
-									throw new FinanceApiException(errorBody.getResponseCode(),
+									throw new FinanceApiException(clientResponse.statusCode(),
+										errorBody.getResponseCode(),
 										errorBody.getResponseMessage());
 								}
-								throw new FinanceApiException(header.getResponseCode(), header.getResponseMessage());
+								throw new FinanceApiException(clientResponse.statusCode(),
+									header.getResponseCode(),
+									header.getResponseMessage());
 							});
 					}
 					return clientResponse.createException().flatMap(Mono::error);
