@@ -7,7 +7,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.ssafy.shinhanflow.finance.dto.header.RequestHeaderDto;
+import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
 
 @Component
 public class FinanceApiHeaderGenerator {

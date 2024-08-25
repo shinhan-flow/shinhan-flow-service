@@ -19,7 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import com.ssafy.shinhanflow.auth.jwt.JWTFilter;
 import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
 import com.ssafy.shinhanflow.auth.jwt.LoginFilter;
-import com.ssafy.shinhanflow.auth.repository.MemberRepository;
+import com.ssafy.shinhanflow.repository.MemberRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

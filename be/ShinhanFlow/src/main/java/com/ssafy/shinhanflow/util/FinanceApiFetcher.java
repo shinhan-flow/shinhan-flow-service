@@ -1,6 +1,6 @@
 package com.ssafy.shinhanflow.util;
 
-import static com.ssafy.shinhanflow.config.error.ErrorCode.INTERNAL_SERVER_ERROR;
+import static com.ssafy.shinhanflow.config.error.ErrorCode.*;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -12,19 +12,19 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.shinhanflow.config.error.FinanceApiErrorBody;
 import com.ssafy.shinhanflow.config.error.exception.BusinessBaseException;
 import com.ssafy.shinhanflow.config.error.exception.FinanceApiException;
-import com.ssafy.shinhanflow.finance.dto.FinanceApiRequestDto;
-import com.ssafy.shinhanflow.finance.dto.FinanceApiResponseDto;
-import com.ssafy.shinhanflow.finance.dto.MemberRequestDto;
-import com.ssafy.shinhanflow.finance.dto.MemberResponseDto;
-import com.ssafy.shinhanflow.finance.dto.account.DemandDepositBalanceRequestDto;
-import com.ssafy.shinhanflow.finance.dto.account.DemandDepositBalanceResponseDto;
-import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderRequestDto;
-import com.ssafy.shinhanflow.finance.dto.account.DemandDepositHolderResponseDto;
-import com.ssafy.shinhanflow.finance.dto.account.DemandDepositRequestDto;
-import com.ssafy.shinhanflow.finance.dto.account.DemandDepositResponseDto;
-import com.ssafy.shinhanflow.financeapi.dto.FinanceApiErrorBody;
+import com.ssafy.shinhanflow.dto.finance.FinanceApiRequestDto;
+import com.ssafy.shinhanflow.dto.finance.FinanceApiResponseDto;
+import com.ssafy.shinhanflow.dto.finance.MemberRequestDto;
+import com.ssafy.shinhanflow.dto.finance.MemberResponseDto;
+import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositBalanceRequestDto;
+import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositBalanceResponseDto;
+import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositHolderRequestDto;
+import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositHolderResponseDto;
+import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositRequestDto;
+import com.ssafy.shinhanflow.dto.finance.deposit.DemandDepositResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
