@@ -84,6 +84,14 @@ public class SecurityConfig {
 		http
 			.authorizeHttpRequests((auth) -> auth
 				.requestMatchers("/login", "/api/v1/members").permitAll()
+				// swagger 설정
+				.requestMatchers(
+					"/h2-console/**",
+					"/favicon.ico",
+					"/error",
+					"/swagger-ui/**",
+					"/swagger-resources/**",
+					"/v3/api-docs/**").permitAll()
 				.requestMatchers("/api/v1/auth/access-token").permitAll()
 				.anyRequest().authenticated());
 
