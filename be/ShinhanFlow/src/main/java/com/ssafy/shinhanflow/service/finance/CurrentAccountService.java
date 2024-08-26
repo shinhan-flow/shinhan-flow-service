@@ -18,6 +18,8 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawRequestDto;
@@ -198,6 +200,30 @@ public class CurrentAccountService {
 			.build();
 
 		return financeApiFetcher.currentAccountListInfo(dto);
+	}
+
+	public CurrentAccountTransactionHistoryResponseDto currentAccountTransactionHistory(long userId, String accountNo,
+		String startDate, String endDate, String transactionType,
+		String orderByType) {
+		log.info("currentAccountTransactionHistory - userId: {}, accountNo: {}, startDate: {}, endDate: {}", userId,
+			accountNo, startDate, endDate);
+		MemberEntity memberEntity = findMemberOrThrow(userId);
+
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireTransactionHistory", userKey,
+			institutionCode);
+		CurrentAccountTransactionHistoryRequestDto dto = CurrentAccountTransactionHistoryRequestDto.builder()
+			.header(header)
+			.accountNo(accountNo)
+			.startDate(startDate)
+			.endDate(endDate)
+			.transactionType(transactionType)
+			.orderByType(orderByType)
+			.build();
+
+		return financeApiFetcher.currentAccountTransactionHistory(dto);
 	}
 
 	private MemberEntity findMemberOrThrow(long userId) {
