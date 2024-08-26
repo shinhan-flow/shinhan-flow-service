@@ -6,11 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.shinhanflow.dto.finance.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.ResponseHeaderDto;
 
-import lombok.Builder;
 import lombok.Value;
 
 @Value
-@Builder
 public class ExchangeRatesResponseDto extends FinanceApiResponseDto {
 	@JsonProperty("Header")
 	ResponseHeaderDto header;
