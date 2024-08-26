@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shinhan_flow/action/param/action_balance_notification_param.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/flow/model/enum/action_category.dart';
@@ -19,6 +20,8 @@ import 'package:shinhan_flow/trigger/view/account_trigger_screen.dart';
 import 'package:shinhan_flow/trigger/view/time_trigger_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 
+import '../../action/model/enum/action_type.dart';
+import '../../action/view/action_notification_screen.dart';
 import '../../common/component/bottom_nav_button.dart';
 import '../../trigger/view/exchange_trigger_screen.dart';
 import '../../trigger/view/product_trigger_screen.dart';
@@ -36,11 +39,12 @@ class FlowInitScreen extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          final valid = ref.watch(flowFormProvider).valid;
           return BottomNavButton(
               child: DefaultTextButton(
             onPressed: () {},
             text: '생성하기',
-            able: false,
+            able: valid,
           ));
         },
       ),
@@ -305,6 +309,7 @@ class _TriggerComponent extends ConsumerWidget {
                 actionType: t,
                 onTap: () {
                   if (ActionCategoryType.notification == t) {
+                    context.pushNamed(ActionNotificationScreen.routeName);
                   } else if (ActionCategoryType.exchange == t) {
                   } else {}
                 },
@@ -377,23 +382,23 @@ class _FlowInitCard extends ConsumerWidget {
     if (triggerType == TriggerCategoryType.time) {
       final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
       try {
-        final findTrigger = triggers.singleWhere((t) => t.code.isTimeType());
-        final param = (findTrigger.data as TgDateTimeParam);
+        final findTrigger = triggers.singleWhere((t) => t.type.isTimeType());
+        final param = (findTrigger as TgDateTimeParam);
 
-        switch (findTrigger.code) {
-          case FlowType.specificDate:
+        switch (findTrigger.type) {
+          case TriggerType.specificDate:
             content = "${param.date}";
             break;
-          case FlowType.periodDate:
+          case TriggerType.periodDate:
             content = "${param.startDate}부터\n${param.endDate}까지";
             break;
-          case FlowType.dayOfWeek:
+          case TriggerType.dayOfWeek:
             final dayOfWeek = param.dayOfWeek
                 ?.map((d) => d.name)
                 .reduce((v, e) => "$v, ${e}");
             content = "매주 $dayOfWeek 반복";
             break;
-          case FlowType.dayOfMonth:
+          case TriggerType.dayOfMonth:
             final dayOfWeek = param.dayOfMonth
                 ?.map((d) => d.toString())
                 .reduce((v, e) => "$v, $e");
@@ -409,8 +414,8 @@ class _FlowInitCard extends ConsumerWidget {
       final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
       try {
         final findTrigger =
-            triggers.singleWhere((t) => t.code == FlowType.interestRate);
-        final param = (findTrigger.data as TgProductParam);
+            triggers.singleWhere((t) => t.type == TriggerType.interestRate);
+        final param = (findTrigger as TgProductParam);
         if (param.product != null) {
           content = "${param.product!.name} 금리 ${param.interestRate}%";
         }
@@ -421,10 +426,24 @@ class _FlowInitCard extends ConsumerWidget {
       final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
       try {
         final findTrigger =
-            triggers.singleWhere((t) => t.code == FlowType.exchangeRate);
-        final param = (findTrigger.data as TgExchangeParam);
+            triggers.singleWhere((t) => t.type == TriggerType.exchangeRate);
+        final param = (findTrigger as TgExchangeParam);
         if (param.currency != null) {
           content = "${param.currency!.displayName}가 ${param.exRate} 이하";
+        }
+      } on Error catch (e) {
+        log("Error ${e}");
+      }
+    }
+
+    if (actionType == ActionCategoryType.notification) {
+      final actions = ref.watch(flowFormProvider.select((f) => f.actions));
+      try {
+        final findAction = actions
+            .singleWhere((t) => t.type == ActionType.balanceNotification);
+        final param = (findAction as AcBalanceNotificationParam);
+        if (param.account.isNotEmpty) {
+          content = "계좌번호 ${param.account} 잔액 알림";
         }
       } on Error catch (e) {
         log("Error ${e}");

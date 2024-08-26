@@ -13,21 +13,24 @@ class TgDateTimeParam extends TriggerBaseParam {
   final String? date;
 
   /// 기간
-  @JsonKey(name: 'start_date')
+  // @JsonKey(name: 'start_date')
   final String? startDate;
-  @JsonKey(name: 'end_date')
+
+  // @JsonKey(name: 'end_date')
   final String? endDate;
 
   /// 여러 요일
-  @JsonKey(name: 'day_of_week')
+  // @JsonKey(name: 'day_of_week')
   final List<DayOfWeek>? dayOfWeek;
-  @JsonKey(name: 'day_of_month')
+
+  // @JsonKey(name: 'day_of_month')
   final List<int>? dayOfMonth;
   final List<String>? dates;
-  @JsonKey(name: 'specific_time')
+
+  // @JsonKey(name: 'specific_time')
   final String? specificTime;
 
-  const TgDateTimeParam({
+  TgDateTimeParam({
     this.startDate,
     this.endDate,
     this.date,
@@ -35,10 +38,12 @@ class TgDateTimeParam extends TriggerBaseParam {
     this.dayOfWeek,
     this.dayOfMonth,
     this.dates,
+    required super.type,
   });
 
   @override
   List<Object?> get props => [
+        type,
         startDate,
         endDate,
         date,
@@ -52,22 +57,24 @@ class TgDateTimeParam extends TriggerBaseParam {
   bool? get stringify => true;
 
   factory TgDateTimeParam.fromForm({required TgDateTimeFormModel form}) {
-    if (form.flowType != null) {
-      switch (form.flowType) {
-        case FlowType.specificDate:
-          return TgDateTimeParam(date: form.date);
-        case FlowType.periodDate:
+    if (form.type != null) {
+      switch (form.type) {
+        case TriggerType.specificDate:
+          return TgDateTimeParam(date: form.date, type: form.type!);
+        case TriggerType.periodDate:
           return TgDateTimeParam(
-              startDate: form.startDate, endDate: form.endDate);
-        case FlowType.dayOfWeek:
-          return TgDateTimeParam(dayOfWeek: form.dayOfWeek);
-        case FlowType.dayOfMonth:
-          return TgDateTimeParam(dayOfMonth: form.dayOfMonth);
+              startDate: form.startDate,
+              endDate: form.endDate,
+              type: form.type!);
+        case TriggerType.dayOfWeek:
+          return TgDateTimeParam(dayOfWeek: form.dayOfWeek, type: form.type!);
+        case TriggerType.dayOfMonth:
+          return TgDateTimeParam(dayOfMonth: form.dayOfMonth, type: form.type!);
         default:
           break;
       }
     }
-    return const TgDateTimeParam();
+    return TgDateTimeParam(type: form.type!);
   }
 
   @override

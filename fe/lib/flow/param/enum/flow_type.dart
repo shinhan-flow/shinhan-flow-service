@@ -1,4 +1,4 @@
-enum FlowType {
+enum TriggerType {
   /// 트리거 타입
   /// 계좌
   balance,
@@ -36,33 +36,22 @@ enum FlowType {
   interestRate,
 
   /// 특정 시간 트리거
-  specificTime;
+  specificTime,
 }
-// specificDate,
-//
-// /// 특정 기간을 확인하는 트리거 생성
-// /// ex) "2024-08-11"
-// periodDate,
-//
-// /// 요일을 설정하는 트리거 생성
-// /// ex) ["MON", "TUE", "WEN", "THU", "FRI", "SAT", "SUN"]
-// dayOfWeek,
-//
-// dayOfMonth,
 
-extension FlowExtension on FlowType {
+extension FlowExtension on TriggerType {
   bool isTimeType() {
-    return FlowType.periodDate == this ||
-        FlowType.specificDate == this ||
-        FlowType.dayOfMonth == this ||
-        FlowType.dayOfWeek == this;
+    return TriggerType.periodDate == this ||
+        TriggerType.specificDate == this ||
+        TriggerType.dayOfMonth == this ||
+        TriggerType.dayOfWeek == this;
   }
 
   bool isProductType() {
-    return FlowType.interestRate == this;
+    return TriggerType.interestRate == this;
   }
 
   bool isExchangeType() {
-    return FlowType.exchangeRate == this;
+    return TriggerType.exchangeRate == this;
   }
 }
