@@ -2,6 +2,7 @@ package com.ssafy.shinhanflow.util;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.shinhanflow.config.error.exception.FinanceApiException;
 import com.ssafy.shinhanflow.dto.finance.MemberRequestDto;
 import com.ssafy.shinhanflow.dto.finance.MemberResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceRequestDto;
@@ -13,6 +14,8 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoListResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountProductRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountProductResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryRequestDto;
@@ -21,6 +24,10 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDt
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawResponseDto;
+import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsRequestDto;
+import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
+import com.ssafy.shinhanflow.dto.finance.product.LoanProductsRequestDto;
+import com.ssafy.shinhanflow.dto.finance.product.LoanProductsResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +39,15 @@ public class FinanceApiService {
 	private final FinanceApiFetcher financeApiFetcher;
 
 	public MemberResponseDto createMember(MemberRequestDto memberRequestDto) {
-		return financeApiFetcher.fetch("/member", memberRequestDto, MemberResponseDto.class);
+		try {
+			return financeApiFetcher.fetch("/member", memberRequestDto, MemberResponseDto.class);
+
+		} catch (FinanceApiException e) {
+			if (e.getErrorCode().equals("E4002")) {
+				return financeApiFetcher.fetch("/member/search", memberRequestDto, MemberResponseDto.class);
+			} else
+				throw e;
+		}
 	}
 
 	/**
@@ -108,5 +123,35 @@ public class FinanceApiService {
 		CurrentAccountTransactionHistoryRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/demandDeposit/inquireTransactionHistoryList", dto,
 			CurrentAccountTransactionHistoryResponseDto.class);
+
+  /**
+	 * 수시 입출금 계좌 상품 조회
+	 */
+	public CurrentAccountProductResponseDto currentAccountProducts(CurrentAccountProductRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/demandDeposit/inquireDemandDepositList", dto,
+			CurrentAccountProductResponseDto.class);
+	}
+
+	/**
+	 * 예금 상품 조회
+	 */
+	public DepositAndSavingProductsResponseDto depositProductsInfo(DepositAndSavingProductsRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/deposit/inquireDepositProducts", dto,
+			DepositAndSavingProductsResponseDto.class);
+	}
+
+	/**
+	 * 적금 상품 조회
+	 */
+	public DepositAndSavingProductsResponseDto savingProductsInfo(DepositAndSavingProductsRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/savings/inquireSavingsProducts", dto,
+			DepositAndSavingProductsResponseDto.class);
+	}
+
+	/**
+	 * 대출 상품 조회
+	 */
+	public LoanProductsResponseDto loanProductsInfo(LoanProductsRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/loan/inquireLoanProductList", dto, LoanProductsResponseDto.class);
 	}
 }

@@ -2,9 +2,7 @@ package com.ssafy.shinhanflow.auth.jwt;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +14,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.shinhanflow.auth.custom.CustomUserDetails;
+import com.ssafy.shinhanflow.auth.dto.LoginSuccessResponseDto;
+import com.ssafy.shinhanflow.config.error.ErrorCode;
+import com.ssafy.shinhanflow.config.error.ErrorResponse;
+import com.ssafy.shinhanflow.config.error.SuccessResponse;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -68,33 +70,53 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		String accessToken = jwtUtil.createJwt("access", userId, role, accessTokenExpireTime);
 		String refreshToken = jwtUtil.createJwt("refresh", userId, role, refreshTokenExpireTime);
 
-		// 토큰 전송
-		respondWithTokens(response, accessToken, refreshToken);
-	}
+		// 로그인 성공 응답 생성
+		LoginSuccessResponseDto loginSuccessResponseDto = LoginSuccessResponseDto.builder()
+			.accessToken(accessToken)
+			.refreshToken(refreshToken)
+			.build();
 
-	private static void respondWithTokens(HttpServletResponse response, String accessToken, String refreshToken) {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, String> tokenResponse = new HashMap<>();
-		tokenResponse.put("access", accessToken);
-		tokenResponse.put("refresh", refreshToken);
-
-		try {
-			String jsonResponse = objectMapper.writeValueAsString(tokenResponse);
-			response.getWriter().write(jsonResponse);
-			response.setStatus(HttpStatus.OK.value());
-		} catch (IOException e) {
-			log.error("Error writing JSON response", e);
-			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		}
+		// 성공 응답, 토큰 전송
+		respondWithSuccess(response, SuccessResponse.of(loginSuccessResponseDto));
 	}
 
 	//로그인 실패시 실행하는 메소드
 	@Override
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 		AuthenticationException failed) {
+
 		log.error("login 요청 실패");
-		response.setStatus(HttpStatus.UNAUTHORIZED.value());
+		respondWithError(response, ErrorResponse.of(ErrorCode.INVALID_CREDENTIALS));
+
 	}
+
+	private static <LoginSuccessResponseDto> void respondWithSuccess(HttpServletResponse response,
+		SuccessResponse<LoginSuccessResponseDto> successResponse) {
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+
+		try {
+			String jsonResponse = new ObjectMapper().writeValueAsString(successResponse);
+			response.setStatus(successResponse.getCode().value());
+			response.getWriter().write(jsonResponse);
+		} catch (IOException e) {
+			log.error("Error writing JSON response", e);
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+		}
+	}
+
+	private static void respondWithError(HttpServletResponse response, ErrorResponse errorResponse) {
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+
+		try {
+			String jsonResponse = new ObjectMapper().writeValueAsString(errorResponse);
+			response.setStatus(HttpStatus.BAD_REQUEST.value());
+			response.getWriter().write(jsonResponse);
+		} catch (IOException e) {
+			log.error("Error writing JSON response", e);
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+		}
+	}
+
 }
