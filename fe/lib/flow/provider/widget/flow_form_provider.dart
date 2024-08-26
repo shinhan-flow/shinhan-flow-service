@@ -93,6 +93,8 @@ class FlowForm extends _$FlowForm {
       triggers.removeWhere((t) => t.type.isProductType());
     } else if (trigger.type.isExchangeType()) {
       triggers.removeWhere((t) => t.type.isExchangeType());
+    }else{
+      triggers.removeWhere((t) => t.type.isAccountType());
     }
 
     final newTriggers = triggers..add(trigger);

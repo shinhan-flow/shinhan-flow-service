@@ -1,10 +1,10 @@
 enum TriggerType {
   /// 트리거 타입
   /// 계좌
-  balance,
-  deposit,
-  transfer,
-  withdraw,
+  balance, // 잔액
+  deposit, // 입금
+  transfer, // 이체
+  withdraw, // 출금
 
   /// 날짜
   /// 특정 날짜임을 확인하는 트리거 생성
@@ -39,7 +39,7 @@ enum TriggerType {
   specificTime,
 }
 
-extension FlowExtension on TriggerType {
+extension TriggerExtension on TriggerType {
   bool isTimeType() {
     return TriggerType.periodDate == this ||
         TriggerType.specificDate == this ||
@@ -53,5 +53,12 @@ extension FlowExtension on TriggerType {
 
   bool isExchangeType() {
     return TriggerType.exchangeRate == this;
+  }
+
+  bool isAccountType() {
+    return TriggerType.balance == this ||
+        TriggerType.deposit == this ||
+        TriggerType.transfer == this ||
+        TriggerType.withdraw == this;
   }
 }

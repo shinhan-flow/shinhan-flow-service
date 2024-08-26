@@ -5,12 +5,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shinhan_flow/action/param/action_balance_notification_param.dart';
+import 'package:shinhan_flow/action/param/action_exchange_rate_notification_param.dart';
+import 'package:shinhan_flow/action/param/action_text_notification_param.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/flow/model/enum/action_category.dart';
 import 'package:shinhan_flow/flow/model/enum/trigger_category.dart';
 import 'package:shinhan_flow/flow/model/enum/widget/flow_property.dart';
 import 'package:shinhan_flow/flow/param/enum/flow_type.dart';
+import 'package:shinhan_flow/flow/param/trigger/account/trigger_balance_account_param.dart';
+import 'package:shinhan_flow/flow/param/trigger/account/trigger_deposit_account_param.dart';
+import 'package:shinhan_flow/flow/param/trigger/account/trigger_transfer_account_param.dart';
+import 'package:shinhan_flow/flow/param/trigger/account/trigger_withdraw_account_param.dart';
 import 'package:shinhan_flow/flow/param/trigger/trigger_product_param.dart';
 import 'package:shinhan_flow/flow/provider/widget/time_form_provider.dart';
 import 'package:shinhan_flow/flow/provider/widget/trigger_category_provider.dart';
@@ -434,16 +440,56 @@ class _FlowInitCard extends ConsumerWidget {
       } on Error catch (e) {
         log("Error ${e}");
       }
+    } else if (triggerType == TriggerCategoryType.transfer) {
+      final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
+      try {
+        final findTrigger = triggers.singleWhere((t) => t.type.isAccountType());
+
+        switch (findTrigger.type) {
+          case TriggerType.balance:
+            final param = (findTrigger as TgAccountBalanceParam);
+            content =
+                '${param.account} ${param.balance}원 ${param.condition.name}';
+            break;
+          case TriggerType.deposit:
+            final param = (findTrigger as TgAccountDepositParam);
+            content = '${param.account} ${param.amount}원';
+
+            break;
+          case TriggerType.transfer:
+            final param = (findTrigger as TgAccountTransferParam);
+            content =
+                '${param.fromAccount} ${param.toAccount} ${param.amount}원';
+
+            break;
+          case TriggerType.withdraw:
+            final param = (findTrigger as TgAccountWithdrawParam);
+            content = '${param.account} ${param.amount}원';
+            break;
+          default:
+            break;
+        }
+      } on Error catch (e) {
+        log("Error ${e}");
+      }
     }
 
     if (actionType == ActionCategoryType.notification) {
       final actions = ref.watch(flowFormProvider.select((f) => f.actions));
       try {
-        final findAction = actions
-            .singleWhere((t) => t.type == ActionType.balanceNotification);
-        final param = (findAction as AcBalanceNotificationParam);
-        if (param.account.isNotEmpty) {
-          content = "계좌번호 ${param.account} 잔액 알림";
+        final findAction =
+            actions.singleWhere((t) => t.type.isNotificationType());
+        if (findAction.type == ActionType.balanceNotification) {
+          final param = (findAction as AcBalanceNotificationParam);
+          if (param.account.isNotEmpty) {
+            content = "계좌번호 ${param.account} 잔액 알림";
+          }
+        } else if (findAction.type == ActionType.exchangeRateNotification) {
+          final param = (findAction as AcExchangeRateNotificationParam);
+          content = '${param.currency.displayName} 환전 알림';
+        } else if (findAction.type == ActionType.textNotification) {
+          final param = (findAction as AcTextNotificationParam);
+          content = '${param.text} 알림';
         }
       } on Error catch (e) {
         log("Error ${e}");

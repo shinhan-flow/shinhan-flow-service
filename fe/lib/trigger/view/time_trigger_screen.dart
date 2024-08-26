@@ -400,13 +400,13 @@ class _TimeCategoryComponent extends ConsumerWidget {
     if (flowType != null) {
       switch (flowType) {
         case TimeCategory.normal:
-          title = '트리거의 특정 날짜를 선택해보세요!';
+          title = '조건의 특정 날짜를 선택해보세요!';
           break;
         case TimeCategory.period:
-          title = '트리거의 기간을 선택해보세요!';
+          title = '조건의 기간을 선택해보세요!';
           break;
         case TimeCategory.iterate:
-          title = '트리거를 반복하고 싶은\n날짜 또는 요일을 선택해보세요!';
+          title = '조건을 반복하고 싶은\n날짜 또는 요일을 선택해보세요!';
           break;
         // case TimeCategory.multi:
         //   title = '트리거의 여러 날짜를 선택해보세요!';

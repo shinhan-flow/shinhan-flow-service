@@ -80,11 +80,17 @@ class ActionNotificationScreen extends ConsumerWidget {
                   )
                 else if (category == ActionType.textNotification)
                   SliverToBoxAdapter(
-                    child: _ActionExchangeRateForm(),
+                    child: _ActionTextForm(),
                   )
                 else
                   SliverToBoxAdapter(
-                    child: Text(""),
+                    child: Padding(
+                      padding: EdgeInsets.all(24.r),
+                      child: Text(
+                        "원하시는 알림을 선택하여\nFlow를 더욱 활용해보세요!",
+                        style: SHFlowTextStyle.subTitle,
+                      ),
+                    ),
                   )
               ],
             )),
@@ -168,6 +174,23 @@ class _NotificationFilter extends StatelessWidget {
           property.name,
           style: SHFlowTextStyle.labelBold,
         ),
+      ),
+    );
+  }
+}
+
+class _ActionTextForm extends ConsumerWidget {
+  const _ActionTextForm({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: EdgeInsets.all(24.r),
+      child: CustomTextFormField(
+        hintText: '사용자 알림 내용을 입력해주세요.',
+        onChanged: (v) {
+          ref.read(acTextNotificationFormProvider.notifier).update(text: v);
+        },
       ),
     );
   }

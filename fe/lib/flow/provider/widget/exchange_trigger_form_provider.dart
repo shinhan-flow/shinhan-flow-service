@@ -45,7 +45,6 @@ class TgExchangeFormModel extends TgExchangeParam with BaseFormModel {
   @override
   DefaultParam toParam() {
     return TgExchangeParam.fromForm(form: this);
-
   }
 }
 
