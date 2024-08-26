@@ -29,8 +29,10 @@ public class GlobalExceptionHandler {
 	protected ResponseEntity<ErrorResponse> handle(FinanceApiException e) {
 		log.error("FinanceApiException", e);
 		return new ResponseEntity<>(
-			ErrorResponse.of(e.getErrorCode(), e.getMessage()),
-			e.getStatus()
+			ErrorResponse.of(
+				e.getErrorCode(),
+				e.getMessage()),
+			e.getHttpStatusCode()
 		);
 	}
 

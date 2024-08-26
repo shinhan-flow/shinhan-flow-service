@@ -3,7 +3,6 @@ package com.ssafy.shinhanflow.util;
 import static com.ssafy.shinhanflow.config.error.ErrorCode.INTERNAL_SERVER_ERROR;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -19,10 +18,10 @@ import com.ssafy.shinhanflow.dto.finance.FinanceApiRequestDto;
 import com.ssafy.shinhanflow.dto.finance.FinanceApiResponseDto;
 
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
+@Component
 public class FinanceApiFetcher {
 	@Value("${finance-api.key}")
 	private String apiKey;
@@ -43,20 +42,19 @@ public class FinanceApiFetcher {
 				.contentType(MediaType.APPLICATION_JSON)
 				.bodyValue(objectMapper.writeValueAsString(financeApiRequestDto))
 				.retrieve()
-				.onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-					if (clientResponse.statusCode() == HttpStatus.BAD_REQUEST) {
-						return clientResponse.bodyToMono(FinanceApiErrorBody.class)
-							.flatMap(errorBody -> {
-
-								FinanceApiErrorBody.Header header = errorBody.getHeader();
-								if (header == null) {
-									throw new FinanceApiException(errorBody.getResponseCode(),
-										errorBody.getResponseMessage());
-								}
-								throw new FinanceApiException(header.getResponseCode(), header.getResponseMessage());
-							});
-					}
-					return clientResponse.createException().flatMap(Mono::error);
+				.onStatus(HttpStatusCode::isError, clientResponse -> {
+					return clientResponse.bodyToMono(FinanceApiErrorBody.class)
+						.flatMap(errorBody -> {
+							FinanceApiErrorBody.Header header = errorBody.getHeader();
+							if (header == null) {
+								throw new FinanceApiException(clientResponse.statusCode(),
+									errorBody.getResponseCode(),
+									errorBody.getResponseMessage());
+							}
+							throw new FinanceApiException(clientResponse.statusCode(),
+								header.getResponseCode(),
+								header.getResponseMessage());
+						});
 				});
 			return response.bodyToMono(responseType).block();
 		} catch (JsonProcessingException e) {
