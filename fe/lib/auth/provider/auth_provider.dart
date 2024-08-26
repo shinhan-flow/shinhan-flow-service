@@ -34,6 +34,7 @@ class TokenProvider extends ChangeNotifier {
     await ref.read(authProvider.notifier).logout();
   }
 
+
   String? redirectLogic(GoRouterState goRouteState) {
     log('redirect start!');
     final tokens = ref.read(authProvider);
