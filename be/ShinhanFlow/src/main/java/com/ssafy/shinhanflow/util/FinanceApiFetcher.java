@@ -1,6 +1,6 @@
 package com.ssafy.shinhanflow.util;
 
-import static com.ssafy.shinhanflow.config.error.ErrorCode.*;
+import static com.ssafy.shinhanflow.config.error.ErrorCode.INTERNAL_SERVER_ERROR;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

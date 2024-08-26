@@ -1,4 +1,4 @@
-package com.ssafy.shinhanflow.dto.finance.deposit;
+package com.ssafy.shinhanflow.dto.finance.current;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.shinhanflow.dto.finance.FinanceApiRequestDto;
@@ -9,7 +9,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class DemandDepositRequestDto extends FinanceApiRequestDto {
+public class CurrentAccountRequestDto extends FinanceApiRequestDto {
 	@JsonProperty("Header")
 	RequestHeaderDto header;
 	String accountTypeUniqueNo;

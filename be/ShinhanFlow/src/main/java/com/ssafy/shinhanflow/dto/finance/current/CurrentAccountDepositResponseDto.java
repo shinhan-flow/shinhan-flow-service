@@ -1,22 +1,21 @@
-package com.ssafy.shinhanflow.dto.finance.deposit;
+package com.ssafy.shinhanflow.dto.finance.current;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.shinhanflow.dto.finance.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.ResponseHeaderDto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 @Value
-public class DemandDepositResponseDto extends FinanceApiResponseDto {
-
+@EqualsAndHashCode(callSuper = true)
+public class CurrentAccountDepositResponseDto extends FinanceApiResponseDto {
 	@JsonProperty("Header")
 	ResponseHeaderDto header;
 	@JsonProperty("REC")
 	Rec rec;
 
-	private record Rec(String bankCode, String accountNo, Currency currency) {
+	private record Rec(Long transactionUniqueNo, String transactionDate) {
 	}
 
-	private record Currency(String currency, String currencyName) {
-	}
 }
