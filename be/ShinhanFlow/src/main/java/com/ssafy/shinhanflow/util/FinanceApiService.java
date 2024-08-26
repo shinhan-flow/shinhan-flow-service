@@ -19,6 +19,10 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDt
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawResponseDto;
+import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsRequestDto;
+import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
+import com.ssafy.shinhanflow.dto.finance.product.LoanProductsRequestDto;
+import com.ssafy.shinhanflow.dto.finance.product.LoanProductsResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -97,5 +101,28 @@ public class FinanceApiService {
 	public CurrentAccountInfoListResponseDto currentAccountListInfo(CurrentAccountInfoRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/demandDeposit/inquireDemandDepositAccountList", dto,
 			CurrentAccountInfoListResponseDto.class);
+	}
+
+	/**
+	 * 예금 상품 조회
+	 */
+	public DepositAndSavingProductsResponseDto depositProductsInfo(DepositAndSavingProductsRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/deposit/inquireDepositProducts", dto,
+			DepositAndSavingProductsResponseDto.class);
+	}
+
+	/**
+	 * 적금 상품 조회
+	 */
+	public DepositAndSavingProductsResponseDto savingProductsInfo(DepositAndSavingProductsRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/savings/inquireSavingsProducts", dto,
+			DepositAndSavingProductsResponseDto.class);
+	}
+
+	/**
+	 * 대출 상품 조회
+	 */
+	public LoanProductsResponseDto loanProductsInfo(LoanProductsRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/loan/inquireLoanProductList", dto, LoanProductsResponseDto.class);
 	}
 }
