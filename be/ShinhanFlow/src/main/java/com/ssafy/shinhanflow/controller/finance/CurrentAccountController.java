@@ -126,7 +126,7 @@ public class CurrentAccountController {
 	/**
 	 * 수시 입출금 계좌 거래 내역 조회
 	 */
-	@GetMapping("/{accountNo}/transaction-history")
+	@PostMapping("/{accountNo}/transaction-history")
 	public SuccessResponse<CurrentAccountTransactionHistoryResponseDto> currentAccountTransactionHistory(
 		@RequestHeader("Authorization") String token,
 		@PathVariable String accountNo,
