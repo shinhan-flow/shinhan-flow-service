@@ -54,7 +54,8 @@ public record CreateFlowRequestDto(
 	@JsonTypeInfo(
 		use = JsonTypeInfo.Id.NAME,
 		include = JsonTypeInfo.As.PROPERTY,
-		property = "type"
+		property = "type",
+		visible = true
 	)
 	@JsonSubTypes({
 		@JsonSubTypes.Type(value = TextNotificationAction.class, name = "textNotification"),
@@ -67,4 +68,5 @@ public record CreateFlowRequestDto(
 	@Valid
 	Action[] actions
 ) {
+
 }

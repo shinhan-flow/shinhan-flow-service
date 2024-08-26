@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,8 +36,8 @@ public class ActionEntity {
 	private Long flowId;
 
 	@NotNull
-	@Column(name = "code")
-	private int code;
+	@Column(name = "type")
+	private String type;
 
 	@NotNull
 	@Column(name = "data")
@@ -54,14 +55,11 @@ public class ActionEntity {
 	@Column(name = "deleted_at", insertable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime deletedAt;
 
-	public enum Category {
-		NOTIFICATION, TRANSFER, EXCHANGE
-	}
-
-	public ActionEntity(Long memberId, Long flowId, int code, String data) {
+	@Builder
+	public ActionEntity(Long memberId, Long flowId, String type, String data) {
 		this.memberId = memberId;
 		this.flowId = flowId;
-		this.code = code;
+		this.type = type;
 		this.data = data;
 	}
 }

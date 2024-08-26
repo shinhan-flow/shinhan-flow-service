@@ -35,8 +35,8 @@ public class FlowEntity {
 	@Column(name = "description", length = 100)
 	private String description;
 
-	@ColumnDefault("true")
-	@Column(name = "enable", nullable = false)
+	@ColumnDefault("1")
+	@Column(name = "enable", nullable = false, insertable = false, columnDefinition = "TINYINT(1)")
 	private Boolean enable;
 
 	@ColumnDefault("CURRENT_TIMESTAMP")

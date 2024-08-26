@@ -34,8 +34,8 @@ public class TriggerEntity {
 	private Long flowId;
 
 	@NotNull
-	@Column(name = "code")
-	private int code;
+	@Column(name = "type")
+	private String type;
 
 	@NotNull
 	@Column(name = "data")
@@ -54,10 +54,10 @@ public class TriggerEntity {
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public TriggerEntity(Long flowId, Long memberId, int code, String data) {
+	public TriggerEntity(Long flowId, Long memberId, String type, String data) {
 		this.flowId = flowId;
 		this.memberId = memberId;
-		this.code = code;
+		this.type = type;
 		this.data = data;
 	}
 }
