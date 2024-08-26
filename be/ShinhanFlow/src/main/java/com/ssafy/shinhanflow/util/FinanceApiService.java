@@ -15,6 +15,8 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawRequestDto;
@@ -97,5 +99,14 @@ public class FinanceApiService {
 	public CurrentAccountInfoListResponseDto currentAccountListInfo(CurrentAccountInfoRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/demandDeposit/inquireDemandDepositAccountList", dto,
 			CurrentAccountInfoListResponseDto.class);
+	}
+
+	/**
+	 * 수시 입출금 계좌 거래내역 조회
+	 */
+	public CurrentAccountTransactionHistoryResponseDto currentAccountTransactionHistory(
+		CurrentAccountTransactionHistoryRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/demandDeposit/inquireTransactionHistory", dto,
+			CurrentAccountTransactionHistoryResponseDto.class);
 	}
 }
