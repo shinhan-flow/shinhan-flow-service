@@ -123,8 +123,9 @@ public class FinanceApiService {
 		CurrentAccountTransactionHistoryRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/demandDeposit/inquireTransactionHistoryList", dto,
 			CurrentAccountTransactionHistoryResponseDto.class);
+	}
 
-  /**
+	/**
 	 * 수시 입출금 계좌 상품 조회
 	 */
 	public CurrentAccountProductResponseDto currentAccountProducts(CurrentAccountProductRequestDto dto) {
