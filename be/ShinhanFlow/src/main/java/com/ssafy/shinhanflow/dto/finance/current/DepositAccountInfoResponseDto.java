@@ -10,7 +10,7 @@ import lombok.Value;
 public class DepositAccountInfoResponseDto extends FinanceApiResponseDto {
 	@JsonProperty("Header")
 	ResponseHeaderDto header;
-	@JsonProperty("Rec")
+	@JsonProperty("REC")
 	Rec rec;
 
 	private record Rec(String bankCode, String BankName, String userName, String accountNo, String accountName,

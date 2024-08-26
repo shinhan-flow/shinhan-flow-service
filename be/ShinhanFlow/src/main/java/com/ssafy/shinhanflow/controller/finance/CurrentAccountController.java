@@ -101,7 +101,7 @@ public class CurrentAccountController {
 	}
 
 	/**
-	 * 수시 입춝금 계좌 조회 (단건)
+	 * 수시 입출금 계좌 조회 (단건)
 	 */
 	@GetMapping("/{accountNo}")
 	public SuccessResponse<CurrentAccountInfoResponseDto> currentAccount(
@@ -112,7 +112,7 @@ public class CurrentAccountController {
 	}
 
 	/**
-	 * 수시 입춝금 계좌 조회 (전체)
+	 * 수시 입출금 계좌 조회 (전체)
 	 */
 	@GetMapping()
 	public SuccessResponse<CurrentAccountInfoListResponseDto> currentAccountList(
