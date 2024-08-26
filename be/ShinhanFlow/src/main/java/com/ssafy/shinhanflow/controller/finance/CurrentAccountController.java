@@ -14,6 +14,8 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDt
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoListResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDto;
@@ -97,4 +99,26 @@ public class CurrentAccountController {
 		@RequestBody CurrentAccountDepositRequestDto dto) {
 		return SuccessResponse.of(currentAccountService.depositCurrentAccount(jwtUtil.getId(token), dto));
 	}
+
+	/**
+	 * 수시 입출금 계좌 조회 (단건)
+	 */
+	@GetMapping("/{accountNo}")
+	public SuccessResponse<CurrentAccountInfoResponseDto> currentAccount(
+		@RequestHeader("Authorization") String token,
+		@PathVariable String accountNo) {
+		return SuccessResponse.of(
+			currentAccountService.currentAccountInfo(jwtUtil.getId(token), accountNo));
+	}
+
+	/**
+	 * 수시 입출금 계좌 조회 (전체)
+	 */
+	@GetMapping()
+	public SuccessResponse<CurrentAccountInfoListResponseDto> currentAccountList(
+		@RequestHeader("Authorization") String token) {
+		return SuccessResponse.of(
+			currentAccountService.currentAccountListInfo(jwtUtil.getId(token)));
+	}
+
 }

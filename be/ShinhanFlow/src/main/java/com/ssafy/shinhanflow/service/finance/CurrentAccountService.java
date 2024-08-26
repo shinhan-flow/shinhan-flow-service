@@ -12,6 +12,9 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositRequestDto
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoListResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDto;
@@ -160,8 +163,41 @@ public class CurrentAccountService {
 			.transactionBalance(dto.getTransactionBalance())
 			.transactionSummary(dto.getTransactionSummary())
 			.build();
-		
+
 		return financeApiFetcher.depositCurrentAccount(requestDto);
+	}
+
+	public CurrentAccountInfoResponseDto currentAccountInfo(long userId, String accountNo) {
+		log.info("currentAccountInfo - userId: {}, accountNo: {}", userId, accountNo);
+		MemberEntity memberEntity = findMemberOrThrow(userId);
+
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireDemandDepositAccount", userKey,
+			institutionCode);
+		CurrentAccountInfoRequestDto dto = CurrentAccountInfoRequestDto.builder()
+			.header(header)
+			.accountNo(accountNo)
+			.build();
+
+		return financeApiFetcher.currentAccountInfo(dto);
+	}
+
+	public CurrentAccountInfoListResponseDto currentAccountListInfo(long userId) {
+		log.info("currentAccountListInfo - userId: {}", userId);
+		MemberEntity memberEntity = findMemberOrThrow(userId);
+
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireDemandDepositAccountList", userKey,
+			institutionCode);
+		CurrentAccountInfoRequestDto dto = CurrentAccountInfoRequestDto.builder()
+			.header(header)
+			.build();
+
+		return financeApiFetcher.currentAccountListInfo(dto);
 	}
 
 	private MemberEntity findMemberOrThrow(long userId) {
