@@ -2,6 +2,8 @@ package com.ssafy.shinhanflow.service.finance;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountProductRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountProductResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsRequestDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
@@ -48,5 +50,16 @@ public class FinanceProductService {
 			.header(header)
 			.build();
 		return financeApiFetcher.loanProductsInfo(dto);
+	}
+
+	public CurrentAccountProductResponseDto currentAccountProducts() {
+		log.info("currentAccountProducts - 조회 요청");
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireDemandDepositList", null,
+			"00100");
+		CurrentAccountProductRequestDto dto = CurrentAccountProductRequestDto.builder()
+			.header(header)
+			.build();
+
+		return financeApiFetcher.currentAccountProducts(dto);
 	}
 }

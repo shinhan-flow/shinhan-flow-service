@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.shinhanflow.config.error.SuccessResponse;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountProductResponseDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
 import com.ssafy.shinhanflow.dto.finance.product.LoanProductsResponseDto;
 import com.ssafy.shinhanflow.service.finance.FinanceProductService;
@@ -41,5 +42,13 @@ public class FinanceProductController {
 	@GetMapping("/loans")
 	public SuccessResponse<LoanProductsResponseDto> loanProductsInfo() {
 		return SuccessResponse.of(financeProductService.loanProductsInfo());
+	}
+
+	/**
+	 * 수시 입출금 계좌 상품 조회
+	 */
+	@GetMapping("/current-accounts")
+	public SuccessResponse<CurrentAccountProductResponseDto> currentAccountProducts() {
+		return SuccessResponse.of(financeProductService.currentAccountProducts());
 	}
 }
