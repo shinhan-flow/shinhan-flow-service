@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.ssafy.shinhanflow.entity.MemberEntity;
+import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 
 import lombok.RequiredArgsConstructor;
 

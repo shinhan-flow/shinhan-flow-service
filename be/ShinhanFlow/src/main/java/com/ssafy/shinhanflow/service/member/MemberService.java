@@ -7,7 +7,7 @@ import com.ssafy.shinhanflow.config.SecurityConfig;
 import com.ssafy.shinhanflow.dto.finance.MemberRequestDto;
 import com.ssafy.shinhanflow.dto.finance.MemberResponseDto;
 import com.ssafy.shinhanflow.dto.member.SignUpRequestDto;
-import com.ssafy.shinhanflow.entity.MemberEntity;
+import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 import com.ssafy.shinhanflow.repository.MemberRepository;
 import com.ssafy.shinhanflow.util.FinanceApiService;
 

@@ -11,7 +11,7 @@ import com.google.firebase.messaging.Notification;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.NotFoundException;
 import com.ssafy.shinhanflow.dto.FcmMessageRequestDto;
-import com.ssafy.shinhanflow.entity.MemberEntity;
+import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 import com.ssafy.shinhanflow.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
