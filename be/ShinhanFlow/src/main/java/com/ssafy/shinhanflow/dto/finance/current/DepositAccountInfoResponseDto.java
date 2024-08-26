@@ -1,0 +1,23 @@
+package com.ssafy.shinhanflow.dto.finance.current;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssafy.shinhanflow.dto.finance.FinanceApiResponseDto;
+import com.ssafy.shinhanflow.dto.finance.header.ResponseHeaderDto;
+
+import lombok.Value;
+
+@Value
+public class DepositAccountInfoResponseDto extends FinanceApiResponseDto {
+	@JsonProperty("Header")
+	ResponseHeaderDto header;
+	@JsonProperty("Rec")
+	Rec rec;
+
+	private record Rec(String bankCode, String BankName, String userName, String accountNo, String accountName,
+					   String accountDescription,
+					   String withdrawalBankCode, String withdrawalBankName, String withdrawalAccountNo,
+					   String subscriptionPeriod, String depositBalance,
+					   String interestRate, String accountCreatedDate, String accountExpiryDate) {
+	}
+
+}

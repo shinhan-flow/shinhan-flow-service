@@ -12,6 +12,7 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositRequestDto
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoListResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
@@ -181,6 +182,22 @@ public class CurrentAccountService {
 			.build();
 
 		return financeApiFetcher.currentAccountInfo(dto);
+	}
+
+	public CurrentAccountInfoListResponseDto currentAccountListInfo(long userId) {
+		log.info("currentAccountListInfo - userId: {}", userId);
+		MemberEntity memberEntity = findMemberOrThrow(userId);
+
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireDemandDepositAccountList", userKey,
+			institutionCode);
+		CurrentAccountInfoRequestDto dto = CurrentAccountInfoRequestDto.builder()
+			.header(header)
+			.build();
+
+		return financeApiFetcher.currentAccountListInfo(dto);
 	}
 
 	private MemberEntity findMemberOrThrow(long userId) {
