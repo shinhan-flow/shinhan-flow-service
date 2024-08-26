@@ -2,6 +2,7 @@ package com.ssafy.shinhanflow.util;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.shinhanflow.config.error.exception.FinanceApiException;
 import com.ssafy.shinhanflow.dto.finance.MemberRequestDto;
 import com.ssafy.shinhanflow.dto.finance.MemberResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceRequestDto;
@@ -36,7 +37,15 @@ public class FinanceApiService {
 	private final FinanceApiFetcher financeApiFetcher;
 
 	public MemberResponseDto createMember(MemberRequestDto memberRequestDto) {
-		return financeApiFetcher.fetch("/member", memberRequestDto, MemberResponseDto.class);
+		try {
+			return financeApiFetcher.fetch("/member", memberRequestDto, MemberResponseDto.class);
+
+		} catch (FinanceApiException e) {
+			if (e.getErrorCode().equals("E4002")) {
+				return financeApiFetcher.fetch("/member/search", memberRequestDto, MemberResponseDto.class);
+			} else
+				throw e;
+		}
 	}
 
 	/**
