@@ -34,7 +34,6 @@ class TokenProvider extends ChangeNotifier {
     await ref.read(authProvider.notifier).logout();
   }
 
-
   String? redirectLogic(GoRouterState goRouteState) {
     log('redirect start!');
     final tokens = ref.read(authProvider);
@@ -94,6 +93,7 @@ class AuthStateNotifier extends StateNotifier<AuthModel?> {
 
   Future<void> autoLogin({BuildContext? context}) async {
     log("autoLogin");
+
     final accessToken = await storage.read(key: 'accessToken');
     final refreshToken = await storage.read(key: 'refreshToken');
 
@@ -101,9 +101,8 @@ class AuthStateNotifier extends StateNotifier<AuthModel?> {
     // final signUpType =
     //     AuthType.stringToEnum(value: signUpTypeString ?? 'email');
 
-    // log("accessToken = $accessToken");
     if (accessToken != null) {
-      state = AuthModel(access: accessToken, refresh: refreshToken);
+      state = AuthModel(accessToken: accessToken, refreshToken: refreshToken);
 
       if (context != null && context.mounted) {
         log("로그인 완료!");

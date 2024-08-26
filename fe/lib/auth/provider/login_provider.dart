@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shinhan_flow/auth/provider/auth_provider.dart';
 import 'package:shinhan_flow/auth/provider/widget/widget/login_form_provider.dart';
@@ -21,12 +23,13 @@ Future<BaseModel> login(LoginRef ref) async {
       .watch(authRepositoryProvider)
       .login(username: param.email, password: param.password)
       .then<BaseModel>((value) async {
-    logger.i('login $param!');
+    logger.i('login $value!');
     final model = value.data!;
     final storage = ref.read(secureStorageProvider);
 
-    await storage.write(key: 'accessToken', value: model.access);
-    await storage.write(key: 'refreshToken', value: model.refresh);
+    await storage.write(key: 'accessToken', value: model.accessToken);
+    await storage.write(key: 'refreshToken', value: model.refreshToken);
+
     // await saveUserInfo(storage, model, ref);
     return value;
   }).catchError((e) {

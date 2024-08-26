@@ -1,8 +1,12 @@
+import 'dart:developer';
+import 'dart:math' hide log;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shinhan_flow/account/model/account_model.dart';
 import 'package:shinhan_flow/auth/provider/login_provider.dart';
 import 'package:shinhan_flow/auth/provider/widget/widget/login_form_provider.dart';
 import 'package:shinhan_flow/auth/view/sign_up_screen.dart';
@@ -22,6 +26,10 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Object json = {"account": "3412312", "balance": 412344, "condition": "LT"};
+
+    final model = TrashModel.fromJson(json as Map<String, dynamic>);
+    log('model ${model}');
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       onPanDown: (v) => FocusScope.of(context).unfocus(),
