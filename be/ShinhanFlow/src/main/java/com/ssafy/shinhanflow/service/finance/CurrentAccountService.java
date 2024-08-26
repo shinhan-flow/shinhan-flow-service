@@ -212,7 +212,7 @@ public class CurrentAccountService {
 		String userKey = memberEntity.getUserKey();
 		String institutionCode = memberEntity.getInstitutionCode();
 
-		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireTransactionHistory", userKey,
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireTransactionHistoryList", userKey,
 			institutionCode);
 		CurrentAccountTransactionHistoryRequestDto dto = CurrentAccountTransactionHistoryRequestDto.builder()
 			.header(header)

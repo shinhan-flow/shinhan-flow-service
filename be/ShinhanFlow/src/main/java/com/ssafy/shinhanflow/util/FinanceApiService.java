@@ -106,7 +106,7 @@ public class FinanceApiService {
 	 */
 	public CurrentAccountTransactionHistoryResponseDto currentAccountTransactionHistory(
 		CurrentAccountTransactionHistoryRequestDto dto) {
-		return financeApiFetcher.fetch("/edu/demandDeposit/inquireTransactionHistory", dto,
+		return financeApiFetcher.fetch("/edu/demandDeposit/inquireTransactionHistoryList", dto,
 			CurrentAccountTransactionHistoryResponseDto.class);
 	}
 }
