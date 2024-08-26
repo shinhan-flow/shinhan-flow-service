@@ -18,6 +18,8 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoListResponseD
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountInfoResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawRequestDto;
@@ -119,6 +121,19 @@ public class CurrentAccountController {
 		@RequestHeader("Authorization") String token) {
 		return SuccessResponse.of(
 			currentAccountService.currentAccountListInfo(jwtUtil.getId(token)));
+	}
+
+	/**
+	 * 수시 입출금 계좌 거래 내역 조회
+	 */
+	@PostMapping("/{accountNo}/transaction-history")
+	public SuccessResponse<CurrentAccountTransactionHistoryResponseDto> currentAccountTransactionHistory(
+		@RequestHeader("Authorization") String token,
+		@PathVariable String accountNo,
+		@RequestBody CurrentAccountTransactionHistoryRequestDto dto) {
+		return SuccessResponse.of(
+			currentAccountService.currentAccountTransactionHistory(jwtUtil.getId(token), accountNo, dto.getStartDate(),
+				dto.getEndDate(), dto.getTransactionType(), dto.getOrderByType()));
 	}
 
 }
