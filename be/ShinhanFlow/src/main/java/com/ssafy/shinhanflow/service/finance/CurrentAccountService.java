@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
+import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositRequestDto;
@@ -19,7 +20,6 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferResponseD
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
-import com.ssafy.shinhanflow.entity.MemberEntity;
 import com.ssafy.shinhanflow.repository.MemberRepository;
 import com.ssafy.shinhanflow.util.FinanceApiHeaderGenerator;
 import com.ssafy.shinhanflow.util.FinanceApiService;

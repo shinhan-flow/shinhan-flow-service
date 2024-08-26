@@ -27,6 +27,7 @@ public class FlowService {
 	private final TriggerRepository triggerRepository;
 	private final ActionRepository actionRepository;
 
+	@Transactional
 	public Boolean createFlow(Long memberId, CreateFlowRequestDto createFlowRequestDto) {
 
 		// flow 생성
