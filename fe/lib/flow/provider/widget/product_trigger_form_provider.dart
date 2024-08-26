@@ -29,6 +29,7 @@ class TgProductFormModel extends TgProductParam with BaseFormModel {
   TgProductFormModel copyWith({
     ProductProperty? product,
     double? interestRate,
+    TriggerType? type,
   }) {
     final validProduct = product ?? this.product;
     final validInterestRate = interestRate ?? this.interestRate;
@@ -42,18 +43,8 @@ class TgProductFormModel extends TgProductParam with BaseFormModel {
 
   @override
   DefaultParam toParam() {
-    return TriggerParam(
-      code: FlowType.interestRate,
-      data: TgProductParam.fromForm(form: this),
-    );
+    return TgProductParam.fromForm(form: this);
   }
-
-// TriggerParam toParam() {
-//   return TriggerParam(
-//     code: flowType!,
-//     data: TgDateTimeParam.fromForm(form: this),
-//   );
-// }
 }
 
 @riverpod

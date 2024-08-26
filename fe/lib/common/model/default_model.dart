@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -11,12 +13,12 @@ class LoadingModel extends BaseModel {}
 
 @JsonSerializable()
 class CompletedModel extends BaseModel {
-  final int statusCode;
+  final String code;
   final String message;
   final String? data;
 
   CompletedModel({
-    required this.statusCode,
+    required this.code,
     required this.message,
     required this.data,
   });
@@ -26,35 +28,27 @@ class CompletedModel extends BaseModel {
 }
 
 class ErrorModel<T> extends BaseModel {
-  final int statusCode;
+  final String code;
   final String message;
-  final T? data;
-  final int errorCode;
 
   ErrorModel({
-    required this.statusCode,
+    required this.code,
     required this.message,
-    required this.data,
-    required this.errorCode,
   });
 
   static ErrorModel respToError(e) {
-    logger.e(e);
-    switch (e.runtimeType) {
+    // logger.e(e);
+    switch (e) {
       case DioException _:
-        final resp = (e as DioException).response!.data;
+        final resp = e.response!.data;
         return ErrorModel(
-          statusCode: resp['statusCode'],
+          code: resp['code'],
           message: resp['message'],
-          data: resp['data'],
-          errorCode: resp['errorCode'],
         );
       default:
         return ErrorModel(
-          statusCode: 500,
+          code: "500",
           message: 'JsonSerializable 에러',
-          data: '',
-          errorCode: 0,
         );
     }
   }
@@ -64,12 +58,12 @@ class ErrorModel<T> extends BaseModel {
   genericArgumentFactories: true,
 )
 class ResponseModel<T> extends BaseModel {
-  final int statusCode;
+  final String code;
   final String message;
   final T? data;
 
   ResponseModel({
-    required this.statusCode,
+    required this.code,
     required this.message,
     required this.data,
   });
@@ -80,12 +74,12 @@ class ResponseModel<T> extends BaseModel {
   }
 
   ResponseModel<T> copyWith({
-    int? statusCode,
+    String? code,
     String? message,
     T? data,
   }) {
     return ResponseModel<T>(
-      statusCode: statusCode ?? this.statusCode,
+      code: code ?? this.code,
       message: message ?? this.message,
       data: data ?? this.data,
     );
@@ -96,12 +90,12 @@ class ResponseModel<T> extends BaseModel {
   genericArgumentFactories: true,
 )
 class ResponseListModel<T> extends BaseModel {
-  final int statusCode;
+  final String code;
   final String message;
   final List<T>? data;
 
   ResponseListModel({
-    required this.statusCode,
+    required this.code,
     required this.message,
     required this.data,
   });
@@ -116,29 +110,29 @@ class ResponseListModel<T> extends BaseModel {
   genericArgumentFactories: true,
 )
 class PaginationModel<T> extends BaseModel {
-  final int start_index;
-  final int end_index;
-  final int current_index;
-  final List<T> page_content;
+  // final int start_index;
+  final int totalPage;
+  final int nowPage;
+  final List<T> pageContent;
 
   PaginationModel({
-    required this.start_index,
-    required this.end_index,
-    required this.current_index,
-    required this.page_content,
+    // required this.start_index,
+    required this.totalPage,
+    required this.nowPage,
+    required this.pageContent,
   });
 
   PaginationModel<T> copyWith({
     int? start_index,
-    int? end_index,
-    int? current_index,
-    List<T>? page_content,
+    int? totalPage,
+    int? nowPage,
+    List<T>? pageContent,
   }) {
     return PaginationModel<T>(
-      start_index: start_index ?? this.start_index,
-      end_index: end_index ?? this.end_index,
-      current_index: current_index ?? this.current_index,
-      page_content: page_content ?? this.page_content,
+      // start_index: start_index ?? this.start_index,
+      totalPage: totalPage ?? this.totalPage,
+      nowPage: nowPage ?? this.nowPage,
+      pageContent: pageContent ?? this.pageContent,
     );
   }
 
@@ -150,16 +144,18 @@ class PaginationModel<T> extends BaseModel {
 
 class PaginationModelRefetching<T> extends PaginationModel<T> {
   PaginationModelRefetching(
-      {required super.start_index,
-      required super.end_index,
-      required super.current_index,
-      required super.page_content});
+      {
+      // required super.start_index,
+      required super.totalPage,
+      required super.nowPage,
+      required super.pageContent});
 }
 
 class PaginationModelFetchingMore<T> extends PaginationModel<T> {
   PaginationModelFetchingMore(
-      {required super.start_index,
-      required super.end_index,
-      required super.current_index,
-      required super.page_content});
+      {
+      // required super.start_index,
+      required super.totalPage,
+      required super.nowPage,
+      required super.pageContent});
 }

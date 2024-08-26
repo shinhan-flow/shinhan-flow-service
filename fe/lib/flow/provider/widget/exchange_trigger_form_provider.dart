@@ -44,10 +44,7 @@ class TgExchangeFormModel extends TgExchangeParam with BaseFormModel {
 
   @override
   DefaultParam toParam() {
-    return TriggerParam(
-      code: FlowType.exchangeRate,
-      data: TgExchangeParam.fromForm(form: this),
-    );
+    return TgExchangeParam.fromForm(form: this);
   }
 }
 

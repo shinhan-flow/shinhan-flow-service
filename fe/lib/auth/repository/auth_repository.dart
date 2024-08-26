@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../common/model/default_model.dart';
 import '../../dio/dio_interceptor.dart';
 import '../../dio/provider/dio_provider.dart';
 import '../model/login_model.dart';
@@ -10,6 +11,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
+
+import '../param/sign_up_param.dart';
 
 part 'auth_repository.g.dart';
 
@@ -26,16 +29,13 @@ abstract class AuthRepository {
 
   @POST('/login')
   @FormUrlEncoded()
-  Future<AuthModel> login({
+  Future<ResponseModel<AuthModel>> login({
     @Field() required String username,
     @Field() required String password,
   });
 
   @POST('/api/v1/members')
-  @FormUrlEncoded()
-  Future<AuthModel> signUp({
-    @Field() required String username,
-    @Field() required String password,
-    @Field() required String name,
+  Future<ResponseModel<bool>> signUp({
+    @Body() required SignUpParam param,
   });
 }

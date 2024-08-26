@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shinhan_flow/auth/provider/auth_provider.dart';
 import 'package:shinhan_flow/auth/view/login_screen.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
@@ -162,16 +164,19 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _AccountCardComponent extends StatelessWidget {
+class _AccountCardComponent extends ConsumerWidget {
   const _AccountCardComponent({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          TextButton(onPressed: () {
+            ref.read(authProvider.notifier).logout();
+          }, child: Text("임싯 로그아웃")),
           Text(
             '금융정보를 알려드려요',
             style: SHFlowTextStyle.subTitle,

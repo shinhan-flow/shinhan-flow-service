@@ -39,7 +39,7 @@ class TimeTriggerScreen extends StatelessWidget {
                       final trigger = ref.read(tgDateTimeFormProvider);
 
                       ref.read(flowFormProvider.notifier).addTrigger(
-                          trigger: trigger.toParam() as TriggerParam);
+                          trigger: trigger.toParam() as TriggerBaseParam);
                       context.pop();
                     }
                   : null,
@@ -121,7 +121,7 @@ class _IterateComponentState extends ConsumerState<_IterateComponent>
     WidgetsBinding.instance.addPostFrameCallback((e) {
       ref
           .read(tgDateTimeFormProvider.notifier)
-          .update(flowType: FlowType.dayOfWeek);
+          .update(flowType: TriggerType.dayOfWeek);
     });
   }
 
@@ -130,7 +130,7 @@ class _IterateComponentState extends ConsumerState<_IterateComponent>
     int idx = tabController.index;
     ref
         .read(tgDateTimeFormProvider.notifier)
-        .update(flowType: idx == 0 ? FlowType.dayOfWeek : FlowType.dayOfMonth);
+        .update(flowType: idx == 0 ? TriggerType.dayOfWeek : TriggerType.dayOfMonth);
   }
 
   @override
@@ -365,14 +365,14 @@ class _TimeCategoryComponent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(timeCategoryProvider, (previous, next) {
-      FlowType? type;
+      TriggerType? type;
       if (next != null) {
         switch (next) {
           case TimeCategory.normal:
-            type = FlowType.specificDate;
+            type = TriggerType.specificDate;
             break;
           case TimeCategory.period:
-            type = FlowType.periodDate;
+            type = TriggerType.periodDate;
             break;
           case TimeCategory.iterate:
             // type = FlowType.;
@@ -400,13 +400,13 @@ class _TimeCategoryComponent extends ConsumerWidget {
     if (flowType != null) {
       switch (flowType) {
         case TimeCategory.normal:
-          title = '트리거의 특정 날짜를 선택해보세요!';
+          title = '조건의 특정 날짜를 선택해보세요!';
           break;
         case TimeCategory.period:
-          title = '트리거의 기간을 선택해보세요!';
+          title = '조건의 기간을 선택해보세요!';
           break;
         case TimeCategory.iterate:
-          title = '트리거를 반복하고 싶은\n날짜 또는 요일을 선택해보세요!';
+          title = '조건을 반복하고 싶은\n날짜 또는 요일을 선택해보세요!';
           break;
         // case TimeCategory.multi:
         //   title = '트리거의 여러 날짜를 선택해보세요!';
