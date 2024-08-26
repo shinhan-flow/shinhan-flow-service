@@ -1,18 +1,17 @@
 package com.ssafy.shinhanflow.service.flow;
 
-import java.util.Optional;
-import java.util.concurrent.Flow;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.shinhanflow.config.error.ErrorCode;
-import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
 import com.ssafy.shinhanflow.domain.action.Action;
 import com.ssafy.shinhanflow.domain.entity.ActionEntity;
 import com.ssafy.shinhanflow.domain.entity.FlowEntity;
 import com.ssafy.shinhanflow.domain.entity.TriggerEntity;
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 import com.ssafy.shinhanflow.dto.flow.CreateFlowRequestDto;
+import com.ssafy.shinhanflow.dto.flow.GetFlowListResponseDto;
 import com.ssafy.shinhanflow.repository.ActionRepository;
 import com.ssafy.shinhanflow.repository.FlowRepository;
 import com.ssafy.shinhanflow.repository.TriggerRepository;
@@ -38,11 +37,11 @@ public class FlowService {
 			.description(createFlowRequestDto.description())
 			.build();
 
-		FlowEntity flow =  flowRepository.save(flowEntity);
+		FlowEntity flow = flowRepository.save(flowEntity);
 
 		// trigger 생성
 		Trigger[] triggers = createFlowRequestDto.triggers();
-		for(Trigger trigger : triggers) {
+		for (Trigger trigger : triggers) {
 			TriggerEntity triggerEntity = TriggerEntity
 				.builder()
 				.flowId(flow.getId())
@@ -56,7 +55,7 @@ public class FlowService {
 
 		// action 생성
 		Action[] actions = createFlowRequestDto.actions();
-		for(Action action : actions) {
+		for (Action action : actions) {
 			ActionEntity actionEntity = ActionEntity
 				.builder()
 				.memberId(memberId)
@@ -68,5 +67,17 @@ public class FlowService {
 			actionRepository.save(actionEntity);
 		}
 		return true;
+	}
+
+	public GetFlowListResponseDto getFlowList(Long memberId, Integer nowPage, Integer perPage) {
+		Pageable pageable = PageRequest.of(nowPage, perPage);
+		Page<FlowEntity> res = flowRepository.findAll(pageable);
+
+		return GetFlowListResponseDto
+			.builder()
+			.totalPage(res.getTotalPages())
+			.nowPage(res.getNumber())
+			.pageContent(res.getContent())
+			.build();
 	}
 }
