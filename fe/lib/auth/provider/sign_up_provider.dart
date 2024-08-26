@@ -29,7 +29,7 @@ Future<BaseModel> signUp(SignUpRef ref) async {
     return value;
   }).catchError((e) {
     final error = ErrorModel.respToError(e);
-    logger.e('status_code = ${error.code}\nmessage = ${error.message}');
+    logger.e('code ${error.code}\nmessage = ${error.message}');
     return error;
   });
 }

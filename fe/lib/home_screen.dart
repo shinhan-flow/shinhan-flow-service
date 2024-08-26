@@ -174,9 +174,11 @@ class _AccountCardComponent extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextButton(onPressed: () {
-            ref.read(authProvider.notifier).logout();
-          }, child: Text("임싯 로그아웃")),
+          TextButton(
+              onPressed: () {
+                ref.read(authProvider.notifier).logout();
+              },
+              child: Text("임시 로그아웃")),
           Text(
             '금융정보를 알려드려요',
             style: SHFlowTextStyle.subTitle,

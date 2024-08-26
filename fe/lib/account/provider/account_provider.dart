@@ -20,7 +20,7 @@ Future<BaseModel> createAccount(CreateAccountRef ref,
     return value;
   }).catchError((e) {
     final error = ErrorModel.respToError(e);
-    logger.e('status_code = ${error.code}\nmessage = ${error.message}');
+    logger.e('code ${error.code}\nmessage = ${error.message}');
     return error;
   });
 }
@@ -41,7 +41,7 @@ class Account extends _$Account {
       state = value;
     }).catchError((e) {
       final error = ErrorModel.respToError(e);
-      logger.e('status_code = ${error.code}\nmessage = ${error.message}');
+      logger.e('code ${error.code}\nmessage = ${error.message}');
       state = error;
     });
   }
@@ -63,7 +63,7 @@ class AccountList extends _$AccountList {
       state = value;
     }).catchError((e) {
       final error = ErrorModel.respToError(e);
-      logger.e('status_code = ${error.code}\nmessage = ${error.message}');
+      logger.e('code ${error.code}\nmessage = ${error.message}');
       state = error;
     });
   }
@@ -85,7 +85,7 @@ class AccountBalance extends _$AccountBalance {
       state = value;
     }).catchError((e) {
       final error = ErrorModel.respToError(e);
-      logger.e('status_code = ${error.code}\nmessage = ${error.message}');
+      logger.e('code ${error.code}\nmessage = ${error.message}');
       state = error;
     });
   }

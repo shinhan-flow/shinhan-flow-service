@@ -107,17 +107,24 @@ class AccountDetailModel {
       _$AccountDetailModelFromJson(json);
 }
 
+//
+// "{\"dates\": [\"2024-08-27\"],\"triggered\":true}"
 // {"account": "3412312","balance": 412344,"condition": "LT"}
 @JsonSerializable()
 class TrashModel {
-  final String account;
-  final int balance;
-  final Condition condition;
+  // final String account;
+  // final int balance;
+  // final Condition condition;
+
+  final List<String> dates;
+  final bool triggered;
 
   TrashModel({
-    required this.account,
-    required this.balance,
-    required this.condition,
+    required this.dates,
+    required this.triggered,
+    // required this.account,
+    // required this.balance,
+    // required this.condition,
   });
 
   factory TrashModel.fromJson(Map<String, dynamic> json) =>

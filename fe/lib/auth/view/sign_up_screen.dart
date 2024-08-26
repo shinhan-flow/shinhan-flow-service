@@ -12,16 +12,33 @@ import 'package:shinhan_flow/common/model/default_model.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 import 'package:shinhan_flow/util/reg_exp_util.dart';
 
+import '../../common/provider/widget/select_provider.dart';
 import '../provider/widget/widget/sign_up_form_provider.dart';
 
 final signUpViewProvider = StateProvider.autoDispose<int>((ref) => 0);
 
-class SignUpScreen extends ConsumerWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   static String get routeName => 'signUp';
 
   const SignUpScreen({super.key});
 
+  @override
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
+  late final List<FocusNode> focusNodes;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNodes = List.generate(3, (e) => FocusNode());
+  }
+
   Widget _infoForm(WidgetRef ref, SignUpFormModel form, BuildContext context) {
+    final isVisible1 = ref.watch(selectProvider(2));
+    final isVisible2 = ref.watch(selectProvider(3));
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -31,6 +48,8 @@ class SignUpScreen extends ConsumerWidget {
         ),
         SizedBox(height: 20.h),
         CustomTextFormField(
+          focusNode: focusNodes[0],
+          textInputAction: TextInputAction.next,
           label: '이름',
           hintText: '이름을 입력해주세요.',
           onChanged: (v) {
@@ -46,21 +65,50 @@ class SignUpScreen extends ConsumerWidget {
         ),
         SizedBox(height: 20.h),
         CustomTextFormField(
+          focusNode: focusNodes[1],
+          textInputAction: TextInputAction.next,
           label: '비밀번호',
           hintText: '비밀번호를 입력해주세요.',
-          obscureText: true,
+          obscureText: isVisible1,
           onChanged: (v) {
             ref.read(signUpFormProvider.notifier).update(password: v);
           },
+          suffix: focusNodes[1].hasFocus
+              ? Padding(
+                  padding: EdgeInsets.only(right: 12.w),
+                  child: GestureDetector(
+                    onTap: () {
+                      ref.read(selectProvider(2).notifier).update((s) => !s);
+                    },
+                    child: isVisible1
+                        ? const Icon(Icons.visibility)
+                        : const Icon(Icons.visibility_off),
+                  ),
+                )
+              : null,
         ),
         SizedBox(height: 20.h),
         CustomTextFormField(
+          focusNode: focusNodes[2],
           label: '비밀번호 확인',
           hintText: '비밀번호 확인을 입력해주세요.',
-          obscureText: true,
+          obscureText: isVisible2,
           onChanged: (v) {
             ref.read(signUpFormProvider.notifier).update(checkPassword: v);
           },
+          suffix: focusNodes[2].hasFocus
+              ? Padding(
+                  padding: EdgeInsets.only(right: 12.w),
+                  child: GestureDetector(
+                    onTap: () {
+                      ref.read(selectProvider(3).notifier).update((s) => !s);
+                    },
+                    child: isVisible2
+                        ? const Icon(Icons.visibility)
+                        : const Icon(Icons.visibility_off),
+                  ),
+                )
+              : null,
         ),
         const Spacer(),
         DefaultTextButton(
@@ -82,7 +130,15 @@ class SignUpScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    for (var f in focusNodes) {
+      f.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final form = ref.watch(signUpFormProvider);
     final viewOrder = ref.watch(signUpViewProvider);
     final view =
@@ -90,7 +146,7 @@ class SignUpScreen extends ConsumerWidget {
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      onPanDown: (v) => FocusScope.of(context).unfocus(),
+      // onPanDown: (v) => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: const DefaultAppBar(

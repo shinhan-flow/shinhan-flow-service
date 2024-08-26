@@ -61,7 +61,5 @@ abstract class AccountRepository {
   Future<ResponseModel<AccountBaseModel<AccountBalanceModel>>> getBalance(
       {@Path() required String accountNo});
 
-
   /// 입금 (수시입출금)
-
 }
