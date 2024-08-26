@@ -1,5 +1,6 @@
 package com.ssafy.shinhanflow.service.flow;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -8,12 +9,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ssafy.shinhanflow.config.error.ErrorCode;
+import com.ssafy.shinhanflow.config.error.exception.NotFoundException;
 import com.ssafy.shinhanflow.domain.action.Action;
 import com.ssafy.shinhanflow.domain.entity.ActionEntity;
 import com.ssafy.shinhanflow.domain.entity.FlowEntity;
 import com.ssafy.shinhanflow.domain.entity.TriggerEntity;
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 import com.ssafy.shinhanflow.dto.flow.CreateFlowRequestDto;
+import com.ssafy.shinhanflow.dto.flow.FlowDetailResponseDto;
 import com.ssafy.shinhanflow.repository.ActionRepository;
 import com.ssafy.shinhanflow.repository.FlowRepository;
 import com.ssafy.shinhanflow.repository.TriggerRepository;
@@ -92,4 +96,39 @@ public class FlowService {
 
 		return true;
 	}
+
+	public FlowDetailResponseDto getFlowDetail(Long memberId, Long flowId) {
+		FlowDetailResponseDto flowDetailResponseDto = null;
+		FlowEntity flow = flowRepository.findById(flowId).orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
+		List<TriggerEntity> triggerEntities = triggerRepository.findByFlowId(flowId);
+		List<ActionEntity> actionEntities = actionRepository.findByFlowId(flowId);
+
+		try {
+			List<Trigger> triggers = new ArrayList<>();
+			for (TriggerEntity triggerEntity : triggerEntities) {
+				Trigger trigger = objectMapper.readValue(triggerEntity.getData(), Trigger.class);
+				triggers.add(trigger);
+			}
+
+			List<Action> actions = new ArrayList<>();
+			for (ActionEntity actionEntity : actionEntities) {
+				Action action = objectMapper.readValue(actionEntity.getData(), Action.class);
+				actions.add(action);
+			}
+
+			flowDetailResponseDto = FlowDetailResponseDto
+				.builder()
+				.id(flow.getId())
+				.title(flow.getTitle())
+				.description(flow.getDescription())
+				.triggers(triggers)
+				.actions(actions)
+				.build();
+
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return flowDetailResponseDto;
+	}
+
 }
