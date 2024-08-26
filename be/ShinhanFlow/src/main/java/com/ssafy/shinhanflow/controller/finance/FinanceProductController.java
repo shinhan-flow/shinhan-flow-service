@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.shinhanflow.config.error.SuccessResponse;
-import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingsProductsResponseDto;
+import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
+import com.ssafy.shinhanflow.dto.finance.product.LoanProductsResponseDto;
 import com.ssafy.shinhanflow.service.finance.FinanceProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class FinanceProductController {
 	 * 예금 상품 조회
 	 */
 	@GetMapping("/deposits")
-	public SuccessResponse<DepositAndSavingsProductsResponseDto> depositProductInfo() {
+	public SuccessResponse<DepositAndSavingProductsResponseDto> depositProductInfo() {
 		return SuccessResponse.of(financeProductService.depositProductsInfo());
 	}
 
@@ -30,7 +31,15 @@ public class FinanceProductController {
 	 * 적금 상품 조회
 	 */
 	@GetMapping("/savings")
-	public SuccessResponse<DepositAndSavingsProductsResponseDto> savingsProductsInfo() {
-		return SuccessResponse.of(financeProductService.savingsProductsInfo());
+	public SuccessResponse<DepositAndSavingProductsResponseDto> savingProductsInfo() {
+		return SuccessResponse.of(financeProductService.savingProductsInfo());
+	}
+
+	/**
+	 * 대출 상품 조회
+	 */
+	@GetMapping("/loans")
+	public SuccessResponse<LoanProductsResponseDto> loanProductsInfo() {
+		return SuccessResponse.of(financeProductService.loanProductsInfo());
 	}
 }

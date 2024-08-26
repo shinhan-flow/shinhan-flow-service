@@ -11,8 +11,7 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 @Value
 @Builder
-public class DepositAndSavingsProductsRequestDto extends FinanceApiRequestDto {
+public class LoanProductsRequestDto extends FinanceApiRequestDto {
 	@JsonProperty("Header")
 	RequestHeaderDto header;
-
 }
