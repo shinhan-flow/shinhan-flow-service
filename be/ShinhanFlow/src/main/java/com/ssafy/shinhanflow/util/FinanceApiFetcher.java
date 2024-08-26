@@ -1,6 +1,6 @@
 package com.ssafy.shinhanflow.util;
 
-import static com.ssafy.shinhanflow.config.error.ErrorCode.INTERNAL_SERVER_ERROR;
+import static com.ssafy.shinhanflow.config.error.ErrorCode.*;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-@Component
 public class FinanceApiFetcher {
 	@Value("${finance-api.key}")
 	private String apiKey;
