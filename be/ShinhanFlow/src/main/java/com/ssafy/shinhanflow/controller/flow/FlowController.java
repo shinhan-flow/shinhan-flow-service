@@ -41,5 +41,4 @@ public class FlowController {
 	) {
 		return SuccessResponse.of(flowService.getFlowList(jwtUtil.getId(token), nowPage, perPage));
 	}
-
 }
