@@ -38,7 +38,7 @@ public class TriggerEntity {
 	private String type;
 
 	@NotNull
-	@Column(name = "data")
+	@Column(name = "data", columnDefinition = "TEXT")
 	private String data;
 
 	@ColumnDefault("CURRENT_TIMESTAMP")
