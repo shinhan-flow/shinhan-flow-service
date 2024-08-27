@@ -15,6 +15,12 @@ public class DepositAndSavingProductsResponseDto extends FinanceApiResponseDto {
 	@JsonProperty("REC")
 	List<Rec> rec;
 
+	// @JsonCreator
+	// public DepositAndSavingProductsResponseDto(ResponseHeaderDto header, List<Rec> rec) {
+	// 	this.header = header;
+	// 	this.rec = rec;
+	// }
+
 	public record Rec(String accountTypeUniqueNo, String bankCode, String bankName, String accountTypeCode,
 					  String accountTypeName, String accountName, String accountDescription, String subscriptionPeriod,
 					  String minSubscriptionBalance, String maxSubscriptionBalance, double interestRate,

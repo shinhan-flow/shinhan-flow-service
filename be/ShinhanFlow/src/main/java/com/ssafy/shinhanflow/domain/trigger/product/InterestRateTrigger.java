@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
@@ -13,15 +15,26 @@ import com.ssafy.shinhanflow.util.constants.AccountProduct;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public record InterestRateTrigger(
-	FinanceProductService financeProductService,
+public class InterestRateTrigger implements Trigger {
+	@JsonIgnore
+	private final FinanceProductService financeProductService;
+
 	@NotNull
-	AccountProduct accountProduct,
+	private final AccountProduct accountProduct;
+
 	@NotNull
 	@Positive
-	BigDecimal rate
+	private final BigDecimal rate;
 
-) implements Trigger {
+	@JsonCreator
+	public InterestRateTrigger(
+		FinanceProductService financeProductService,
+		AccountProduct accountProduct,
+		BigDecimal rate) {
+		this.financeProductService = financeProductService;
+		this.accountProduct = accountProduct;
+		this.rate = rate;
+	}
 
 	@Override
 	public boolean isTriggered() {
