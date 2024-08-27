@@ -1,5 +1,6 @@
 package com.ssafy.shinhanflow.controller.flow;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
 import com.ssafy.shinhanflow.config.error.SuccessResponse;
+import com.ssafy.shinhanflow.domain.trigger.product.InterestRateTrigger;
 import com.ssafy.shinhanflow.dto.flow.CreateFlowRequestDto;
 import com.ssafy.shinhanflow.dto.flow.FlowDetailResponseDto;
 import com.ssafy.shinhanflow.dto.flow.GetFlowListResponseDto;
@@ -54,10 +56,13 @@ public class FlowController {
 		return SuccessResponse.of(flowService.getFlowDetail(jwtUtil.getId(token), flowId));
 	}
 
-	@GetMapping("/test")
-	public String test() throws JsonProcessingException {
-		flowService.testFlowTrigger();
-		return "test";
+
+	@DeleteMapping("/{flowId}")
+	public SuccessResponse<Boolean> deleteFlow(
+		@RequestHeader("Authorization") String token,
+		@PathVariable Long flowId
+	){
+		return SuccessResponse.of(flowService.deleteFlow(jwtUtil.getId(token), flowId));
 	}
 
 }
