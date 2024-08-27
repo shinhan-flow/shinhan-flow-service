@@ -9,6 +9,8 @@ import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
 import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsRequestDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
@@ -87,6 +89,33 @@ public class FinanceTriggerService {
 			.build();
 
 		return financeApiFetcher.currentAccountBalance(dto);
+	}
+
+	/**
+	 * 수시입출금 계좌 거래내역 조회
+	 */
+	public CurrentAccountTransactionHistoryResponseDto currentAccountTransactionHistory(long userId, String accountNo,
+		String startDate, String endDate, String transactionType,
+		String orderByType) {
+		log.info("currentAccountTransactionHistory - userId: {}, accountNo: {}, startDate: {}, endDate: {}", userId,
+			accountNo, startDate, endDate);
+		MemberEntity memberEntity = findMemberOrThrow(userId);
+
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireTransactionHistoryList", userKey,
+			institutionCode);
+		CurrentAccountTransactionHistoryRequestDto dto = CurrentAccountTransactionHistoryRequestDto.builder()
+			.header(header)
+			.accountNo(accountNo)
+			.startDate(startDate)
+			.endDate(endDate)
+			.transactionType(transactionType)
+			.orderByType(orderByType)
+			.build();
+
+		return financeApiFetcher.currentAccountTransactionHistory(dto);
 	}
 
 	private MemberEntity findMemberOrThrow(long userId) {
