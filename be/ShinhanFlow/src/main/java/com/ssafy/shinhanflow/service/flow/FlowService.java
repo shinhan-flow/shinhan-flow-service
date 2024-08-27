@@ -3,6 +3,9 @@ package com.ssafy.shinhanflow.service.flow;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,11 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.NotFoundException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import com.ssafy.shinhanflow.domain.action.Action;
 import com.ssafy.shinhanflow.domain.entity.ActionEntity;
 import com.ssafy.shinhanflow.domain.entity.FlowEntity;
@@ -27,6 +25,7 @@ import com.ssafy.shinhanflow.dto.flow.GetFlowListResponseDto;
 import com.ssafy.shinhanflow.repository.ActionRepository;
 import com.ssafy.shinhanflow.repository.FlowRepository;
 import com.ssafy.shinhanflow.repository.TriggerRepository;
+import com.ssafy.shinhanflow.service.finance.FinanceTriggerService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +37,7 @@ public class FlowService {
 	private final TriggerRepository triggerRepository;
 	private final ActionRepository actionRepository;
 	private final ObjectMapper objectMapper;
+	private final FinanceTriggerService financeTriggerService;
 
 	@Transactional
 	public Boolean createFlow(Long memberId, CreateFlowRequestDto createFlowRequestDto) {
@@ -149,5 +149,16 @@ public class FlowService {
 		return flowDetailResponseDto;
 	}
 
+	public void testFlowTrigger() throws JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		String str = " { \"type\": \"InterestRateTrigger\", \"accountProduct\": \"DEPOSIT_ACCOUNT\", \"rate\": 20}";
+		Trigger trigger = objectMapper.readValue(str, Trigger.class);
+		System.out.println(trigger);
+		System.out.println(trigger.isTriggered(financeTriggerService));
 
+		/**
+		 * type: InterestRateTrigger
+		 *
+		 * */
+	}
 }

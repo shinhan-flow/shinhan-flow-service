@@ -17,9 +17,9 @@ public class LoanProductsResponseDto extends FinanceApiResponseDto {
 	@JsonProperty("REC")
 	List<Rec> rec;
 
-	private record Rec(String bankCode, String bankName, String ratingUniqueNo, String ratingName, String accountName,
-					   String loanPeriod, String minLoanBalance, String maxLoanBalance, String interestRate,
-					   String accountDescription, String accountTypeCode, String accountTypeName,
-					   String repaymentMethod, String repaymentMethodTypeName) {
+	public record Rec(String bankCode, String bankName, String ratingUniqueNo, String ratingName, String accountName,
+					  String loanPeriod, String minLoanBalance, String maxLoanBalance, double interestRate,
+					  String accountDescription, String accountTypeCode, String accountTypeName,
+					  String repaymentMethod, String repaymentMethodTypeName) {
 	}
 }
