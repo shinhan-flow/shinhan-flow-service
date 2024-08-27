@@ -1,6 +1,5 @@
 package com.ssafy.shinhanflow.domain.trigger;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.ssafy.shinhanflow.domain.trigger.account.BalanceTrigger;
@@ -15,6 +14,7 @@ import com.ssafy.shinhanflow.domain.trigger.date.SpecificDateTrigger;
 import com.ssafy.shinhanflow.domain.trigger.exchange.ExchangeRateTrigger;
 import com.ssafy.shinhanflow.domain.trigger.product.InterestRateTrigger;
 import com.ssafy.shinhanflow.domain.trigger.time.SpecificTimeTrigger;
+import com.ssafy.shinhanflow.service.finance.FinanceTriggerService;
 
 /**
  * Trigger interface
@@ -45,8 +45,11 @@ public interface Trigger {
 	 * Trigger가 발생했는지 확인하는 메소드
 	 * @return Trigger가 발생했는지 여부
 	 */
-	@JsonIgnore
-	boolean isTriggered();
+
+	// default boolean isTriggered() {
+	// 	return true;
+	// }
+	boolean isTriggered(FinanceTriggerService financeTriggerService);
 
 }
 

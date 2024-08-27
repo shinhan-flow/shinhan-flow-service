@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
+import com.ssafy.shinhanflow.service.finance.FinanceTriggerService;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +22,7 @@ public record TransferTrigger(
 ) implements Trigger {
 
 	@Override
-	public boolean isTriggered() {
+	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
 		//todo: 송금하면 이니까 fromAccount에서 최근 거래내역 가져오기
 		List<Long> amounts = new ArrayList<>();
 		for (Long amount : amounts) {
