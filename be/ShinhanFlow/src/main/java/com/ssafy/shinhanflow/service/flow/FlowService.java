@@ -29,9 +29,11 @@ import com.ssafy.shinhanflow.service.finance.FinanceTriggerService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class FlowService {
 	private final FlowRepository flowRepository;
 	private final TriggerRepository triggerRepository;
@@ -149,25 +151,33 @@ public class FlowService {
 		return flowDetailResponseDto;
 	}
 
-
 	@Transactional
-	public Boolean deleteFlow(Long memberId, Long flowId){
+	public Boolean deleteFlow(Long memberId, Long flowId) {
 		// 플로우삭제
-		FlowEntity flowEntity = flowRepository.findById(flowId).orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
+		FlowEntity flowEntity = flowRepository.findById(flowId)
+			.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 		flowRepository.delete(flowEntity);
 
 		// 트리거 삭제
 		List<TriggerEntity> triggerEntities = triggerRepository.findByFlowId(flowId);
-		for(TriggerEntity triggerEntity : triggerEntities){
+		for (TriggerEntity triggerEntity : triggerEntities) {
 			triggerRepository.delete(triggerEntity);
 		}
 
 		// 액션 삭제
 		List<ActionEntity> actionEntities = actionRepository.findByFlowId(flowId);
-		for(ActionEntity actionEntity : actionEntities){
+		for (ActionEntity actionEntity : actionEntities) {
 			actionRepository.delete(actionEntity);
 		}
 
 		return true;
+	}
+
+	public void testFlowTrigger() throws JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		// String str = " { \"type\": \"InterestRateTrigger\", \"accountProduct\": \"DEPOSIT_ACCOUNT\", \"rate\": 20}";
+		String str = " { \"type\": \"BalanceTrigger\", \"account\": \"0011104781451776\", \"balance\": 10000, \"condition\": \"LT\"}";
+		Trigger trigger = objectMapper.readValue(str, Trigger.class);
+		log.info("trigger.isTriggered: {}", trigger.isTriggered(financeTriggerService));
 	}
 }
