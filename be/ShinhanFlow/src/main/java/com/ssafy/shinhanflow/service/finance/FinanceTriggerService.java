@@ -7,6 +7,7 @@ import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsRequest
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
 import com.ssafy.shinhanflow.dto.finance.product.LoanProductsRequestDto;
 import com.ssafy.shinhanflow.dto.finance.product.LoanProductsResponseDto;
+import com.ssafy.shinhanflow.service.TriggerService;
 import com.ssafy.shinhanflow.util.FinanceApiHeaderGenerator;
 import com.ssafy.shinhanflow.util.FinanceApiService;
 
@@ -16,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FinanceTriggerService {
+public class FinanceTriggerService extends TriggerService {
 	private final FinanceApiService financeApiFetcher;
 	private final FinanceApiHeaderGenerator financeApiHeaderGenerator;
 
