@@ -57,4 +57,10 @@ public class FlowEntity {
 		this.title = title;
 		this.description = description;
 	}
+
+	public Boolean active() {
+		enable = !enable;
+		return enable;
+
+	}
 }

@@ -149,25 +149,34 @@ public class FlowService {
 		return flowDetailResponseDto;
 	}
 
-
 	@Transactional
-	public Boolean deleteFlow(Long memberId, Long flowId){
+	public Boolean deleteFlow(Long memberId, Long flowId) {
 		// 플로우삭제
-		FlowEntity flowEntity = flowRepository.findById(flowId).orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
+		FlowEntity flowEntity = flowRepository.findById(flowId)
+			.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 		flowRepository.delete(flowEntity);
 
 		// 트리거 삭제
 		List<TriggerEntity> triggerEntities = triggerRepository.findByFlowId(flowId);
-		for(TriggerEntity triggerEntity : triggerEntities){
+		for (TriggerEntity triggerEntity : triggerEntities) {
 			triggerRepository.delete(triggerEntity);
 		}
 
 		// 액션 삭제
 		List<ActionEntity> actionEntities = actionRepository.findByFlowId(flowId);
-		for(ActionEntity actionEntity : actionEntities){
+		for (ActionEntity actionEntity : actionEntities) {
 			actionRepository.delete(actionEntity);
 		}
 
 		return true;
+	}
+
+	public Boolean activeFlow(Long memberId, Long flowId) {
+		FlowEntity flowEntity = flowRepository.findById(flowId)
+			.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
+
+		Boolean res = flowEntity.active();
+		flowRepository.save(flowEntity);
+		return res;
 	}
 }
