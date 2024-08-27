@@ -49,7 +49,7 @@ public interface Trigger {
 	// default boolean isTriggered() {
 	// 	return true;
 	// }
-	boolean isTriggered(TriggerService triggerService);
+	<T extends TriggerService> boolean isTriggered(T triggerService);
 
 }
 
