@@ -176,7 +176,9 @@ public class FlowService {
 	public void testFlowTrigger() throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		// String str = " { \"type\": \"InterestRateTrigger\", \"accountProduct\": \"DEPOSIT_ACCOUNT\", \"rate\": 20}";
-		String str = " { \"type\": \"BalanceTrigger\", \"account\": \"0011104781451776\", \"balance\": 10000, \"condition\": \"LT\"}";
+		// String str = " { \"type\": \"BalanceTrigger\", \"account\": \"0011104781451776\", \"balance\": 10000, \"condition\": \"LT\"}";
+		// String str = " { \"type\": \"DepositTrigger\", \"account\": \"0011104781451776\", \"amount\": 10000 }";
+		String str = " { \"type\": \"WithDrawTrigger\", \"account\": \"0011104781451776\", \"amount\": 100000000 }";
 		Trigger trigger = objectMapper.readValue(str, Trigger.class);
 		log.info("trigger.isTriggered: {}", trigger.isTriggered(financeTriggerService));
 	}
