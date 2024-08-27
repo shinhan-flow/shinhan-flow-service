@@ -16,7 +16,7 @@ public class ExchangeRateResponseDto extends FinanceApiResponseDto {
 	ExchangeRate rec;
 
 	@Value
-	private static class ExchangeRate {
+	public static class ExchangeRate {
 		Long id;
 		String currency;
 		BigDecimal exchangeRate;
