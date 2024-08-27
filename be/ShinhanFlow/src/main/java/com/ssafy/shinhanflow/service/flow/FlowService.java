@@ -25,6 +25,7 @@ import com.ssafy.shinhanflow.dto.flow.GetFlowListResponseDto;
 import com.ssafy.shinhanflow.repository.ActionRepository;
 import com.ssafy.shinhanflow.repository.FlowRepository;
 import com.ssafy.shinhanflow.repository.TriggerRepository;
+import com.ssafy.shinhanflow.service.finance.FinanceTriggerService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ public class FlowService {
 	private final TriggerRepository triggerRepository;
 	private final ActionRepository actionRepository;
 	private final ObjectMapper objectMapper;
+	private final FinanceTriggerService financeTriggerService;
 
 	@Transactional
 	public Boolean createFlow(Long memberId, CreateFlowRequestDto createFlowRequestDto) {
@@ -149,10 +151,10 @@ public class FlowService {
 
 	public void testFlowTrigger() throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
-		String str = " { \"type\": \"InterestRateTrigger\", \"accountProduct\": \"DEPOSIT_ACCOUNT\", \"rate\": 1}";
+		String str = " { \"type\": \"InterestRateTrigger\", \"accountProduct\": \"DEPOSIT_ACCOUNT\", \"rate\": 20}";
 		Trigger trigger = objectMapper.readValue(str, Trigger.class);
 		System.out.println(trigger);
-		System.out.println(trigger.isTriggered());
+		System.out.println(trigger.isTriggered(financeTriggerService));
 
 		/**
 		 * type: InterestRateTrigger

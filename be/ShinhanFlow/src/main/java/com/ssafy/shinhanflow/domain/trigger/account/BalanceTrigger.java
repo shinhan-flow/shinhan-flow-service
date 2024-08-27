@@ -1,6 +1,7 @@
 package com.ssafy.shinhanflow.domain.trigger.account;
 
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
+import com.ssafy.shinhanflow.service.finance.FinanceTriggerService;
 import com.ssafy.shinhanflow.util.constants.Condition;
 
 import jakarta.validation.constraints.NotBlank;
@@ -18,8 +19,7 @@ public record BalanceTrigger(
 
 ) implements Trigger {
 
-	@Override
-	public boolean isTriggered() {
+	public boolean isTriggered(FinanceTriggerService serviceInterface) {
 		Long accountBalance = 0L; // todo: account에 대한 계좌 잔액 조회
 
 		if (condition.name().equals("LT")) {
