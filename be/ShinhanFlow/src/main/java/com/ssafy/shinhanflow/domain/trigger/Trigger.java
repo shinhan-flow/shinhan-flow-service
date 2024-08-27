@@ -14,7 +14,7 @@ import com.ssafy.shinhanflow.domain.trigger.date.SpecificDateTrigger;
 import com.ssafy.shinhanflow.domain.trigger.exchange.ExchangeRateTrigger;
 import com.ssafy.shinhanflow.domain.trigger.product.InterestRateTrigger;
 import com.ssafy.shinhanflow.domain.trigger.time.SpecificTimeTrigger;
-import com.ssafy.shinhanflow.service.TriggerService;
+import com.ssafy.shinhanflow.service.finance.FinanceTriggerService;
 
 /**
  * Trigger interface
@@ -49,7 +49,7 @@ public interface Trigger {
 	// default boolean isTriggered() {
 	// 	return true;
 	// }
-	<T extends TriggerService> boolean isTriggered(T triggerService);
+	boolean isTriggered(FinanceTriggerService financeTriggerService);
 
 }
 

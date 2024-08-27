@@ -4,8 +4,7 @@ import java.math.BigDecimal;
 
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRateResponseDto;
-import com.ssafy.shinhanflow.service.TriggerService;
-import com.ssafy.shinhanflow.service.finance.ExchangeRateTriggerService;
+import com.ssafy.shinhanflow.service.finance.FinanceTriggerService;
 import com.ssafy.shinhanflow.util.constants.Currency;
 
 import jakarta.validation.constraints.NotNull;
@@ -21,14 +20,11 @@ public record ExchangeRateTrigger(
 ) implements Trigger {
 
 	@Override
-	public boolean isTriggered(TriggerService triggerService) {
-		if (triggerService instanceof ExchangeRateTriggerService exchangeRateTriggerService) {
-			ExchangeRateResponseDto dto = exchangeRateTriggerService.getExchangeRate(currency.name());
-			BigDecimal rate = dto.getRec().getExchangeRate();
-			return this.rate.compareTo(rate) >= 0;
-		}
+	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
+		ExchangeRateResponseDto dto = financeTriggerService.getExchangeRate(currency.name());
+		BigDecimal rate = dto.getRec().getExchangeRate();
+		return this.rate.compareTo(rate) >= 0;
 
-		throw new IllegalArgumentException("Invalid TriggerService");
 	}
 
 }
