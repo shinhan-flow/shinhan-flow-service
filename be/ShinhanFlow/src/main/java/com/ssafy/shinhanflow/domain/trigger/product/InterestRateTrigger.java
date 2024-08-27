@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
+import com.ssafy.shinhanflow.service.TriggerService;
 import com.ssafy.shinhanflow.service.finance.FinanceTriggerService;
 import com.ssafy.shinhanflow.util.constants.AccountProduct;
 
@@ -21,8 +22,11 @@ public record InterestRateTrigger(
 	BigDecimal rate
 ) implements Trigger {
 	@Override
-	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
-		List<BigDecimal> rates = getProductRates(accountProduct, financeTriggerService);
+	public boolean isTriggered(TriggerService financeTriggerService) {
+		if (!(financeTriggerService instanceof FinanceTriggerService)) {
+			throw new BadRequestException(ErrorCode.INVALID_INPUT_VALUE);
+		}
+		List<BigDecimal> rates = getProductRates(accountProduct, (FinanceTriggerService)financeTriggerService);
 		return rates.stream().anyMatch(rate -> this.rate.compareTo(rate) >= 0);
 	}
 
