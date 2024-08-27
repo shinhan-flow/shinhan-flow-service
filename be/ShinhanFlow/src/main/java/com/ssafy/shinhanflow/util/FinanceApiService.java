@@ -171,6 +171,6 @@ public class FinanceApiService {
 	 * 특정 환율 조회
 	 */
 	public ExchangeRateResponseDto getExchangeRate(ExchangeRateRequestDto dto) {
-		return financeApiFetcher.fetch("/edu/exchangeRate", dto, ExchangeRateResponseDto.class);
+		return financeApiFetcher.fetch("/edu/exchangeRate/search", dto, ExchangeRateResponseDto.class);
 	}
 }
