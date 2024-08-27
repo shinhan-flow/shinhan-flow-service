@@ -19,7 +19,7 @@ class AcExchangeParam extends ActionBaseParam {
     required this.currency,
     required this.fromAccount,
     required this.amount,
-    super.type = ActionType.exchange,
+    super.type = ActionType.ExchangeAction,
   });
 
   @override

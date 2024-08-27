@@ -12,7 +12,7 @@ class AcExchangeRateNotificationParam extends ActionBaseParam {
 
    AcExchangeRateNotificationParam({
     required this.currency,
-    super.type = ActionType.exchangeRateNotification,
+    super.type = ActionType.ExchangeRateNotificationAction,
   });
 
   @override

@@ -121,7 +121,7 @@ class _IterateComponentState extends ConsumerState<_IterateComponent>
     WidgetsBinding.instance.addPostFrameCallback((e) {
       ref
           .read(tgDateTimeFormProvider.notifier)
-          .update(flowType: TriggerType.dayOfWeek);
+          .update(flowType: TriggerType.DayOfWeekTrigger);
     });
   }
 
@@ -130,7 +130,7 @@ class _IterateComponentState extends ConsumerState<_IterateComponent>
     int idx = tabController.index;
     ref
         .read(tgDateTimeFormProvider.notifier)
-        .update(flowType: idx == 0 ? TriggerType.dayOfWeek : TriggerType.dayOfMonth);
+        .update(flowType: idx == 0 ? TriggerType.DayOfWeekTrigger : TriggerType.DayOfMonthTrigger);
   }
 
   @override
@@ -369,10 +369,10 @@ class _TimeCategoryComponent extends ConsumerWidget {
       if (next != null) {
         switch (next) {
           case TimeCategory.normal:
-            type = TriggerType.specificDate;
+            type = TriggerType.SpecificDateTrigger;
             break;
           case TimeCategory.period:
-            type = TriggerType.periodDate;
+            type = TriggerType.PeriodDateTrigger;
             break;
           case TimeCategory.iterate:
             // type = FlowType.;

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shinhan_flow/auth/model/token_model.dart';
 import 'package:shinhan_flow/home_screen.dart';
 
 import '../../common/logger/custom_logger.dart';
@@ -33,7 +34,6 @@ class TokenProvider extends ChangeNotifier {
   Future<void> logout() async {
     await ref.read(authProvider.notifier).logout();
   }
-
 
   String? redirectLogic(GoRouterState goRouteState) {
     log('redirect start!');
@@ -82,18 +82,20 @@ class AuthStateNotifier extends StateNotifier<AuthModel?> {
     // autoLogin();
   }
 
-  // Future<String> reIssueToken() async {
-  //   log("reIssueToken");
-  //
-  //   final ResponseModel<TokenModel> result = await repository.getReIssueToken();
-  //   state = state?.copyWith(token: result.data!);
-  //   await storage.write(key: 'accessToken', value: state!.token?.access);
-  //   await storage.write(key: 'refreshToken', value: state!.token?.refresh);
-  //   return state!.token?.access ?? '';
-  // }
+  Future<String> reIssueToken() async {
+    log("reIssueToken");
+
+    final ResponseModel<String> result =
+        await repository.getReIssueToken();
+    state = state?.copyWith(accessToken: result.data);
+    await storage.write(key: 'accessToken', value: state!.accessToken);
+    await storage.write(key: 'refreshToken', value: state!.refreshToken);
+    return state!.accessToken ?? '';
+  }
 
   Future<void> autoLogin({BuildContext? context}) async {
     log("autoLogin");
+
     final accessToken = await storage.read(key: 'accessToken');
     final refreshToken = await storage.read(key: 'refreshToken');
 
@@ -101,9 +103,8 @@ class AuthStateNotifier extends StateNotifier<AuthModel?> {
     // final signUpType =
     //     AuthType.stringToEnum(value: signUpTypeString ?? 'email');
 
-    // log("accessToken = $accessToken");
     if (accessToken != null) {
-      state = AuthModel(access: accessToken, refresh: refreshToken);
+      state = AuthModel(accessToken: accessToken, refreshToken: refreshToken);
 
       if (context != null && context.mounted) {
         log("로그인 완료!");

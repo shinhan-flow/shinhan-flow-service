@@ -15,7 +15,7 @@ class TgProductParam extends TriggerBaseParam {
   TgProductParam({
     this.product,
     this.interestRate,
-    super.type = TriggerType.interestRate,
+    super.type = TriggerType.InterestRateTrigger,
   });
 
   @override

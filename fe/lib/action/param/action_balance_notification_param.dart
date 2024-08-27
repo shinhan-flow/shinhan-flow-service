@@ -12,7 +12,7 @@ class AcBalanceNotificationParam extends ActionBaseParam {
   final String account;
 
    AcBalanceNotificationParam({
-    super.type = ActionType.balanceNotification,
+    super.type = ActionType.BalanceNotificationAction,
     required this.account,
   });
 

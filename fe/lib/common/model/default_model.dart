@@ -27,7 +27,7 @@ class CompletedModel extends BaseModel {
       _$CompletedModelFromJson(json);
 }
 
-class ErrorModel<T> extends BaseModel {
+class ErrorModel extends BaseModel {
   final String code;
   final String message;
 

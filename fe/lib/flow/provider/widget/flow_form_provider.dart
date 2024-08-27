@@ -93,7 +93,7 @@ class FlowForm extends _$FlowForm {
       triggers.removeWhere((t) => t.type.isProductType());
     } else if (trigger.type.isExchangeType()) {
       triggers.removeWhere((t) => t.type.isExchangeType());
-    }else{
+    } else {
       triggers.removeWhere((t) => t.type.isAccountType());
     }
 
@@ -106,6 +106,10 @@ class FlowForm extends _$FlowForm {
     final actions = state.actions.toList();
     if (action.type.isNotificationType()) {
       actions.removeWhere((t) => t.type.isNotificationType());
+    } else if (action.type.isTransferType()) {
+      actions.removeWhere((t) => t.type.isTransferType());
+    } else if (action.type.isExchangeType()) {
+      actions.removeWhere((t) => t.type.isExchangeType());
     }
 
     final newActions = actions..add(action);
