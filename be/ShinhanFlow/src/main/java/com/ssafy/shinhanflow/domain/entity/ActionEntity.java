@@ -6,8 +6,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,7 +38,7 @@ public class ActionEntity {
 	private String type;
 
 	@NotNull
-	@Column(name = "data")
+	@Column(name = "data", columnDefinition = "TEXT")
 	private String data;
 
 	@ColumnDefault("CURRENT_TIMESTAMP")
