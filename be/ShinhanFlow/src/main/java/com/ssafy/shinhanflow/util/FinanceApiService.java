@@ -24,6 +24,10 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDt
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountWithdrawResponseDto;
+import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRateRequestDto;
+import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRateResponseDto;
+import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRatesRequestDto;
+import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRatesResponseDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsRequestDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
 import com.ssafy.shinhanflow.dto.finance.product.LoanProductsRequestDto;
@@ -154,5 +158,19 @@ public class FinanceApiService {
 	 */
 	public LoanProductsResponseDto loanProductsInfo(LoanProductsRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/loan/inquireLoanProductList", dto, LoanProductsResponseDto.class);
+	}
+
+	/**
+	 * 전체 환율 조회
+	 */
+	public ExchangeRatesResponseDto getExchangeRates(ExchangeRatesRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/exchangeRate", dto, ExchangeRatesResponseDto.class);
+	}
+
+	/**
+	 * 특정 환율 조회
+	 */
+	public ExchangeRateResponseDto getExchangeRate(ExchangeRateRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/exchangeRate/search", dto, ExchangeRateResponseDto.class);
 	}
 }
