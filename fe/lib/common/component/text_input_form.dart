@@ -18,10 +18,12 @@ class CustomTextFormField extends StatelessWidget {
   final bool isMultiLine;
   final TextInputType? keyboardType;
   final Widget? suffix;
+
   final Widget? side;
   final List<TextInputFormatter>? inputFormatters;
   final bool valid;
   final String? errorText;
+  final String? validText;
   final TextInputAction textInputAction;
 
   const CustomTextFormField({
@@ -42,6 +44,7 @@ class CustomTextFormField extends StatelessWidget {
     this.errorText,
     this.focusNode,
     this.textInputAction = TextInputAction.done,
+    this.validText,
   });
 
   @override
@@ -66,11 +69,7 @@ class CustomTextFormField extends StatelessWidget {
                     focusNode!.requestFocus();
                   }
                 },
-                onTapOutside:(v){
-
-                  log("ABCBABA");
-
-                },
+                onTapOutside: (v) {},
                 focusNode: focusNode,
                 controller: textEditingController,
                 obscuringCharacter: '●',
@@ -134,6 +133,16 @@ class CustomTextFormField extends StatelessWidget {
               errorText!,
               style: SHFlowTextStyle.label.copyWith(
                 color: const Color(0xFFE21A1A),
+              ),
+            ),
+          )
+        else if (validText != null)
+          Padding(
+            padding: EdgeInsets.only(top: 8.h),
+            child: Text(
+              validText!,
+              style: SHFlowTextStyle.label.copyWith(
+                color: const Color(0xFF0057FF),
               ),
             ),
           )

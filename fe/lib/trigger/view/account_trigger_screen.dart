@@ -98,13 +98,13 @@ class _AccountFormComponent extends ConsumerWidget {
               onTap: () {
                 late TriggerType type;
                 if (a == AccountProperty.deposit) {
-                  type = TriggerType.deposit;
+                  type = TriggerType.DepositTrigger;
                 } else if (a == AccountProperty.transfer) {
-                  type = TriggerType.transfer;
+                  type = TriggerType.TransferTrigger;
                 } else if (a == AccountProperty.balance) {
-                  type = TriggerType.balance;
+                  type = TriggerType.BalanceTrigger;
                 } else if (a == AccountProperty.withdrawal) {
-                  type = TriggerType.withdraw;
+                  type = TriggerType.WithDrawTrigger;
                 }
                 ref.read(tgAccountFormProvider.notifier).update(
                       property: a,

@@ -23,6 +23,24 @@ class AccountBaseModel<T> {
   }
 }
 
+@JsonSerializable(
+  genericArgumentFactories: true,
+)
+class BankListBaseModel<T> {
+  @JsonKey(name: 'REC')
+  final List<T> rec;
+
+  BankListBaseModel({
+    required this.rec,
+  });
+
+
+  factory BankListBaseModel.fromJson(
+      Map<String, dynamic> json, T Function(Object? json) fromJsonT) {
+    return _$BankListBaseModelFromJson(json, fromJsonT);
+  }
+}
+
 @JsonSerializable()
 class AccountModel extends BaseModel {
   final String bankCode;

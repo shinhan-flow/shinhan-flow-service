@@ -59,16 +59,16 @@ class TgDateTimeParam extends TriggerBaseParam {
   factory TgDateTimeParam.fromForm({required TgDateTimeFormModel form}) {
     if (form.type != null) {
       switch (form.type) {
-        case TriggerType.specificDate:
+        case TriggerType.SpecificDateTrigger:
           return TgDateTimeParam(date: form.date, type: form.type!);
-        case TriggerType.periodDate:
+        case TriggerType.PeriodDateTrigger:
           return TgDateTimeParam(
               startDate: form.startDate,
               endDate: form.endDate,
               type: form.type!);
-        case TriggerType.dayOfWeek:
+        case TriggerType.DayOfWeekTrigger:
           return TgDateTimeParam(dayOfWeek: form.dayOfWeek, type: form.type!);
-        case TriggerType.dayOfMonth:
+        case TriggerType.DayOfMonthTrigger:
           return TgDateTimeParam(dayOfMonth: form.dayOfMonth, type: form.type!);
         default:
           break;

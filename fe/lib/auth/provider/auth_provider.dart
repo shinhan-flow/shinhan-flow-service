@@ -85,9 +85,9 @@ class AuthStateNotifier extends StateNotifier<AuthModel?> {
   Future<String> reIssueToken() async {
     log("reIssueToken");
 
-    final ResponseModel<AccessTokenModel> result =
+    final ResponseModel<String> result =
         await repository.getReIssueToken();
-    state = state?.copyWith(accessToken: result.data?.accessToken);
+    state = state?.copyWith(accessToken: result.data);
     await storage.write(key: 'accessToken', value: state!.accessToken);
     await storage.write(key: 'refreshToken', value: state!.refreshToken);
     return state!.accessToken ?? '';

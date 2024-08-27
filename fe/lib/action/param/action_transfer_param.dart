@@ -5,24 +5,24 @@ import 'package:shinhan_flow/action/model/enum/action_type.dart';
 
 import '../../flow/param/trigger/trigger_param.dart';
 import '../../trigger/model/enum/foreign_currency_category.dart';
+import '../provider/widget/transfer_action_form_provider.dart';
 
 part 'action_transfer_param.g.dart';
 
 @JsonSerializable()
 class AcTransferParam extends ActionBaseParam {
-  final String amount;
+  final int amount;
+  final String fromAccount;
+  final String toAccount;
+  @JsonKey(includeToJson: false)
+  final String holder;
 
-  // @JsonKey(name: 'from_account')
-  final int fromAccount;
-
-  // @JsonKey(name: 'to_account')
-  final int toAccount;
-
-   AcTransferParam({
+  AcTransferParam({
     required this.toAccount,
     required this.amount,
     required this.fromAccount,
-    super.type = ActionType.transfer,
+    super.type = ActionType.TransferAction,
+    required this.holder,
   });
 
   @override
@@ -31,16 +31,18 @@ class AcTransferParam extends ActionBaseParam {
         toAccount,
         fromAccount,
         amount,
+        // holder,
       ];
 
   @override
   Map<String, dynamic> toJson() => _$AcTransferParamToJson(this);
 
-// factory AcTextNotificationParam.fromForm(
-//     {required TgExchangeFormModel form}) {
-//   return TgExchangeParam(
-//     exRate: form.exRate,
-//     currency: form.currency,
-//   );
-// }
+  factory AcTransferParam.fromForm({required AcTransferFormModel form}) {
+    return AcTransferParam(
+      toAccount: form.toAccount,
+      amount: form.amount,
+      fromAccount: form.fromAccount,
+      holder: form.holder,
+    );
+  }
 }

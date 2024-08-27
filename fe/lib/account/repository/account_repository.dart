@@ -46,8 +46,7 @@ abstract class AccountRepository {
   /// 본인 계좌 목록 전체 조회 (수시 입출금)
   @Headers({'token': 'true'})
   @GET('/current-accounts')
-  Future<ResponseModel<AccountBaseModel<List<AccountDetailModel>>>>
-      getAccounts();
+  Future<ResponseModel<BankListBaseModel<AccountDetailModel>>> getAccounts();
 
   /// 예금주 조회 (수시 입출금)
   @Headers({'token': 'true'})

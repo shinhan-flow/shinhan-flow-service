@@ -60,7 +60,7 @@ class TgAccountFormModel with BaseFormModel {
     bool valid = false;
     if (validType != null) {
       switch (validType) {
-        case TriggerType.balance:
+        case TriggerType.BalanceTrigger:
           if (validAccount != null &&
               validBalance != null &&
               validCondition != null) {
@@ -69,7 +69,7 @@ class TgAccountFormModel with BaseFormModel {
                 validBalance > 0;
           }
           break;
-        case TriggerType.transfer:
+        case TriggerType.TransferTrigger:
           if (validFromAccount != null &&
               validToAccount != null &&
               validAmount != null) {
@@ -79,14 +79,14 @@ class TgAccountFormModel with BaseFormModel {
                 validAmount > 0;
           }
           break;
-        case TriggerType.deposit:
+        case TriggerType.DepositTrigger:
           if (validAccount != null && validAmount != null) {
             valid = validProperty != null &&
                 validAccount.isNotEmpty &&
                 validAmount > 0;
           }
           break;
-        case TriggerType.withdraw:
+        case TriggerType.WithDrawTrigger:
           if (validAccount != null && validAmount != null) {
             valid = validProperty != null &&
                 validAccount.isNotEmpty &&
@@ -114,13 +114,13 @@ class TgAccountFormModel with BaseFormModel {
   @override
   DefaultParam toParam() {
     switch (type!) {
-      case TriggerType.balance:
+      case TriggerType.BalanceTrigger:
         return TgAccountBalanceParam.fromForm(form: this);
-      case TriggerType.deposit:
+      case TriggerType.DepositTrigger:
         return TgAccountDepositParam.fromForm(form: this);
-      case TriggerType.transfer:
+      case TriggerType.TransferTrigger:
         return TgAccountTransferParam.fromForm(form: this);
-      case TriggerType.withdraw:
+      case TriggerType.WithDrawTrigger:
         return TgAccountWithdrawParam.fromForm(form: this);
       default:
         return TgAccountWithdrawParam.fromForm(form: this);
@@ -133,7 +133,7 @@ class TgAccountForm extends _$TgAccountForm {
   @override
   TgAccountFormModel build() {
     return TgAccountFormModel(
-      type: TriggerType.balance,
+      type: TriggerType.BalanceTrigger,
     );
   }
 

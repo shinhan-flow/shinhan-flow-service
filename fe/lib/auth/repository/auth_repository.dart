@@ -42,8 +42,8 @@ abstract class AuthRepository {
   });
 
   @Headers({'refresh': 'true'})
-  @GET('api/v1/auth/access-token')
-  Future<ResponseModel<AccessTokenModel>> getReIssueToken();
+  @GET('/api/v1/auth/access-token')
+  Future<ResponseModel<String>> getReIssueToken();
 
 //
 }

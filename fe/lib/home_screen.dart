@@ -8,6 +8,7 @@ import 'package:shinhan_flow/auth/provider/auth_provider.dart';
 import 'package:shinhan_flow/auth/view/login_screen.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
+import 'package:shinhan_flow/product/view/product_account_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 import 'package:shinhan_flow/util/util.dart';
 
@@ -179,6 +180,11 @@ class _AccountCardComponent extends ConsumerWidget {
                 ref.read(authProvider.notifier).logout();
               },
               child: Text("임시 로그아웃")),
+          TextButton(
+              onPressed: () {
+                context.pushNamed(ProductAccountScreen.routeName);
+              },
+              child: Text("수시 입출금 상품")),
           Text(
             '금융정보를 알려드려요',
             style: SHFlowTextStyle.subTitle,

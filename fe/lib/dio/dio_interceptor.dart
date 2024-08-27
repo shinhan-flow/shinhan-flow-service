@@ -41,9 +41,9 @@ class CustomDioInterceptor extends Interceptor {
     }
     if (options.headers['refresh'] == 'true') {
       String? refreshToken = await storage.read(key: 'refreshToken');
+      options.headers.clear();
       log('refresh ${refreshToken}');
-      // options.headers.remove('refreshToken');
-      options.headers.addAll({'refresh': '$refreshToken'});
+      options.headers.addAll({'refresh': 'Bearer $refreshToken'});
     }
     List<String> requestLog = [];
     requestLog.add(
@@ -97,9 +97,12 @@ class CustomDioInterceptor extends Interceptor {
         }
         // 재요청
         final reResponse = await dio.fetch(err.requestOptions);
+        log("response ${reResponse}");
         return handler.resolve(reResponse);
       } on DioException catch (e) {
         // 리프레쉬 토큰 만료 된 경우
+        // log("에러 URL = ${e.requestOptions.baseUrl}${e.requestOptions.path}");
+        // log("e.stackTrace = ${e.stackTrace}");
         log("리프레쉬 만료 !!");
         await ref.read(tokenProvider.notifier).logout();
         return;

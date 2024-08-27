@@ -18,7 +18,7 @@ class TgExchangeParam extends TriggerBaseParam {
    TgExchangeParam({
     this.currency,
     this.exRate,
-    super.type = TriggerType.exchangeRate,
+    super.type = TriggerType.ExchangeRateTrigger,
   });
 
   @override
