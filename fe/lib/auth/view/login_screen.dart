@@ -116,7 +116,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       focusNode: focusNodes[1],
                       label: '비밀번호',
                       hintText: '비밀번호를 입력해주세요.',
-                      obscureText: isVisible,
+                      obscureText: !isVisible,
                       onChanged: (v) {
                         ref
                             .read(loginFormProvider.notifier)

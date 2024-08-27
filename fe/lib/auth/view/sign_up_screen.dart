@@ -32,7 +32,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    focusNodes = List.generate(3, (e) => FocusNode());
+    focusNodes = [
+      FocusNode(),
+      FocusNode(),
+      FocusNode(),
+    ];
   }
 
   Widget _infoForm(WidgetRef ref, SignUpFormModel form, BuildContext context) {
@@ -69,7 +73,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           textInputAction: TextInputAction.next,
           label: '비밀번호',
           hintText: '비밀번호를 입력해주세요.',
-          obscureText: isVisible1,
+          obscureText: !isVisible1,
           onChanged: (v) {
             ref.read(signUpFormProvider.notifier).update(password: v);
           },
@@ -92,7 +96,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           focusNode: focusNodes[2],
           label: '비밀번호 확인',
           hintText: '비밀번호 확인을 입력해주세요.',
-          obscureText: isVisible2,
+          obscureText: !isVisible2,
           onChanged: (v) {
             ref.read(signUpFormProvider.notifier).update(checkPassword: v);
           },

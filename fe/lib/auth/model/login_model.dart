@@ -10,9 +10,15 @@ class AuthModel extends BaseModel {
   final String? refreshToken;
 
   AuthModel({
-     this.accessToken,
-     this.refreshToken,
+    this.accessToken,
+    this.refreshToken,
   });
+
+  AuthModel copyWith({String? accessToken, String? refreshToken}) {
+    return AuthModel(
+        accessToken: accessToken ?? this.accessToken,
+        refreshToken: refreshToken ?? this.refreshToken);
+  }
 
   factory AuthModel.fromJson(Map<String, dynamic> json) =>
       _$AuthModelFromJson(json);

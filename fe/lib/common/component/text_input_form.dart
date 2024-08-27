@@ -61,6 +61,16 @@ class CustomTextFormField extends StatelessWidget {
             Expanded(
               /// constraints 으로 크기를 지정해도 align을 지정 안하면 안됨!
               child: TextFormField(
+                onTap: () {
+                  if (focusNode != null) {
+                    focusNode!.requestFocus();
+                  }
+                },
+                onTapOutside:(v){
+
+                  log("ABCBABA");
+
+                },
                 focusNode: focusNode,
                 controller: textEditingController,
                 obscuringCharacter: '●',
@@ -74,7 +84,6 @@ class CustomTextFormField extends StatelessWidget {
                 keyboardType: keyboardType,
                 inputFormatters: inputFormatters,
                 // expands: true,
-
                 decoration: InputDecoration(
                   suffixIcon: suffix,
                   constraints:

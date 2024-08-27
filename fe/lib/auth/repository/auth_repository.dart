@@ -1,5 +1,7 @@
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shinhan_flow/auth/model/token_model.dart';
+import 'package:shinhan_flow/auth/provider/auth_provider.dart';
 
 import '../../common/model/default_model.dart';
 import '../../dio/dio_interceptor.dart';
@@ -38,4 +40,10 @@ abstract class AuthRepository {
   Future<ResponseModel<bool>> signUp({
     @Body() required SignUpParam param,
   });
+
+  @Headers({'refresh': 'true'})
+  @GET('api/v1/auth/access-token')
+  Future<ResponseModel<AccessTokenModel>> getReIssueToken();
+
+//
 }
