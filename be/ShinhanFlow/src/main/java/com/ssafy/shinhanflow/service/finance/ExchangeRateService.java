@@ -12,6 +12,7 @@ import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
 import com.ssafy.shinhanflow.repository.MemberRepository;
 import com.ssafy.shinhanflow.util.FinanceApiHeaderGenerator;
 import com.ssafy.shinhanflow.util.FinanceApiService;
+import com.ssafy.shinhanflow.util.constants.Currency;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +47,7 @@ public class ExchangeRateService {
 		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("exchangeRate", null, "00100");
 		ExchangeRateRequestDto dto = ExchangeRateRequestDto.builder()
 			.header(header)
-			.currency(currencyCode)
+			.currency(Currency.valueOf(currencyCode))
 			.build();
 
 		return financeApiService.getExchangeRate(dto);
