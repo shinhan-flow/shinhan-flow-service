@@ -149,5 +149,30 @@ public class FlowService {
 		return flowDetailResponseDto;
 	}
 
+	@Transactional
+	public Boolean deleteFlow(Long memberId, Long flowId){
+		// 플로우삭제
+		FlowEntity flowEntity = flowRepository.findById(flowId).orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
+		flowRepository.delete(flowEntity);
+
+		// 트리거 삭제
+		List<TriggerEntity> triggerEntities = triggerRepository.findByFlowId(flowId);
+		for(TriggerEntity triggerEntity : triggerEntities){
+			triggerRepository.delete(triggerEntity);
+		}
+
+		// 액션 삭제
+		List<ActionEntity> actionEntities = actionRepository.findByFlowId(flowId);
+		for(ActionEntity actionEntity : actionEntities){
+			actionRepository.delete(actionEntity);
+		}
+
+		return true;
+	}
+
+	public String hello(){
+		return "hello";
+	}
+
 
 }
