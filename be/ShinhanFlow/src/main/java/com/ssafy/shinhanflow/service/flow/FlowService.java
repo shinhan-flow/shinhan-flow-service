@@ -11,6 +11,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.ssafy.shinhanflow.domain.action.Action;
 import com.ssafy.shinhanflow.domain.entity.ActionEntity;
 import com.ssafy.shinhanflow.domain.entity.FlowEntity;
@@ -18,6 +23,7 @@ import com.ssafy.shinhanflow.domain.entity.TriggerEntity;
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 import com.ssafy.shinhanflow.dto.flow.CreateFlowRequestDto;
 import com.ssafy.shinhanflow.dto.flow.FlowDetailResponseDto;
+import com.ssafy.shinhanflow.dto.flow.GetFlowListResponseDto;
 import com.ssafy.shinhanflow.repository.ActionRepository;
 import com.ssafy.shinhanflow.repository.FlowRepository;
 import com.ssafy.shinhanflow.repository.TriggerRepository;
@@ -131,4 +137,15 @@ public class FlowService {
 		return flowDetailResponseDto;
 	}
 
+	public GetFlowListResponseDto getFlowList(Long memberId, Integer nowPage, Integer perPage) {
+		Pageable pageable = PageRequest.of(nowPage, perPage);
+		Page<FlowEntity> res = flowRepository.findAll(pageable);
+
+		return GetFlowListResponseDto
+			.builder()
+			.totalPage(res.getTotalPages())
+			.nowPage(res.getNumber())
+			.pageContent(res.getContent())
+			.build();
+	}
 }

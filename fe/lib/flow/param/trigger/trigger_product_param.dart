@@ -3,22 +3,24 @@ import 'package:shinhan_flow/flow/param/trigger/trigger_param.dart';
 import 'package:shinhan_flow/trigger/model/enum/product_property.dart';
 
 import '../../provider/widget/product_trigger_form_provider.dart';
+import '../enum/flow_type.dart';
 
 part 'trigger_product_param.g.dart';
 
 @JsonSerializable()
 class TgProductParam extends TriggerBaseParam {
   final ProductProperty? product;
-  @JsonKey(name: 'interest_rate')
   final double? interestRate;
 
-  const TgProductParam({
+  TgProductParam({
     this.product,
     this.interestRate,
+    super.type = TriggerType.interestRate,
   });
 
   @override
   List<Object?> get props => [
+        type,
         product,
         interestRate,
       ];

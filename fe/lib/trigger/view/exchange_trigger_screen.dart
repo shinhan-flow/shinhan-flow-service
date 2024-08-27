@@ -32,7 +32,7 @@ class ExchangeTriggerScreen extends StatelessWidget {
                     final trigger = ref.read(tgExchangeFormProvider);
                     ref
                         .read(flowFormProvider.notifier)
-                        .addTrigger(trigger: trigger.toParam() as TriggerParam);
+                        .addTrigger(trigger: trigger.toParam() as TriggerBaseParam);
                     context.pop();
                   }
                 : null,

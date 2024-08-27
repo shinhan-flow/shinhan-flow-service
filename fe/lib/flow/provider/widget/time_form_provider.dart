@@ -16,7 +16,7 @@ part 'time_form_provider.g.dart';
 
 @immutable
 class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
-  final FlowType? flowType;
+  // final TriggerType? flowType;
 
   TgDateTimeFormModel({
     super.startDate,
@@ -26,8 +26,9 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
     super.dayOfWeek,
     super.dayOfMonth,
     super.dates,
-    this.flowType,
+    // this.flowType,
     bool valid = false,
+    super.type = TriggerType.specificDate,
   }) {
     this.valid = valid;
   }
@@ -41,13 +42,13 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
     List<int>? dayOfMonth,
     List<String>? dates,
   ) {
-    if (flowType != null) {
-      switch (flowType!) {
-        case FlowType.specificDate:
+    if (type != null) {
+      switch (type) {
+        case TriggerType.specificDate:
           return date != null && date.isNotEmpty;
-        case FlowType.specificTime:
+        case TriggerType.specificTime:
           return specificTime != null && specificTime.isNotEmpty;
-        case FlowType.periodDate:
+        case TriggerType.periodDate:
           if (startDate != null && endDate != null) {
             // 기간이 start ~ end
             // 동일하거나 start 가 end 보다 이후일 경우 false
@@ -56,12 +57,12 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
                 -1;
           }
           return false;
-        case FlowType.dayOfWeek:
+        case TriggerType.dayOfWeek:
           // log("valid dayOfWeek = $dayOfWeek");
           return dayOfWeek != null && dayOfWeek.isNotEmpty;
-        case FlowType.dayOfMonth:
+        case TriggerType.dayOfMonth:
           return dayOfMonth != null && dayOfMonth.isNotEmpty;
-        case FlowType.multiDate:
+        case TriggerType.multiDate:
           return dates != null && dates.isNotEmpty;
         default:
           return false;
@@ -72,7 +73,7 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
   }
 
   TgDateTimeFormModel copyWith({
-    FlowType? flowType,
+    TriggerType? flowType,
     String? startDate,
     String? endDate,
     String? date,
@@ -84,10 +85,10 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
     String? validStartDate = startDate ?? this.startDate;
     String? validEndDate = endDate ?? this.endDate;
     String? validDate = date ?? this.date;
-    if (flowType != null && flowType == FlowType.specificDate) {
+    if (flowType != null && flowType == TriggerType.specificDate) {
       validEndDate = null;
       validStartDate = null;
-    } else if (flowType != null && flowType == FlowType.periodDate) {
+    } else if (flowType != null && flowType == TriggerType.periodDate) {
       validDate = null;
     }
 
@@ -113,7 +114,7 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
       dayOfMonth: validDayOfMonth,
       dates: validDates,
       valid: valid,
-      flowType: flowType ?? this.flowType,
+      type: flowType ?? this.type,
     );
   }
 
@@ -131,15 +132,12 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
       dayOfMonth: dayOfMonth,
       dates: dates,
       valid: valid,
-      flowType: flowType,
+      type: type,
     );
   }
 
   DefaultParam toParam() {
-    return TriggerParam(
-      code: flowType!,
-      data: TgDateTimeParam.fromForm(form: this),
-    );
+    return TgDateTimeParam.fromForm(form: this);
   }
 }
 
@@ -155,7 +153,7 @@ class TgDateTimeForm extends _$TgDateTimeForm {
   }
 
   void update({
-    FlowType? flowType,
+    TriggerType? flowType,
     String? startDate,
     String? endDate,
     String? date,

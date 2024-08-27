@@ -17,36 +17,54 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../../action/model/enum/action_type.dart';
 import '../../../common/param/default_param.dart';
 import '../enum/flow_type.dart';
 
 part 'trigger_param.g.dart';
+//
+// @JsonSerializable()
+// class TriggerParam extends DefaultParam {
+//   final ActionBaseParam data;
+//
+//   TriggerParam({
+//     required this.data,
+//   });
+//
+//   Map<String, dynamic> toJson() => _$TriggerParamToJson(this);
+//
+//   factory TriggerParam.fromJson(Map<String, dynamic> json) =>
+//       _$TriggerParamFromJson(json);
+//
+//   @override
+//   List<Object?> get props => [data];
+// }
 
 @JsonSerializable()
-class TriggerParam extends DefaultParam{
-  final FlowType code;
-  final TriggerBaseParam data;
+class ActionBaseParam extends DefaultParam {
+  final ActionType type;
 
-  TriggerParam({
-    required this.code,
-    required this.data,
-  });
+  ActionBaseParam({required this.type});
 
-  Map<String, dynamic> toJson() => _$TriggerParamToJson(this);
+  Map<String, dynamic> toJson() {
+    return {};
+  }
 
-  factory TriggerParam.fromJson(Map<String, dynamic> json) =>
-      _$TriggerParamFromJson(json);
+  factory ActionBaseParam.fromJson(Map<String, dynamic> json) =>
+      _$ActionBaseParamFromJson(json);
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [code, data];
+  List<Object?> get props => [type];
 
-
+  @override
+  bool? get stringify => true;
 }
 
 @JsonSerializable()
-class TriggerBaseParam extends Equatable {
-  const TriggerBaseParam();
+class TriggerBaseParam extends DefaultParam {
+  final TriggerType type;
+
+  TriggerBaseParam({required this.type});
 
   Map<String, dynamic> toJson() {
     return {};
@@ -56,7 +74,7 @@ class TriggerBaseParam extends Equatable {
       _$TriggerBaseParamFromJson(json);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [type];
 
   @override
   bool? get stringify => true;

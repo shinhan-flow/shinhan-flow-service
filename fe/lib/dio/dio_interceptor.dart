@@ -6,7 +6,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../common/logger/custom_logger.dart';
 
-const String serverURL = "http://3.36.53.116:8080";
+const String serverURL = "http://13.124.223.172:8080";
 
 class CustomDioInterceptor extends Interceptor {
   final FlutterSecureStorage storage;
@@ -65,10 +65,10 @@ class CustomDioInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     List<String> errorLog = [];
     final noneAuthUrl = [
-      'auth/login/kakao',
-      'auth/login/apple',
-      '/auth/login/email',
-      'auth/verify-code',
+      // 'auth/login/kakao',
+      // 'auth/login/apple',
+      // '/auth/login/email',
+      // 'auth/verify-code',
     ];
 
     log('err.message ${err.message} , err.error = ${err.error}, err.type = ${err.type}');

@@ -21,6 +21,9 @@ public enum ErrorCode {
 	INVALID_TOKEN(HttpStatus.BAD_REQUEST, "4004", "토큰이 유효하지 않습니다."),
 	EXPIRED_TOKEN(HttpStatus.BAD_REQUEST, "4005", "토큰이 만료됐습니다."),
 	NULL_REQUIRED_VALUE(HttpStatus.BAD_REQUEST, "4006", "필수 요청값이 비어있습니다."),
+	INVALID_CREDENTIALS(HttpStatus.BAD_REQUEST, "4007", "아이디 또는 비밀번호가 올바르지 않습니다."),
+	;
+
 
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "5001", "서버 에러가 발생했습니다."),
 	;

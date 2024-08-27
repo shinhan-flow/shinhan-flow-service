@@ -36,7 +36,7 @@ class ProductTriggerScreen extends StatelessWidget {
                         final trigger = ref.read(tgProductFormProvider);
 
                         ref.read(flowFormProvider.notifier).addTrigger(
-                            trigger: trigger.toParam() as TriggerParam);
+                            trigger: trigger.toParam() as TriggerBaseParam);
                         context.pop();
                       }
                     : null,

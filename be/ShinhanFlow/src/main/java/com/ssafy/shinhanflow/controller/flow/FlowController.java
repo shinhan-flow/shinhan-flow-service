@@ -2,6 +2,8 @@ package com.ssafy.shinhanflow.controller.flow;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -13,6 +15,7 @@ import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
 import com.ssafy.shinhanflow.config.error.SuccessResponse;
 import com.ssafy.shinhanflow.dto.flow.CreateFlowRequestDto;
 import com.ssafy.shinhanflow.dto.flow.FlowDetailResponseDto;
+import com.ssafy.shinhanflow.dto.flow.GetFlowListResponseDto;
 import com.ssafy.shinhanflow.service.flow.FlowService;
 
 import jakarta.validation.Valid;
@@ -40,6 +43,15 @@ public class FlowController {
 		@PathVariable Long flowId
 	) throws JsonProcessingException {
 		return SuccessResponse.of(flowService.getFlowDetail(jwtUtil.getId(token), flowId));
+
+	@GetMapping
+	public SuccessResponse<GetFlowListResponseDto> getFlowList(
+		@RequestHeader("Authorization") String token,
+		@Param("nowPage") Integer nowPage,
+		@Param("perPage") Integer perPage
+	) {
+		return SuccessResponse.of(flowService.getFlowList(jwtUtil.getId(token), nowPage, perPage));
+
 	}
 
 }

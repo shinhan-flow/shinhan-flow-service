@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:shinhan_flow/action/view/action_notification_screen.dart';
 import 'package:shinhan_flow/permission_screen.dart';
 import 'package:shinhan_flow/splash_screen.dart';
 import 'package:shinhan_flow/trigger/model/enum/product_property.dart';
@@ -138,6 +139,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                               name: ExchangeTriggerScreen.routeName,
                               builder: (context, state) {
                                 return const ExchangeTriggerScreen();
+                              },
+                              routes: []),
+                          GoRoute(
+                              path: 'notificationAction',
+                              parentNavigatorKey: rootNavKey,
+                              name: ActionNotificationScreen.routeName,
+                              builder: (context, state) {
+                                return const ActionNotificationScreen();
                               },
                               routes: []),
                         ]),

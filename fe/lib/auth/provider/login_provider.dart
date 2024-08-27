@@ -22,17 +22,16 @@ Future<BaseModel> login(LoginRef ref) async {
       .login(username: param.email, password: param.password)
       .then<BaseModel>((value) async {
     logger.i('login $param!');
-    // final model = value.data!;
+    final model = value.data!;
     final storage = ref.read(secureStorageProvider);
 
-    await storage.write(key: 'accessToken', value: value.access);
-    await storage.write(key: 'refreshToken', value: value.refresh);
+    await storage.write(key: 'accessToken', value: model.access);
+    await storage.write(key: 'refreshToken', value: model.refresh);
     // await saveUserInfo(storage, model, ref);
     return value;
   }).catchError((e) {
     final error = ErrorModel.respToError(e);
-    logger.e(
-        'status_code = ${error.statusCode}\nerror.error_code = ${error.errorCode}\nmessage = ${error.message}\ndata = ${error.data}');
+    logger.e('status_code = ${error.code}\nmessage = ${error.message}');
     return error;
   });
 }

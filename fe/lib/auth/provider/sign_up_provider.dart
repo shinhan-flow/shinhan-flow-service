@@ -18,14 +18,10 @@ Future<BaseModel> signUp(SignUpRef ref) async {
 
   return await ref
       .watch(authRepositoryProvider)
-      .signUp(
-        username: param.email,
-        password: param.password,
-        name: param.name,
-      )
+      .signUp(param: param)
       .then<BaseModel>((value) async {
     logger.i('signUp $param!');
-    // final model = value.data!;
+    final model = value.data!;
     final storage = ref.read(secureStorageProvider);
 
     // storage.write(key: 'accessToken', value: );
@@ -33,8 +29,7 @@ Future<BaseModel> signUp(SignUpRef ref) async {
     return value;
   }).catchError((e) {
     final error = ErrorModel.respToError(e);
-    logger.e(
-        'status_code = ${error.statusCode}\nerror.error_code = ${error.errorCode}\nmessage = ${error.message}\ndata = ${error.data}');
+    logger.e('status_code = ${error.code}\nmessage = ${error.message}');
     return error;
   });
 }
