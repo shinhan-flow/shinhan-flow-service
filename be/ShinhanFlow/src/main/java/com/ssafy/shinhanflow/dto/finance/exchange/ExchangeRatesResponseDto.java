@@ -1,9 +1,9 @@
 package com.ssafy.shinhanflow.dto.finance.exchange;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.type.Decimal;
 import com.ssafy.shinhanflow.dto.finance.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.ResponseHeaderDto;
 
@@ -16,6 +16,7 @@ public class ExchangeRatesResponseDto extends FinanceApiResponseDto {
 	@JsonProperty("REC")
 	List<ExchangeRate> rec;
 
-	private record ExchangeRate(Long id, String currency, Decimal exchangeRate, Decimal exchangeMin, String created) {
+	private record ExchangeRate(Long id, String currency, BigDecimal exchangeRate, BigDecimal exchangeMin,
+								String created) {
 	}
 }
