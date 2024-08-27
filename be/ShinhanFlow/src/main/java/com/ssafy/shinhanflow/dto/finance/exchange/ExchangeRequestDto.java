@@ -19,5 +19,5 @@ public class ExchangeRequestDto extends FinanceApiRequestDto {
 	/**
 	 * Double 이지만 단위는 10이다.
 	 */
-	Double exchangeAmount;
+	Integer exchangeAmount;
 }

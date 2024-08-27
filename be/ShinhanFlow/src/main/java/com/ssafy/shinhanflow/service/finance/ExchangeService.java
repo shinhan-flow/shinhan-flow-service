@@ -25,7 +25,8 @@ public class ExchangeService {
 	private final MemberRepository memberRepository;
 	private final FinanceApiHeaderGenerator financeApiHeaderGenerator;
 
-	public ExchangeResponseDto exchange(long userId, String accountNo, String exchangeCurrency, Double exchangeAmount) {
+	public ExchangeResponseDto exchange(long userId, String accountNo, String exchangeCurrency,
+		Integer exchangeAmount) {
 		log.info("exchange - userId: {}, accountNo: {}, exchangeAmount: {}", userId, accountNo, exchangeAmount);
 		MemberEntity memberEntity = findMemberOrThrow(userId);
 
