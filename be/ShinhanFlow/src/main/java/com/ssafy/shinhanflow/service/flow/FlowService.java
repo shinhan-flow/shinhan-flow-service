@@ -103,6 +103,18 @@ public class FlowService {
 		return true;
 	}
 
+	public GetFlowListResponseDto getFlowList(Long memberId, Integer nowPage, Integer perPage) {
+		Pageable pageable = PageRequest.of(nowPage, perPage);
+		Page<FlowEntity> res = flowRepository.findAll(pageable);
+
+		return GetFlowListResponseDto
+			.builder()
+			.totalPage(res.getTotalPages())
+			.nowPage(res.getNumber())
+			.pageContent(res.getContent())
+			.build();
+	}
+
 	public FlowDetailResponseDto getFlowDetail(Long memberId, Long flowId) {
 		FlowDetailResponseDto flowDetailResponseDto = null;
 		FlowEntity flow = flowRepository.findById(flowId).orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
@@ -137,15 +149,5 @@ public class FlowService {
 		return flowDetailResponseDto;
 	}
 
-	public GetFlowListResponseDto getFlowList(Long memberId, Integer nowPage, Integer perPage) {
-		Pageable pageable = PageRequest.of(nowPage, perPage);
-		Page<FlowEntity> res = flowRepository.findAll(pageable);
 
-		return GetFlowListResponseDto
-			.builder()
-			.totalPage(res.getTotalPages())
-			.nowPage(res.getNumber())
-			.pageContent(res.getContent())
-			.build();
-	}
 }

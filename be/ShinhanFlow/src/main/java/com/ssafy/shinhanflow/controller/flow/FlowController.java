@@ -37,13 +37,6 @@ public class FlowController {
 		return SuccessResponse.of(flowService.createFlow(jwtUtil.getId(token), createFlowRequestDto));
 	}
 
-	@GetMapping("/{flowId}")
-	public SuccessResponse<FlowDetailResponseDto> getFlowDetail(
-		@RequestHeader("Authorization") String token,
-		@PathVariable Long flowId
-	) throws JsonProcessingException {
-		return SuccessResponse.of(flowService.getFlowDetail(jwtUtil.getId(token), flowId));
-
 	@GetMapping
 	public SuccessResponse<GetFlowListResponseDto> getFlowList(
 		@RequestHeader("Authorization") String token,
@@ -53,5 +46,15 @@ public class FlowController {
 		return SuccessResponse.of(flowService.getFlowList(jwtUtil.getId(token), nowPage, perPage));
 
 	}
+
+	@GetMapping("/{flowId}")
+	public SuccessResponse<FlowDetailResponseDto> getFlowDetail(
+		@RequestHeader("Authorization") String token,
+		@PathVariable Long flowId
+	) throws JsonProcessingException {
+		return SuccessResponse.of(flowService.getFlowDetail(jwtUtil.getId(token), flowId));
+	}
+
+
 
 }
