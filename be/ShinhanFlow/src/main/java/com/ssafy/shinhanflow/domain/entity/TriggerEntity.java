@@ -41,6 +41,10 @@ public class TriggerEntity {
 	@Column(name = "data", columnDefinition = "TEXT")
 	private String data;
 
+	@ColumnDefault("NULL")
+	@Column(name = "triggered_at", insertable = false, columnDefinition = "TIMESTAMP")
+	private LocalDateTime triggeredAt;
+
 	@ColumnDefault("CURRENT_TIMESTAMP")
 	@Column(name = "created_at", nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime createdAt;
@@ -59,5 +63,9 @@ public class TriggerEntity {
 		this.memberId = memberId;
 		this.type = type;
 		this.data = data;
+	}
+
+	public void triggered() {
+		this.triggeredAt = LocalDateTime.now();
 	}
 }
