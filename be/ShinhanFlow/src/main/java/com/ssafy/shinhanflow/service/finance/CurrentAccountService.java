@@ -9,6 +9,8 @@ import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
 import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDeleteRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDeleteResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderRequestDto;
@@ -224,6 +226,29 @@ public class CurrentAccountService {
 			.build();
 
 		return financeApiFetcher.currentAccountTransactionHistory(dto);
+	}
+
+	/**
+	 * 수시 입출금 계좌 삭제
+	 */
+	public CurrentAccountDeleteResponseDto deleteCurrentAccount(long userId, CurrentAccountDeleteRequestDto dto) {
+		log.info("deleteCurrentAccount - userId: {}", userId);
+		log.info("계좌번호: {}", dto.getAccountNo());
+
+		MemberEntity memberEntity = findMemberOrThrow(userId);
+
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("deleteDemandDepositAccount", userKey,
+			institutionCode);
+		CurrentAccountDeleteRequestDto requestDto = CurrentAccountDeleteRequestDto.builder()
+			.header(header)
+			.accountNo(dto.getAccountNo())
+			.refundAccountNo(dto.getRefundAccountNo())
+			.build();
+
+		return financeApiFetcher.deleteCurrentAccount(requestDto);
 	}
 
 	private MemberEntity findMemberOrThrow(long userId) {

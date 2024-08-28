@@ -7,6 +7,8 @@ import com.ssafy.shinhanflow.dto.finance.MemberRequestDto;
 import com.ssafy.shinhanflow.dto.finance.MemberResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDeleteRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDeleteResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderRequestDto;
@@ -181,5 +183,10 @@ public class FinanceApiService {
 	 */
 	public ExchangeResponseDto exchange(ExchangeRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/exchange", dto, ExchangeResponseDto.class);
+	}
+
+	public CurrentAccountDeleteResponseDto deleteCurrentAccount(CurrentAccountDeleteRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/demandDeposit/deleteDemandDepositAccount", dto,
+			CurrentAccountDeleteResponseDto.class);
 	}
 }

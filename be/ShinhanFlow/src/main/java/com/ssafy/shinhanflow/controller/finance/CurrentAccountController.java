@@ -1,5 +1,6 @@
 package com.ssafy.shinhanflow.controller.finance;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
 import com.ssafy.shinhanflow.config.error.SuccessResponse;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDeleteRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDeleteResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto;
@@ -134,6 +137,17 @@ public class CurrentAccountController {
 		return SuccessResponse.of(
 			currentAccountService.currentAccountTransactionHistory(jwtUtil.getId(token), accountNo, dto.getStartDate(),
 				dto.getEndDate(), dto.getTransactionType(), dto.getOrderByType()));
+	}
+
+	/**
+	 * 수시 입출금 계좌 삭제
+	 */
+	@DeleteMapping()
+	public SuccessResponse<CurrentAccountDeleteResponseDto> deleteCurrentAccount(
+		@RequestHeader("Authorization") String token,
+		@RequestBody CurrentAccountDeleteRequestDto dto) {
+		return SuccessResponse.of(currentAccountService.deleteCurrentAccount(jwtUtil.getId(token), dto));
+
 	}
 
 }
