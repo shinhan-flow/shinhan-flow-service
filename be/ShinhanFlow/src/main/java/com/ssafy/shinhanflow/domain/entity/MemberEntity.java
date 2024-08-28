@@ -39,7 +39,7 @@ public class MemberEntity {
 	@Column(name = "name", length = 15)
 	private String name;
 
-	@Column(name = "fcm_token", length = 50)
+	@Column(name = "fcm_token", length = 300)
 	@Setter
 	private String fcmToken;
 
