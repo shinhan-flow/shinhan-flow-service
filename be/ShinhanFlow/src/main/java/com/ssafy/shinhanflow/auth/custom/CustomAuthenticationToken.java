@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class CustomAuthenticationToken extends UsernamePasswordAuthenticationToken {
-	private String fcmToken;
+	private final String fcmToken;
 
 	public CustomAuthenticationToken(Object principal, Object credentials, String fcmToken) {
 		super(principal, credentials);
