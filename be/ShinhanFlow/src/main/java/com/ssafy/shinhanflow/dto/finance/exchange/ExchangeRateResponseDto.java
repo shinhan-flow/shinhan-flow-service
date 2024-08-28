@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.shinhanflow.dto.finance.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.ResponseHeaderDto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 
+@EqualsAndHashCode(callSuper = true)
 @Value
 public class ExchangeRateResponseDto extends FinanceApiResponseDto {
 	@JsonProperty("Header")
@@ -16,7 +18,7 @@ public class ExchangeRateResponseDto extends FinanceApiResponseDto {
 	ExchangeRate rec;
 
 	@Value
-	private static class ExchangeRate {
+	public static class ExchangeRate {
 		Long id;
 		String currency;
 		BigDecimal exchangeRate;
