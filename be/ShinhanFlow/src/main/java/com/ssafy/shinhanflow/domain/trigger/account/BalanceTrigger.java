@@ -1,8 +1,5 @@
 package com.ssafy.shinhanflow.domain.trigger.account;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-
-import com.ssafy.shinhanflow.auth.custom.CustomUserDetails;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
@@ -29,9 +26,11 @@ public record BalanceTrigger(
 
 	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
 
-		CustomUserDetails userDetails = (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication()
-			.getPrincipal();
-		long userId = userDetails.getUserId();
+		// CustomUserDetails userDetails = (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication()
+		// 	.getPrincipal();
+		// long userId = userDetails.getUserId();
+
+		long userId = financeTriggerService.findIdByAccountNo(account);
 
 		log.info("userId: {}, account: {}", userId, account);
 		CurrentAccountBalanceResponseDto dto = financeTriggerService.currentAccountBalance(userId, account);

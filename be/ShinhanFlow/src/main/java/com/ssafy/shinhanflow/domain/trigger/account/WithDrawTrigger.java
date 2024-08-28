@@ -4,9 +4,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-
-import com.ssafy.shinhanflow.auth.custom.CustomUserDetails;
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryResponseDto;
 import com.ssafy.shinhanflow.service.finance.FinanceTriggerService;
@@ -25,9 +22,10 @@ public record WithDrawTrigger(
 ) implements Trigger {
 	@Override
 	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
-		CustomUserDetails userDetails = (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication()
-			.getPrincipal();
-		long userId = userDetails.getUserId();
+		// CustomUserDetails userDetails = (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication()
+		// 	.getPrincipal();
+		// long userId = userDetails.getUserId();
+		long userId = financeTriggerService.findIdByAccountNo(account);
 		String currDay = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
 		// 당일 출금 내역 최신순으로 조회 ( transactionType: D -> 출금, M -> 입금)
