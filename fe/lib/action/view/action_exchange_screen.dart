@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shinhan_flow/action/provider/widget/exchange_action_form_provider.dart';
 import 'package:shinhan_flow/common/component/bottom_nav_button.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
@@ -16,6 +17,8 @@ import 'package:shinhan_flow/theme/text_theme.dart';
 
 import '../../common/component/default_text_button.dart';
 import '../../common/component/drop_down_button.dart';
+import '../../flow/param/trigger/trigger_param.dart';
+import '../../flow/provider/widget/flow_form_provider.dart';
 import '../../trigger/model/enum/foreign_currency_category.dart';
 import '../../util/text_form_formatter.dart';
 import 'action_transfer_screen.dart';
@@ -34,10 +37,20 @@ class ActionExchangeScreen extends StatelessWidget {
         bottomNavigationBar: BottomNavButton(
           child: Consumer(
             builder: (BuildContext context, WidgetRef ref, Widget? child) {
-              final valid = ref.watch(acExchangeFormProvider).valid;
-              log("valid = $valid");
+              final form = ref.watch(acExchangeFormProvider);
+              final valid = form.amount > 0 && form.fromAccount.isNotEmpty;
+              // log("valid = $valid");
               return DefaultTextButton(
-                  onPressed: () async {}, text: '완료', able: valid);
+                  onPressed: () async {
+                    final action = ref.read(acExchangeFormProvider);
+                    log("action.toParam() = ${action.toParam()}");
+                    ref
+                        .read(flowFormProvider.notifier)
+                        .addAction(action: action.toParam() as ActionBaseParam);
+                    context.pop();
+                  },
+                  text: '완료',
+                  able: valid);
             },
           ),
         ),
@@ -93,7 +106,7 @@ class _ExchangeForm extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "얼마나 환전하실 건가요",
+              "얼마나 환전하실 건가요?",
               style: SHFlowTextStyle.subTitle,
             ),
             DropDownButton(

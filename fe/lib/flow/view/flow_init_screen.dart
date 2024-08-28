@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shinhan_flow/action/param/action_balance_notification_param.dart';
+import 'package:shinhan_flow/action/param/action_exchange_param.dart';
 import 'package:shinhan_flow/action/param/action_exchange_rate_notification_param.dart';
 import 'package:shinhan_flow/action/param/action_text_notification_param.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
@@ -508,6 +509,16 @@ class _FlowInitCard extends ConsumerWidget {
             actions.singleWhere((t) => t.type == ActionType.TransferAction);
         final param = (findAction as AcTransferParam);
         content = "${param.holder}에게 ${param.amount} 원 송금";
+      } on Error catch (e) {
+        log("Error ${e}");
+      }
+    } else if (actionType == ActionCategoryType.exchange) {
+      final actions = ref.watch(flowFormProvider.select((a) => a.actions));
+      try {
+        final findAction =
+        actions.singleWhere((t) => t.type == ActionType.ExchangeAction);
+        final param = (findAction as AcExchangeParam);
+        content = "${param.currency.name} ${param.amount} 원 환전";
       } on Error catch (e) {
         log("Error ${e}");
       }
