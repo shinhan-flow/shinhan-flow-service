@@ -74,13 +74,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 		// fcmToken DB에 저장
 		Optional<MemberEntity> memberEntityOptional = memberRepository.findById(userId);
-		if (memberEntityOptional.isEmpty()) {
-			// error 던지기
+		if (memberEntityOptional.isPresent()) {
+			MemberEntity memberEntity = memberEntityOptional.get();
+			memberEntity.setFcmToken(fcmToken);
+			memberRepository.save(memberEntity);
 		}
-		MemberEntity memberEntity = memberEntityOptional.get();
-		memberEntity.setFcmToken(fcmToken);
-		memberRepository.save(memberEntity);
-
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 		Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
 		GrantedAuthority auth = iterator.next();
