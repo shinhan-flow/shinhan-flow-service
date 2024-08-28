@@ -11,7 +11,7 @@ part 'action_exchange_param.g.dart';
 
 @JsonSerializable()
 class AcExchangeParam extends ActionBaseParam {
-  final ForeignCurrencyCategory currency;
+  final CurrencyType currency;
   final String fromAccount;
   final int amount;
 

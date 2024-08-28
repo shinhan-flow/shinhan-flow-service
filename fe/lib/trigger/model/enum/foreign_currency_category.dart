@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
-enum ForeignCurrencyCategory {
-  @JsonValue("KRW")
-  KRW('한국(원화)'),
+enum CurrencyType {
+  // @JsonValue("KRW")
+  // KRW('한국(원화)'),
   @JsonValue("USD")
   USD('미국(달러)'),
   @JsonValue("EUR")
@@ -20,10 +20,9 @@ enum ForeignCurrencyCategory {
 
   final String displayName;
 
-  const ForeignCurrencyCategory(this.displayName);
+  const CurrencyType(this.displayName);
 
-  static ForeignCurrencyCategory stringToEnum({required String value}) {
-    return ForeignCurrencyCategory.values
-        .firstWhere((e) => e.displayName == value);
+  static CurrencyType stringToEnum({required String value}) {
+    return CurrencyType.values.firstWhere((e) => e.displayName == value);
   }
 }

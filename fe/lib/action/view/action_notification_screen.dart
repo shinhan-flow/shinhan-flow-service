@@ -258,7 +258,7 @@ class CurrencyDropDownButton extends ConsumerWidget {
       value: form.currency.displayName,
       onChanged: (v) {
         if (v != null) {
-          final currency = ForeignCurrencyCategory.stringToEnum(value: v);
+          final currency = CurrencyType.stringToEnum(value: v);
           ref
               .read(acExchangeRateNotificationFormProvider.notifier)
               .update(currency: currency);

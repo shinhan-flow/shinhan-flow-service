@@ -389,8 +389,8 @@ class _FlowInitCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String content = triggerType != null
-        ? '${triggerType!.name} 조건 선택'
-        : '${actionType!.name} 하기';
+        ? '${triggerType!.name} 조건 생성 하기'
+        : '${actionType!.name} 액션 생성 하기';
     if (triggerType == TriggerCategoryType.time) {
       final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
       try {

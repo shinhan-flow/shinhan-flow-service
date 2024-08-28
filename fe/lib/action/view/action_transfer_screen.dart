@@ -16,10 +16,12 @@ import '../../account/model/account_holder_model.dart';
 import '../../account/model/account_model.dart';
 import '../../common/component/default_text_button.dart';
 import '../../common/component/text_input_form.dart';
+import '../../common/model/bank_model.dart';
 import '../../flow/param/trigger/trigger_param.dart';
 import '../../flow/provider/widget/flow_form_provider.dart';
 import '../../theme/text_theme.dart';
 import '../../util/text_form_formatter.dart';
+import '../provider/widget/exchange_action_form_provider.dart';
 import '../provider/widget/transfer_action_form_provider.dart';
 
 class ActionTransferScreen extends StatelessWidget {
@@ -65,7 +67,7 @@ class ActionTransferScreen extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 24.h),
-                    child: const _AccountDropDown(),
+                    child: const AccountDropDown(),
                   ),
                 ),
                 const SliverToBoxAdapter(
@@ -129,7 +131,7 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
                             .update(toAccount: '');
                       } else {
                         final model = (result as ResponseModel<
-                                AccountBaseModel<AccountHolderModel>>)
+                                BankBaseModel<AccountHolderModel>>)
                             .data!
                             .rec;
 
@@ -222,14 +224,14 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
   }
 }
 
-class _AccountDropDown extends ConsumerStatefulWidget {
-  const _AccountDropDown({super.key});
+class AccountDropDown extends ConsumerStatefulWidget {
+  const AccountDropDown({super.key});
 
   @override
-  ConsumerState<_AccountDropDown> createState() => _AccountDropDownState();
+  ConsumerState<AccountDropDown> createState() => _AccountDropDownState();
 }
 
-class _AccountDropDownState extends ConsumerState<_AccountDropDown> {
+class _AccountDropDownState extends ConsumerState<AccountDropDown> {
   AccountDetailModel? select;
 
   @override
@@ -241,6 +243,7 @@ class _AccountDropDownState extends ConsumerState<_AccountDropDown> {
   @override
   Widget build(BuildContext context) {
     ref.watch(acTransferFormProvider.select((s) => s.fromAccount));
+    ref.watch(acExchangeFormProvider.select((s) => s.fromAccount));
 
     final result = ref.watch(accountListProvider);
     if (result is LoadingModel) {
@@ -271,6 +274,9 @@ class _AccountDropDownState extends ConsumerState<_AccountDropDown> {
               select = v;
               ref
                   .read(acTransferFormProvider.notifier)
+                  .update(fromAccount: v?.accountNo);
+              ref
+                  .read(acExchangeFormProvider.notifier)
                   .update(fromAccount: v?.accountNo);
               log("value = $v");
             });
