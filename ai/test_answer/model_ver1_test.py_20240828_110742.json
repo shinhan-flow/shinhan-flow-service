@@ -1,0 +1,5 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-28 11:07:42.394754",
+    "output": "{\n  \"title\": \"\ub9e4\uc6d4 25\uc77c\uc5d0 \uc1a1\uae08\ud558\uae30\",\n  \"description\": \"\ub9e4\uc6d4 25\uc77c\uc5d0 5\ub9cc\uc6d0\uc744 \ud2b9\uc815 \uacc4\uc88c\ub85c \uc1a1\uae08\ud558\ub294 \uc790\ub3d9\ud654 \uc791\uc5c5\uc785\ub2c8\ub2e4.\",\n  \"triggers\": [\n    {\n      \"type\": \"dayOfMonthTrigger\",\n      \"days\": [25]\n    }\n  ],\n  \"actions\": [\n    {\n      \"type\": \"transferAction\",\n      \"fromAccount\": \"111113111111\",\n      \"toAccount\": \"123456123123\",\n      \"amount\": 50000\n    }\n  ]\n}"
+}

@@ -1,0 +1,24 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 07:11:19.878896",
+    "output": {
+        "title": "\ub9e4\uc6d4 25\uc77c \uc790\ub3d9 \uc1a1\uae08 \uc124\uc815",
+        "description": "\ub9e4\uc6d4 25\uc77c\uc5d0 5\ub9cc\uc6d0\uc744 \ud2b9\uc815 \uacc4\uc88c\ub85c \uc1a1\uae08\ud558\ub294 \uc790\ub3d9\ud654 \uc791\uc5c5\uc785\ub2c8\ub2e4.",
+        "triggers": [
+            {
+                "type": "dayOfMonthTrigger",
+                "days": [
+                    25
+                ]
+            }
+        ],
+        "actions": [
+            {
+                "type": "transferAction",
+                "fromAccount": "111113111111",
+                "toAccount": "123456123123",
+                "amount": 50000
+            }
+        ]
+    }
+}
