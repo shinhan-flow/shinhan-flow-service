@@ -16,8 +16,5 @@ public class ExchangeRequestDto extends FinanceApiRequestDto {
 	RequestHeaderDto header;
 	String accountNo;
 	String exchangeCurrency;
-	/**
-	 * Double 이지만 단위는 10이다.
-	 */
 	Integer exchangeAmount;
 }
