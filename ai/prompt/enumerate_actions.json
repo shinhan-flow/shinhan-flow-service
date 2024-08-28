@@ -1,0 +1,4 @@
+{
+    "role": "system",
+    "content": "Shinhan-flow의 액션들을 나열할게 잔액 : { \"type\":\"balanceNotification\", \"account\":\"123-123-123456\" }, 환전 : { \"type\":\"exchange\", \"currency\":\"USD\", \"fromAccount\":\"123-123-123456\", \"amount\":0 }, 환율 알림 : { \"type\":\"exchangeRateNotification\", \"currency\":\"USD\" }, text 알림 : { \"type\":\"textNotification\", \"text\":\"얼른 운동가자\" }, 송금 : { \"type\":\"transfer\", \"fromAccount\":\"123-123-123456\", \"toAccount\":\"456-456-456789\", \"amount\":0 }"
+}
