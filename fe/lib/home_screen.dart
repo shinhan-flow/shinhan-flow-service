@@ -7,15 +7,33 @@ import 'package:go_router/go_router.dart';
 import 'package:shinhan_flow/auth/provider/auth_provider.dart';
 import 'package:shinhan_flow/auth/view/login_screen.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
+import 'package:shinhan_flow/common/component/sliver_pagination_list_view.dart';
 import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
 import 'package:shinhan_flow/product/view/product_account_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 import 'package:shinhan_flow/util/util.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'common/model/default_model.dart';
+import 'flow/model/flow_model.dart';
+import 'flow/provider/flow_provider.dart';
+
+class HomeScreen extends StatefulWidget {
   static String get routeName => 'home';
 
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +112,7 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: NestedScrollView(
+        controller: _scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
               DefaultAppBar(
@@ -151,14 +170,33 @@ class HomeScreen extends StatelessWidget {
                   right: 28.w,
                   bottom: 12.h,
                 ),
-                sliver: SliverList.separated(
-                  itemBuilder: (_, idx) => FlowCard(),
-                  separatorBuilder: (_, idx) => SizedBox(
-                    height: 12.h,
-                  ),
-                  itemCount: 10,
+                sliver: DisposeSliverPaginationListView(
+                  provider: flowProvider,
+                  itemBuilder: (BuildContext _, int idx, Base pModel) {
+                    final model = pModel as FlowModel;
+                    return FlowCard.fromModel(
+                      model: model,
+                    );
+                  },
+                  skeleton: Container(),
+                  controller: _scrollController,
+                  emptyWidget: Container(),
                 ),
               ),
+              // SliverPadding(
+              //   padding: EdgeInsets.only(
+              //     left: 28.w,
+              //     right: 28.w,
+              //     bottom: 12.h,
+              //   ),
+              //   sliver: SliverList.separated(
+              //     itemBuilder: (_, idx) => FlowCard(),
+              //     separatorBuilder: (_, idx) => SizedBox(
+              //       height: 12.h,
+              //     ),
+              //     itemCount: 10,
+              //   ),
+              // ),
             ],
           )),
     );
@@ -309,11 +347,11 @@ class QuickCard extends StatelessWidget {
   }
 }
 
-class _FlowComponent extends StatelessWidget {
+class _FlowComponent extends ConsumerWidget {
   const _FlowComponent({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
       child: Column(
@@ -335,7 +373,26 @@ class _FlowComponent extends StatelessWidget {
 }
 
 class FlowCard extends StatefulWidget {
-  const FlowCard({super.key});
+  final int memberId;
+  final String title;
+  final String description;
+  final bool enable;
+
+  const FlowCard(
+      {super.key,
+      required this.memberId,
+      required this.title,
+      required this.description,
+      required this.enable});
+
+  factory FlowCard.fromModel({required FlowModel model}) {
+    return FlowCard(
+      memberId: model.memberId,
+      title: model.title,
+      description: model.description,
+      enable: model.enable,
+    );
+  }
 
   @override
   State<FlowCard> createState() => _FlowCardState();
@@ -359,7 +416,7 @@ class _FlowCardState extends State<FlowCard> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "Flow 제목Flow 제목Flow 제목Flow 제목",
+                  widget.title,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: SHFlowTextStyle.subTitle.copyWith(
@@ -368,7 +425,7 @@ class _FlowCardState extends State<FlowCard> {
                 ),
                 SizedBox(height: 12.h),
                 Text(
-                  "Flow 내용Flow 내용Flow 내용Flow 내용Flow 내용Flow 내용",
+                  widget.description,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: SHFlowTextStyle.labelSmall.copyWith(
@@ -380,7 +437,7 @@ class _FlowCardState extends State<FlowCard> {
           ),
           SizedBox(width: 24.w),
           Switch(
-            value: isOn,
+            value: widget.enable,
             onChanged: (v) {
               setState(() {
                 isOn = v;
