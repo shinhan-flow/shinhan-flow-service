@@ -1,9 +1,13 @@
+import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
+import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shinhan_flow/account/provider/account_provider.dart';
+import 'package:shinhan_flow/account/view/account_transaction_history_screen.dart';
 import 'package:shinhan_flow/auth/provider/auth_provider.dart';
 import 'package:shinhan_flow/auth/view/login_screen.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
@@ -13,6 +17,9 @@ import 'package:shinhan_flow/product/view/product_account_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 import 'package:shinhan_flow/util/util.dart';
 
+import 'account/component/account_card.dart';
+import 'account/model/account_model.dart';
+import 'common/model/bank_model.dart';
 import 'common/model/default_model.dart';
 import 'flow/model/flow_model.dart';
 import 'flow/provider/flow_provider.dart';
@@ -112,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: NestedScrollView(
-        controller: _scrollController,
+          controller: _scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
               DefaultAppBar(
@@ -155,6 +162,32 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           body: CustomScrollView(
             slivers: [
+              SliverToBoxAdapter(
+                child: CupertinoTimerPicker(onTimerDurationChanged: (t) {}),
+              ),
+              SliverToBoxAdapter(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      showPicker(
+                        context: context,
+                        value: Time(hour: 12, minute: 13),
+                        // sunrise: TimeOfDay(hour: 6, minute: 0),
+                        // optional
+                        // sunset: TimeOfDay(hour: 18, minute: 0),
+                        // optional
+                        duskSpanInMinutes: 120,
+                        // optional
+                        onChange: (t) {},
+                      ),
+                    );
+                  },
+                  child: Text(
+                    "Open time picker",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
               SliverToBoxAdapter(
                 child: Column(
                   children: [
@@ -224,57 +257,40 @@ class _AccountCardComponent extends ConsumerWidget {
               },
               child: Text("수시 입출금 상품")),
           Text(
-            '금융정보를 알려드려요',
+            '금융 정보를 알려드려요',
             style: SHFlowTextStyle.subTitle,
           ),
           SizedBox(height: 12.h),
-          Container(
-            padding: EdgeInsets.all(18.r),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.r),
-                color: const Color(0xFF3F73FF)),
-            child: Row(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey,
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              final result = ref.watch(accountListProvider);
+              if (result is LoadingModel) {
+                return CircularProgressIndicator();
+              } else if (result is ErrorModel) {
+                return Text("error");
+              }
+              final modelList = (result
+                      as ResponseModel<BankListBaseModel<AccountDetailModel>>)
+                  .data!
+                  .rec;
+              if (modelList.isEmpty) {
+                return InkWell(
+                  onTap: () {},
+                  child: Text(
+                    '입출금 계좌 만들러가기',
+                    style: SHFlowTextStyle.subTitle,
                   ),
-                  width: 98.r,
-                  height: 98.r,
-                ),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        "저축예금",
-                        style: SHFlowTextStyle.subTitle.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        "110-123-123456",
-                        style: SHFlowTextStyle.subTitle.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
-                      Text(
-                        "10,000원",
-                        style: SHFlowTextStyle.subTitle.copyWith(
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.end,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+                );
+              }
+
+              final model = modelList.first;
+              return GestureDetector(
+                onTap: () {
+                  context.pushNamed(AccountTransactionHistoryScreen.routeName);
+                },
+                child: AccountCard.fromModel(model: model),
+              );
+            },
           )
         ],
       ),

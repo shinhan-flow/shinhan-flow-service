@@ -58,15 +58,12 @@ class FlowInitScreen extends StatelessWidget {
               child: DefaultTextButton(
             onPressed: () async {
               final result = await ref.read(createFlowProvider.future);
-              if(result is ErrorModel){
-
-              }else{
-
-                if(context.mounted){
+              if (result is ErrorModel) {
+              } else {
+                if (context.mounted) {
                   context.goNamed(HomeScreen.routeName);
                   FlashUtil.showFlash(context, '플로우 생성 성공!');
                 }
-
               }
             },
             text: '생성하기',
@@ -106,7 +103,6 @@ class FlowInitScreen extends StatelessWidget {
     );
   }
 }
-
 
 class _TriggerComponent extends ConsumerWidget {
   final FlowProperty property;
@@ -405,7 +401,6 @@ class _FlowInitCard extends ConsumerWidget {
       try {
         final findTrigger = triggers.singleWhere((t) => t.type.isTimeType());
 
-
         switch (findTrigger.type) {
           case TriggerType.SpecificDateTrigger:
             final param = (findTrigger as TgSpecificDateParam);
@@ -424,9 +419,8 @@ class _FlowInitCard extends ConsumerWidget {
             break;
           case TriggerType.DayOfMonthTrigger:
             final param = (findTrigger as TgDayOfMonthParam);
-            final dayOfWeek = param.dayOfMonth
-                ?.map((d) => d.toString())
-                .reduce((v, e) => "$v, $e");
+            final dayOfWeek =
+                param.days?.map((d) => d.toString()).reduce((v, e) => "$v, $e");
             content = "매월 $dayOfWeek일 반복";
             break;
           default:
@@ -454,7 +448,7 @@ class _FlowInitCard extends ConsumerWidget {
             .singleWhere((t) => t.type == TriggerType.ExchangeRateTrigger);
         final param = (findTrigger as TgExchangeParam);
         if (param.currency != null) {
-          content = "${param.currency!.displayName}가 ${param.exRate} 이하";
+          content = "${param.currency!.displayName}가 ${param.rate} 이하";
         }
       } on Error catch (e) {
         log("Error ${e}");
@@ -583,12 +577,18 @@ class _FlowInitCard extends ConsumerWidget {
                         ref
                             .read(triggerCategoryProvider.notifier)
                             .update((t) => triggers.toSet());
+                        ref
+                            .read(flowFormProvider.notifier)
+                            .removeTrigger(trigger: triggerType!);
                       } else {
                         final triggers = ref.read(actionCategoryProvider);
                         triggers.remove(actionType);
                         ref
                             .read(actionCategoryProvider.notifier)
                             .update((t) => triggers.toSet());
+                        ref
+                            .read(flowFormProvider.notifier)
+                            .removeAction(action: actionType!);
                       }
                     },
                     child: child!,

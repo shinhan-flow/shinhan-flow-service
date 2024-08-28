@@ -24,10 +24,25 @@ import '../../util/text_form_formatter.dart';
 import '../provider/widget/exchange_action_form_provider.dart';
 import '../provider/widget/transfer_action_form_provider.dart';
 
-class ActionTransferScreen extends StatelessWidget {
+class ActionTransferScreen extends ConsumerStatefulWidget {
   static String get routeName => 'transferAction';
 
   const ActionTransferScreen({super.key});
+
+  @override
+  ConsumerState<ActionTransferScreen> createState() =>
+      _ActionTransferScreenState();
+}
+
+class _ActionTransferScreenState extends ConsumerState<ActionTransferScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((t) {
+      ref.invalidate(accountListProvider);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

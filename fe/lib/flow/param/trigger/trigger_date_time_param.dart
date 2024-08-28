@@ -168,17 +168,17 @@ class TgDayOfWeekParam extends TriggerBaseParam {
 @JsonSerializable()
 class TgDayOfMonthParam extends TriggerBaseParam {
   /// 요일을 설정하는 트리거 생성
-  final List<int>? dayOfMonth;
+  final List<int>? days;
 
   TgDayOfMonthParam({
-    this.dayOfMonth,
+    this.days,
     super.type = TriggerType.DayOfMonthTrigger,
   });
 
   @override
   List<Object?> get props => [
     type,
-    dayOfMonth,
+    days,
   ];
 
   @override
@@ -187,7 +187,7 @@ class TgDayOfMonthParam extends TriggerBaseParam {
   factory TgDayOfMonthParam.fromForm({required TgDateTimeFormModel form}) {
     return TgDayOfMonthParam(
       type: form.type,
-      dayOfMonth: form.dayOfMonth!,
+      days: form.dayOfMonth!,
     );
   }
 

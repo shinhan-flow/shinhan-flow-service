@@ -61,5 +61,10 @@ abstract class AccountRepository {
   Future<ResponseModel<BankBaseModel<AccountBalanceModel>>> getBalance(
       {@Path() required String accountNo});
 
-  /// 입금 (수시입출금)
+  /// 거래 내역 조회
+  @Headers({'token': 'true'})
+  @POST('/api/v1/finances/current-accounts/transaction-history')
+  Future<ResponseModel<BankBaseModel<RecListModel<AccountBalanceModel>>>>
+      getTransactionHistory(
+          {@Body() required AccountTransactionHistoryParam param});
 }

@@ -16,3 +16,38 @@ class AccountCreateParam extends DefaultParam {
 
   Map<String, dynamic> toJson() => _$AccountCreateParamToJson(this);
 }
+
+@JsonSerializable()
+class AccountTransactionHistoryParam extends DefaultParam {
+  final String accountNo;
+  final String startDate;
+  final String endDate;
+  final String transactionType;
+  final String orderByType;
+
+  //
+  // "accountNo": "0010337226851755",
+  // "startDate": "20240801",
+  // "endDate": "20240930",
+  // "transactionType": "A",
+  // "orderByType": "DESC"
+
+  AccountTransactionHistoryParam({
+    required this.accountNo,
+    required this.startDate,
+    required this.endDate,
+    this.transactionType = 'A',
+    required this.orderByType,
+  });
+
+  @override
+  List<Object?> get props => [
+        accountNo,
+        startDate,
+        endDate,
+        transactionType,
+        orderByType,
+      ];
+
+  Map<String, dynamic> toJson() => _$AccountTransactionHistoryParamToJson(this);
+}
