@@ -204,11 +204,10 @@ public class CurrentAccountService {
 		return financeApiFetcher.currentAccountListInfo(dto);
 	}
 
-	public CurrentAccountTransactionHistoryResponseDto currentAccountTransactionHistory(long userId, String accountNo,
-		String startDate, String endDate, String transactionType,
-		String orderByType) {
+	public CurrentAccountTransactionHistoryResponseDto currentAccountTransactionHistory(long userId,
+		CurrentAccountTransactionHistoryRequestDto dto) {
 		log.info("currentAccountTransactionHistory - userId: {}, accountNo: {}, startDate: {}, endDate: {}", userId,
-			accountNo, startDate, endDate);
+			dto.getAccountNo(), dto.getStartDate(), dto.getEndDate());
 		MemberEntity memberEntity = findMemberOrThrow(userId);
 
 		String userKey = memberEntity.getUserKey();
@@ -216,16 +215,17 @@ public class CurrentAccountService {
 
 		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireTransactionHistoryList", userKey,
 			institutionCode);
-		CurrentAccountTransactionHistoryRequestDto dto = CurrentAccountTransactionHistoryRequestDto.builder()
+
+		CurrentAccountTransactionHistoryRequestDto requestDto = CurrentAccountTransactionHistoryRequestDto.builder()
 			.header(header)
-			.accountNo(accountNo)
-			.startDate(startDate)
-			.endDate(endDate)
-			.transactionType(transactionType)
-			.orderByType(orderByType)
+			.accountNo(dto.getAccountNo())
+			.startDate(dto.getStartDate())
+			.endDate(dto.getEndDate())
+			.transactionType(dto.getTransactionType())
+			.orderByType(dto.getOrderByType())
 			.build();
 
-		return financeApiFetcher.currentAccountTransactionHistory(dto);
+		return financeApiFetcher.currentAccountTransactionHistory(requestDto);
 	}
 
 	/**

@@ -129,14 +129,12 @@ public class CurrentAccountController {
 	/**
 	 * 수시 입출금 계좌 거래 내역 조회
 	 */
-	@PostMapping("/{accountNo}/transaction-history")
+	@PostMapping("/transaction-history")
 	public SuccessResponse<CurrentAccountTransactionHistoryResponseDto> currentAccountTransactionHistory(
 		@RequestHeader("Authorization") String token,
-		@PathVariable String accountNo,
 		@RequestBody CurrentAccountTransactionHistoryRequestDto dto) {
 		return SuccessResponse.of(
-			currentAccountService.currentAccountTransactionHistory(jwtUtil.getId(token), accountNo, dto.getStartDate(),
-				dto.getEndDate(), dto.getTransactionType(), dto.getOrderByType()));
+			currentAccountService.currentAccountTransactionHistory(jwtUtil.getId(token), dto));
 	}
 
 	/**
