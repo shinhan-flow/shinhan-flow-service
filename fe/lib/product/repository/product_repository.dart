@@ -10,6 +10,7 @@ import 'package:shinhan_flow/product/model/product_account_model.dart';
 
 import '../../account/model/account_model.dart';
 import '../../auth/model/login_model.dart';
+import '../../common/model/bank_model.dart';
 import '../../common/model/default_model.dart';
 import '../../dio/dio_interceptor.dart';
 import '../../dio/provider/dio_provider.dart';

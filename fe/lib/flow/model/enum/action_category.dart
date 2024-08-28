@@ -6,7 +6,7 @@ enum ActionCategoryType {
   @JsonValue("TRANSFER")
   transfer('송금'),
   @JsonValue("EXCHANGE")
-  exchange('환율');
+  exchange('환전');
 
   final String name;
 

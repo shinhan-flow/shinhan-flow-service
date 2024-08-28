@@ -13,7 +13,7 @@ class DropDownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foreign = ForeignCurrencyCategory.values.map((f) => f.displayName).toList();
+    final foreign = CurrencyType.values.map((f) => f.displayName).toList();
 
     return DropdownButtonHideUnderline(
       child: DropdownButton2<String>(

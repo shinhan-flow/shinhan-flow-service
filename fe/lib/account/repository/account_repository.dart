@@ -8,6 +8,7 @@ import 'package:retrofit/http.dart';
 import 'package:shinhan_flow/account/model/account_holder_model.dart';
 
 import '../../auth/model/login_model.dart';
+import '../../common/model/bank_model.dart';
 import '../../common/model/default_model.dart';
 import '../../dio/dio_interceptor.dart';
 import '../../dio/provider/dio_provider.dart';
@@ -33,13 +34,13 @@ abstract class AccountRepository {
   /// 본인 계좌 목록 단건 조회 (수시 입출금)
   @Headers({'token': 'true'})
   @GET('/current-accounts/{accountNo}')
-  Future<ResponseModel<AccountBaseModel<AccountDetailModel>>> getAccount(
+  Future<ResponseModel<BankBaseModel<AccountDetailModel>>> getAccount(
       {@Path() required String accountNo});
 
   /// 계좌 생성 (수시 입출금)
   @Headers({'token': 'true'})
   @POST('/current-accounts')
-  Future<ResponseModel<AccountBaseModel<AccountModel>>> createAccount({
+  Future<ResponseModel<BankBaseModel<AccountModel>>> createAccount({
     @Body() required AccountCreateParam param,
   });
 
@@ -51,13 +52,13 @@ abstract class AccountRepository {
   /// 예금주 조회 (수시 입출금)
   @Headers({'token': 'true'})
   @GET('/current-accounts/{accountNo}/account-holder')
-  Future<ResponseModel<AccountBaseModel<AccountHolderModel>>> getHolder(
+  Future<ResponseModel<BankBaseModel<AccountHolderModel>>> getHolder(
       {@Path() required String accountNo});
 
   /// 계좌 잔액 조회 (수시 입출금)
   @Headers({'token': 'true'})
   @GET('/current-accounts/{accountNo}/balance')
-  Future<ResponseModel<AccountBaseModel<AccountBalanceModel>>> getBalance(
+  Future<ResponseModel<BankBaseModel<AccountBalanceModel>>> getBalance(
       {@Path() required String accountNo});
 
   /// 입금 (수시입출금)

@@ -6,41 +6,6 @@ import '../../common/model/default_model.dart';
 
 part 'account_model.g.dart';
 
-@JsonSerializable(
-  genericArgumentFactories: true,
-)
-class AccountBaseModel<T> {
-  @JsonKey(name: 'REC')
-  final T rec;
-
-  AccountBaseModel({
-    required this.rec,
-  });
-
-  factory AccountBaseModel.fromJson(
-      Map<String, dynamic> json, T Function(Object? json) fromJsonT) {
-    return _$AccountBaseModelFromJson(json, fromJsonT);
-  }
-}
-
-@JsonSerializable(
-  genericArgumentFactories: true,
-)
-class BankListBaseModel<T> {
-  @JsonKey(name: 'REC')
-  final List<T> rec;
-
-  BankListBaseModel({
-    required this.rec,
-  });
-
-
-  factory BankListBaseModel.fromJson(
-      Map<String, dynamic> json, T Function(Object? json) fromJsonT) {
-    return _$BankListBaseModelFromJson(json, fromJsonT);
-  }
-}
-
 @JsonSerializable()
 class AccountModel extends BaseModel {
   final String bankCode;
@@ -59,7 +24,7 @@ class AccountModel extends BaseModel {
 
 @JsonSerializable()
 class CurrencyModel {
-  final ForeignCurrencyCategory currency;
+  final CurrencyType currency;
   final String currencyName;
 
   CurrencyModel({

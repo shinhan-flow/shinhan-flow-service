@@ -3,6 +3,7 @@ import 'package:shinhan_flow/account/model/account_model.dart';
 import 'package:shinhan_flow/account/repository/account_repository.dart';
 import 'package:shinhan_flow/common/model/default_model.dart';
 
+import '../../action/provider/widget/exchange_action_form_provider.dart';
 import '../../action/provider/widget/transfer_action_form_provider.dart';
 import '../../common/logger/custom_logger.dart';
 import '../param/account_param.dart';
@@ -65,6 +66,9 @@ class AccountList extends _$AccountList {
           value.data!.rec.isNotEmpty ? value.data!.rec.first.accountNo : '';
       ref
           .read(acTransferFormProvider.notifier)
+          .update(fromAccount: fromAccount);
+      ref
+          .read(acExchangeFormProvider.notifier)
           .update(fromAccount: fromAccount);
       state = value;
     }).catchError((e) {
