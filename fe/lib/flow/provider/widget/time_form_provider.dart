@@ -28,7 +28,7 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
     super.dates,
     // this.flowType,
     bool valid = false,
-    super.type = TriggerType.specificDate,
+    super.type = TriggerType.SpecificDateTrigger,
   }) {
     this.valid = valid;
   }
@@ -44,11 +44,11 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
   ) {
     if (type != null) {
       switch (type) {
-        case TriggerType.specificDate:
+        case TriggerType.SpecificDateTrigger:
           return date != null && date.isNotEmpty;
-        case TriggerType.specificTime:
+        case TriggerType.SpecificTimeTrigger:
           return specificTime != null && specificTime.isNotEmpty;
-        case TriggerType.periodDate:
+        case TriggerType.PeriodDateTrigger:
           if (startDate != null && endDate != null) {
             // 기간이 start ~ end
             // 동일하거나 start 가 end 보다 이후일 경우 false
@@ -57,10 +57,10 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
                 -1;
           }
           return false;
-        case TriggerType.dayOfWeek:
+        case TriggerType.DayOfWeekTrigger:
           // log("valid dayOfWeek = $dayOfWeek");
           return dayOfWeek != null && dayOfWeek.isNotEmpty;
-        case TriggerType.dayOfMonth:
+        case TriggerType.DayOfMonthTrigger:
           return dayOfMonth != null && dayOfMonth.isNotEmpty;
         case TriggerType.multiDate:
           return dates != null && dates.isNotEmpty;
@@ -85,10 +85,10 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
     String? validStartDate = startDate ?? this.startDate;
     String? validEndDate = endDate ?? this.endDate;
     String? validDate = date ?? this.date;
-    if (flowType != null && flowType == TriggerType.specificDate) {
+    if (flowType != null && flowType == TriggerType.SpecificDateTrigger) {
       validEndDate = null;
       validStartDate = null;
-    } else if (flowType != null && flowType == TriggerType.periodDate) {
+    } else if (flowType != null && flowType == TriggerType.PeriodDateTrigger) {
       validDate = null;
     }
 

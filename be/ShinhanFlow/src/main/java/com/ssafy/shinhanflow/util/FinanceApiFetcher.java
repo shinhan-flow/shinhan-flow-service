@@ -1,6 +1,6 @@
 package com.ssafy.shinhanflow.util;
 
-import static com.ssafy.shinhanflow.config.error.ErrorCode.*;
+import static com.ssafy.shinhanflow.config.error.ErrorCode.INTERNAL_SERVER_ERROR;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
@@ -18,7 +18,9 @@ import com.ssafy.shinhanflow.dto.finance.FinanceApiRequestDto;
 import com.ssafy.shinhanflow.dto.finance.FinanceApiResponseDto;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FinanceApiFetcher {
@@ -44,6 +46,7 @@ public class FinanceApiFetcher {
 				.onStatus(HttpStatusCode::isError, clientResponse -> {
 					return clientResponse.bodyToMono(FinanceApiErrorBody.class)
 						.flatMap(errorBody -> {
+							log.info(errorBody.toString());
 							FinanceApiErrorBody.Header header = errorBody.getHeader();
 							if (header == null) {
 								throw new FinanceApiException(clientResponse.statusCode(),
@@ -51,8 +54,8 @@ public class FinanceApiFetcher {
 									errorBody.getResponseMessage());
 							}
 							throw new FinanceApiException(clientResponse.statusCode(),
-								header.getResponseCode(),
-								header.getResponseMessage());
+								header.responseCode(),
+								header.responseMessage());
 						});
 				});
 			return response.bodyToMono(responseType).block();

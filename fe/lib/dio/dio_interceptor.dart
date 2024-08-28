@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../auth/provider/auth_provider.dart';
 import '../common/logger/custom_logger.dart';
 
 const String serverURL = "http://13.124.223.172:8080";
@@ -40,9 +41,9 @@ class CustomDioInterceptor extends Interceptor {
     }
     if (options.headers['refresh'] == 'true') {
       String? refreshToken = await storage.read(key: 'refreshToken');
+      options.headers.clear();
       log('refresh ${refreshToken}');
-      // options.headers.remove('refreshToken');
-      options.headers.addAll({'refresh': '$refreshToken'});
+      options.headers.addAll({'refresh': 'Bearer $refreshToken'});
     }
     List<String> requestLog = [];
     requestLog.add(
@@ -83,24 +84,27 @@ class CustomDioInterceptor extends Interceptor {
     logger.w(errorLog.reduce((value, element) => value + element));
     // 어세스 토큰이 만료되 경우
     if (err.response!.statusCode == 401 &&
-        err.requestOptions.uri.path != '/auth/refresh-token' &&
+        err.requestOptions.uri.path != '/api/v1/auth/refresh-token' &&
         !noneAUth) {
       try {
         Dio dio = Dio();
-        // final newAccessToken =
-        //     await ref.read(authProvider.notifier).reIssueToken();
-        // err.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+        final newAccessToken =
+            await ref.read(authProvider.notifier).reIssueToken();
+        err.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
         log("[RE-REQUEST] [${err.requestOptions.method}] ${err.requestOptions.baseUrl}${err.requestOptions.path}");
         if (err.requestOptions.uri.queryParameters.isNotEmpty) {
           log("[RE-REQUEST] [${err.requestOptions.method}] ${err.requestOptions.uri.queryParameters}");
         }
         // 재요청
         final reResponse = await dio.fetch(err.requestOptions);
+        log("response ${reResponse}");
         return handler.resolve(reResponse);
       } on DioException catch (e) {
         // 리프레쉬 토큰 만료 된 경우
+        // log("에러 URL = ${e.requestOptions.baseUrl}${e.requestOptions.path}");
+        // log("e.stackTrace = ${e.stackTrace}");
         log("리프레쉬 만료 !!");
-        // await ref.read(tokenProvider.notifier).logout();
+        await ref.read(tokenProvider.notifier).logout();
         return;
       }
     }

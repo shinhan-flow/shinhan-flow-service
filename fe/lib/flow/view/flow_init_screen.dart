@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shinhan_flow/action/param/action_balance_notification_param.dart';
+import 'package:shinhan_flow/action/param/action_exchange_param.dart';
 import 'package:shinhan_flow/action/param/action_exchange_rate_notification_param.dart';
 import 'package:shinhan_flow/action/param/action_text_notification_param.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
@@ -27,7 +28,10 @@ import 'package:shinhan_flow/trigger/view/time_trigger_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 
 import '../../action/model/enum/action_type.dart';
+import '../../action/param/action_transfer_param.dart';
+import '../../action/view/action_exchange_screen.dart';
 import '../../action/view/action_notification_screen.dart';
+import '../../action/view/action_transfer_screen.dart';
 import '../../common/component/bottom_nav_button.dart';
 import '../../trigger/view/exchange_trigger_screen.dart';
 import '../../trigger/view/product_trigger_screen.dart';
@@ -317,7 +321,10 @@ class _TriggerComponent extends ConsumerWidget {
                   if (ActionCategoryType.notification == t) {
                     context.pushNamed(ActionNotificationScreen.routeName);
                   } else if (ActionCategoryType.exchange == t) {
-                  } else {}
+                    context.pushNamed(ActionExchangeScreen.routeName);
+                  } else {
+                    context.pushNamed(ActionTransferScreen.routeName);
+                  }
                 },
                 visibleDelete: visibleDelete,
               ))
@@ -383,8 +390,8 @@ class _FlowInitCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String content = triggerType != null
-        ? '${triggerType!.name} 조건 선택'
-        : '${actionType!.name} 하기';
+        ? '${triggerType!.name} 조건 생성 하기'
+        : '${actionType!.name} 액션 생성 하기';
     if (triggerType == TriggerCategoryType.time) {
       final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
       try {
@@ -392,19 +399,19 @@ class _FlowInitCard extends ConsumerWidget {
         final param = (findTrigger as TgDateTimeParam);
 
         switch (findTrigger.type) {
-          case TriggerType.specificDate:
+          case TriggerType.SpecificDateTrigger:
             content = "${param.date}";
             break;
-          case TriggerType.periodDate:
+          case TriggerType.PeriodDateTrigger:
             content = "${param.startDate}부터\n${param.endDate}까지";
             break;
-          case TriggerType.dayOfWeek:
+          case TriggerType.DayOfWeekTrigger:
             final dayOfWeek = param.dayOfWeek
                 ?.map((d) => d.name)
                 .reduce((v, e) => "$v, ${e}");
             content = "매주 $dayOfWeek 반복";
             break;
-          case TriggerType.dayOfMonth:
+          case TriggerType.DayOfMonthTrigger:
             final dayOfWeek = param.dayOfMonth
                 ?.map((d) => d.toString())
                 .reduce((v, e) => "$v, $e");
@@ -419,8 +426,8 @@ class _FlowInitCard extends ConsumerWidget {
     } else if (triggerType == TriggerCategoryType.product) {
       final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
       try {
-        final findTrigger =
-            triggers.singleWhere((t) => t.type == TriggerType.interestRate);
+        final findTrigger = triggers
+            .singleWhere((t) => t.type == TriggerType.InterestRateTrigger);
         final param = (findTrigger as TgProductParam);
         if (param.product != null) {
           content = "${param.product!.name} 금리 ${param.interestRate}%";
@@ -431,8 +438,8 @@ class _FlowInitCard extends ConsumerWidget {
     } else if (triggerType == TriggerCategoryType.exchange) {
       final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
       try {
-        final findTrigger =
-            triggers.singleWhere((t) => t.type == TriggerType.exchangeRate);
+        final findTrigger = triggers
+            .singleWhere((t) => t.type == TriggerType.ExchangeRateTrigger);
         final param = (findTrigger as TgExchangeParam);
         if (param.currency != null) {
           content = "${param.currency!.displayName}가 ${param.exRate} 이하";
@@ -446,23 +453,23 @@ class _FlowInitCard extends ConsumerWidget {
         final findTrigger = triggers.singleWhere((t) => t.type.isAccountType());
 
         switch (findTrigger.type) {
-          case TriggerType.balance:
+          case TriggerType.BalanceTrigger:
             final param = (findTrigger as TgAccountBalanceParam);
             content =
                 '${param.account} ${param.balance}원 ${param.condition.name}';
             break;
-          case TriggerType.deposit:
+          case TriggerType.DepositTrigger:
             final param = (findTrigger as TgAccountDepositParam);
             content = '${param.account} ${param.amount}원';
 
             break;
-          case TriggerType.transfer:
+          case TriggerType.TransferTrigger:
             final param = (findTrigger as TgAccountTransferParam);
             content =
                 '${param.fromAccount} ${param.toAccount} ${param.amount}원';
 
             break;
-          case TriggerType.withdraw:
+          case TriggerType.WithDrawTrigger:
             final param = (findTrigger as TgAccountWithdrawParam);
             content = '${param.account} ${param.amount}원';
             break;
@@ -479,18 +486,39 @@ class _FlowInitCard extends ConsumerWidget {
       try {
         final findAction =
             actions.singleWhere((t) => t.type.isNotificationType());
-        if (findAction.type == ActionType.balanceNotification) {
+        if (findAction.type == ActionType.BalanceNotificationAction) {
           final param = (findAction as AcBalanceNotificationParam);
           if (param.account.isNotEmpty) {
             content = "계좌번호 ${param.account} 잔액 알림";
           }
-        } else if (findAction.type == ActionType.exchangeRateNotification) {
+        } else if (findAction.type ==
+            ActionType.ExchangeRateNotificationAction) {
           final param = (findAction as AcExchangeRateNotificationParam);
           content = '${param.currency.displayName} 환전 알림';
-        } else if (findAction.type == ActionType.textNotification) {
+        } else if (findAction.type == ActionType.TextNotificationAction) {
           final param = (findAction as AcTextNotificationParam);
           content = '${param.text} 알림';
         }
+      } on Error catch (e) {
+        log("Error ${e}");
+      }
+    } else if (actionType == ActionCategoryType.transfer) {
+      final actions = ref.watch(flowFormProvider.select((a) => a.actions));
+      try {
+        final findAction =
+            actions.singleWhere((t) => t.type == ActionType.TransferAction);
+        final param = (findAction as AcTransferParam);
+        content = "${param.holder}에게 ${param.amount} 원 송금";
+      } on Error catch (e) {
+        log("Error ${e}");
+      }
+    } else if (actionType == ActionCategoryType.exchange) {
+      final actions = ref.watch(flowFormProvider.select((a) => a.actions));
+      try {
+        final findAction =
+        actions.singleWhere((t) => t.type == ActionType.ExchangeAction);
+        final param = (findAction as AcExchangeParam);
+        content = "${param.currency.name} ${param.amount} 원 환전";
       } on Error catch (e) {
         log("Error ${e}");
       }

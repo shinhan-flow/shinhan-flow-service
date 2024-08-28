@@ -12,7 +12,7 @@ class AcTextNotificationParam extends ActionBaseParam {
 
    AcTextNotificationParam({
     required this.text,
-    super.type = ActionType.textNotification,
+    super.type = ActionType.TextNotificationAction,
   });
 
   @override

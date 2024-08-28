@@ -4,9 +4,9 @@ enum ActionCategoryType {
   @JsonValue("NOTIFICATION")
   notification('알림'),
   @JsonValue("TRANSFER")
-  transfer('금액'),
+  transfer('송금'),
   @JsonValue("EXCHANGE")
-  exchange('환율');
+  exchange('환전');
 
   final String name;
 

@@ -16,13 +16,13 @@ class AcExchangeRateNotificationFormModel
     extends AcExchangeRateNotificationParam with BaseFormModel {
   AcExchangeRateNotificationFormModel({
     bool valid = false,
-    super.currency = ForeignCurrencyCategory.USD,
+    super.currency = CurrencyType.USD,
   }) {
     this.valid = valid;
   }
 
   AcExchangeRateNotificationFormModel copyWith({
-    ForeignCurrencyCategory? currency,
+    CurrencyType? currency,
   }) {
     return AcExchangeRateNotificationFormModel(
       valid: true,
@@ -44,7 +44,7 @@ class AcExchangeRateNotificationForm extends _$AcExchangeRateNotificationForm {
   }
 
   void update({
-    ForeignCurrencyCategory? currency,
+    CurrencyType? currency,
   }) {
     state = state.copyWith(
       currency: currency,

@@ -8,11 +8,11 @@ part 'action_exchange_rate_notification_param.g.dart';
 
 @JsonSerializable()
 class AcExchangeRateNotificationParam extends ActionBaseParam {
-  final ForeignCurrencyCategory currency;
+  final CurrencyType currency;
 
    AcExchangeRateNotificationParam({
     required this.currency,
-    super.type = ActionType.exchangeRateNotification,
+    super.type = ActionType.ExchangeRateNotificationAction,
   });
 
   @override

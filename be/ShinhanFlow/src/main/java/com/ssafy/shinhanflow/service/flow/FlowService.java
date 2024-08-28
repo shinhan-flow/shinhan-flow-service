@@ -173,6 +173,15 @@ public class FlowService {
 		return true;
 	}
 
+	public Boolean toggleFlow(Long memberId, Long flowId) {
+		FlowEntity flowEntity = flowRepository.findById(flowId)
+			.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
+
+		Boolean res = flowEntity.toggleStatus();
+		flowRepository.save(flowEntity);
+		return res;
+	}
+
 	public void testFlowTrigger() throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		// String str = " { \"type\": \"InterestRateTrigger\", \"accountProduct\": \"DEPOSIT_ACCOUNT\", \"rate\": 20}";

@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:shinhan_flow/action/view/action_notification_screen.dart';
 import 'package:shinhan_flow/permission_screen.dart';
+import 'package:shinhan_flow/product/view/product_account_screen.dart';
 import 'package:shinhan_flow/splash_screen.dart';
 import 'package:shinhan_flow/trigger/model/enum/product_property.dart';
 import 'package:shinhan_flow/trigger/view/account_trigger_screen.dart';
@@ -16,6 +17,8 @@ import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
 import 'package:shinhan_flow/flow/view/flow_init_screen.dart';
 import 'package:shinhan_flow/home_screen.dart';
 
+import '../../action/view/action_exchange_screen.dart';
+import '../../action/view/action_transfer_screen.dart';
 import '../../auth/provider/auth_provider.dart';
 import '../../auth/view/login_screen.dart';
 import '../../auth/view/sign_up_screen.dart';
@@ -94,6 +97,14 @@ final routerProvider = Provider<GoRouter>((ref) {
             },
             routes: [
               GoRoute(
+                path: 'productAccount',
+                parentNavigatorKey: rootNavKey,
+                name: ProductAccountScreen.routeName,
+                builder: (context, state) {
+                  return const ProductAccountScreen();
+                },
+              ),
+              GoRoute(
                   path: 'triggerCategory',
                   parentNavigatorKey: rootNavKey,
                   name: TriggerCategoryScreen.routeName,
@@ -147,6 +158,22 @@ final routerProvider = Provider<GoRouter>((ref) {
                               name: ActionNotificationScreen.routeName,
                               builder: (context, state) {
                                 return const ActionNotificationScreen();
+                              },
+                              routes: []),
+                          GoRoute(
+                              path: 'transferAction',
+                              parentNavigatorKey: rootNavKey,
+                              name: ActionTransferScreen.routeName,
+                              builder: (context, state) {
+                                return const ActionTransferScreen();
+                              },
+                              routes: []),
+                          GoRoute(
+                              path: 'exchangeAction',
+                              parentNavigatorKey: rootNavKey,
+                              name: ActionExchangeScreen.routeName,
+                              builder: (context, state) {
+                                return const ActionExchangeScreen();
                               },
                               routes: []),
                         ]),

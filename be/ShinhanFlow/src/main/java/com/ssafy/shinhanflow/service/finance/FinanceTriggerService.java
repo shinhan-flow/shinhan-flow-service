@@ -14,6 +14,8 @@ import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryResponseDto;
+import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRateRequestDto;
+import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRateResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsRequestDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
@@ -22,6 +24,7 @@ import com.ssafy.shinhanflow.dto.finance.product.LoanProductsResponseDto;
 import com.ssafy.shinhanflow.repository.MemberRepository;
 import com.ssafy.shinhanflow.util.FinanceApiHeaderGenerator;
 import com.ssafy.shinhanflow.util.FinanceApiService;
+import com.ssafy.shinhanflow.util.constants.Currency;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class FinanceTriggerService {
-	private final FinanceApiService financeApiFetcher;
+	private final FinanceApiService financeApiService;
 	private final FinanceApiHeaderGenerator financeApiHeaderGenerator;
 	private final MemberRepository memberRepository;
 
@@ -44,7 +47,7 @@ public class FinanceTriggerService {
 		DepositAndSavingProductsRequestDto dto = DepositAndSavingProductsRequestDto.builder()
 			.header(header)
 			.build();
-		return financeApiFetcher.depositProductsInfo(dto);
+		return financeApiService.depositProductsInfo(dto);
 	}
 
 	/**
@@ -57,7 +60,7 @@ public class FinanceTriggerService {
 		DepositAndSavingProductsRequestDto dto = DepositAndSavingProductsRequestDto.builder()
 			.header(header)
 			.build();
-		return financeApiFetcher.savingProductsInfo(dto);
+		return financeApiService.savingProductsInfo(dto);
 	}
 
 	/**
@@ -70,7 +73,23 @@ public class FinanceTriggerService {
 		LoanProductsRequestDto dto = LoanProductsRequestDto.builder()
 			.header(header)
 			.build();
-		return financeApiFetcher.loanProductsInfo(dto);
+		return financeApiService.loanProductsInfo(dto);
+	}
+
+	public ExchangeRateResponseDto getExchangeRate(String currencyCode) {
+		log.info("getExchangeRate - currencyCode: {}", currencyCode);
+		if (currencyCode == null) {
+			throw new BadRequestException(ErrorCode.NULL_REQUIRED_VALUE);
+		}
+
+		// userKey 필요 없음
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("exchangeRate", null, "00100");
+		ExchangeRateRequestDto dto = ExchangeRateRequestDto.builder()
+			.header(header)
+			.currency(Currency.valueOf(currencyCode))
+			.build();
+
+		return financeApiService.getExchangeRate(dto);
 	}
 
 	/**
@@ -91,7 +110,7 @@ public class FinanceTriggerService {
 			.accountNo(accountNo)
 			.build();
 
-		return financeApiFetcher.currentAccountBalance(dto);
+		return financeApiService.currentAccountBalance(dto);
 	}
 
 	/**
@@ -118,7 +137,7 @@ public class FinanceTriggerService {
 			.orderByType(orderByType)
 			.build();
 
-		return financeApiFetcher.currentAccountTransactionHistory(dto);
+		return financeApiService.currentAccountTransactionHistory(dto);
 	}
 
 	/**
@@ -132,7 +151,7 @@ public class FinanceTriggerService {
 			.accountNo(accountNo)
 			.build();
 
-		CurrentAccountHolderResponseDto holderInfo = financeApiFetcher.currentAccountHolderName(dto);
+		CurrentAccountHolderResponseDto holderInfo = financeApiService.currentAccountHolderName(dto);
 		String userName = holderInfo.getRec().userName();
 		List<MemberEntity> byEmailContaining = memberRepository.findByEmailContaining(userName);
 		return byEmailContaining.get(0).getId();

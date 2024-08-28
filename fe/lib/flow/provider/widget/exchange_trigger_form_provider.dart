@@ -22,14 +22,14 @@ part 'exchange_trigger_form_provider.g.dart';
 class TgExchangeFormModel extends TgExchangeParam with BaseFormModel {
   TgExchangeFormModel({
     bool valid = false,
-    super.currency = ForeignCurrencyCategory.USD,
+    super.currency = CurrencyType.USD,
     super.exRate = 1300,
   }) {
     this.valid = valid;
   }
 
   TgExchangeFormModel copyWith({
-    ForeignCurrencyCategory? currency,
+    CurrencyType? currency,
     double? exRate,
   }) {
     final validCurrency = currency ?? this.currency;
@@ -56,7 +56,7 @@ class TgExchangeForm extends _$TgExchangeForm {
   }
 
   void update({
-    ForeignCurrencyCategory? currency,
+    CurrencyType? currency,
     double? exRate,
   }) {
     state = state.copyWith(

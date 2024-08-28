@@ -1,0 +1,100 @@
+{
+    "title": "string",
+    "description": "string",
+    "triggers": [
+        {
+            "type": "string",
+            "account": "string",
+            "balance": 0,
+            "condition": "LT"
+        },
+        {
+            "type": "string",
+            "days": [
+                0
+            ]
+        },
+        {
+            "type": "string",
+            "daysOfWeek": [
+                "MONDAY"
+            ]
+        },
+        {
+            "type": "string",
+            "account": "string",
+            "amount": 0
+        },
+        {
+            "type": "string",
+            "currency": "USD",
+            "rate": 0
+        },
+        {
+            "type": "string",
+            "accountProduct": "CURRENT_ACCOUNT",
+            "rate": 0
+        },
+        {
+            "type": "string",
+            "dates": [
+                "2024-08-27"
+            ]
+        },
+        {
+            "type": "string",
+            "startDate": "2024-08-27",
+            "endDate": "2024-08-27"
+        },
+        {
+            "type": "string",
+            "localDate": "2024-08-27"
+        },
+        {
+            "type": "string",
+            "time": {
+                "hour": 0,
+                "minute": 0,
+                "second": 0,
+                "nano": 0
+            }
+        },
+        {
+            "type": "string",
+            "fromAccount": "string",
+            "toAccount": "string",
+            "amount": 0
+        },
+        {
+            "type": "string",
+            "account": "string",
+            "amount": 0
+        }
+    ],
+    "actions": [
+        {
+            "type": "string",
+            "account": "string"
+        },
+        {
+            "type": "string",
+            "currency": "USD",
+            "fromAccount": "string",
+            "amount": 0
+        },
+        {
+            "type": "string",
+            "currency": "USD"
+        },
+        {
+            "type": "string",
+            "text": "string"
+        },
+        {
+            "type": "string",
+            "fromAccount": "string",
+            "toAccount": "string",
+            "amount": 0
+        }
+    ]
+}

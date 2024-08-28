@@ -61,4 +61,5 @@ public class CustomUserDetails implements UserDetails {
 	public long getUserId() {
 		return memberEntity.getId();
 	}
+
 }

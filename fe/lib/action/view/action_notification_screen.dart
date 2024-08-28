@@ -36,11 +36,11 @@ class ActionNotificationScreen extends ConsumerWidget {
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final category = ref.watch(notificationCategoryProvider);
             bool valid = false;
-            if (category == ActionType.balanceNotification) {
+            if (category == ActionType.BalanceNotificationAction) {
               valid = ref.watch(acBalanceNotificationFormProvider).valid;
-            } else if (category == ActionType.exchangeRateNotification) {
+            } else if (category == ActionType.ExchangeRateNotificationAction) {
               valid = ref.watch(acExchangeRateNotificationFormProvider).valid;
-            } else if (category == ActionType.textNotification) {
+            } else if (category == ActionType.TextNotificationAction) {
               valid = ref.watch(acTextNotificationFormProvider).valid;
             }
 
@@ -70,15 +70,15 @@ class ActionNotificationScreen extends ConsumerWidget {
                 SliverToBoxAdapter(
                   child: _NotificationTypeComponent(),
                 ),
-                if (category == ActionType.balanceNotification)
+                if (category == ActionType.BalanceNotificationAction)
                   SliverToBoxAdapter(
                     child: _ActionBalanceForm(),
                   )
-                else if (category == ActionType.exchangeRateNotification)
+                else if (category == ActionType.ExchangeRateNotificationAction)
                   SliverToBoxAdapter(
                     child: _ActionExchangeRateForm(),
                   )
-                else if (category == ActionType.textNotification)
+                else if (category == ActionType.TextNotificationAction)
                   SliverToBoxAdapter(
                     child: _ActionTextForm(),
                   )
@@ -100,17 +100,17 @@ class ActionNotificationScreen extends ConsumerWidget {
 
   void selectNotification(
       ActionType? category, WidgetRef ref, BuildContext context) {
-    if (category == ActionType.balanceNotification) {
+    if (category == ActionType.BalanceNotificationAction) {
       final action = ref.read(acBalanceNotificationFormProvider);
       ref
           .read(flowFormProvider.notifier)
           .addAction(action: action.toParam() as ActionBaseParam);
-    } else if (category == ActionType.exchangeRateNotification) {
+    } else if (category == ActionType.ExchangeRateNotificationAction) {
       final action = ref.read(acExchangeRateNotificationFormProvider);
       ref
           .read(flowFormProvider.notifier)
           .addAction(action: action.toParam() as ActionBaseParam);
-    } else if (category == ActionType.textNotification) {
+    } else if (category == ActionType.TextNotificationAction) {
       final action = ref.read(acTextNotificationFormProvider);
       ref
           .read(flowFormProvider.notifier)
@@ -258,7 +258,7 @@ class CurrencyDropDownButton extends ConsumerWidget {
       value: form.currency.displayName,
       onChanged: (v) {
         if (v != null) {
-          final currency = ForeignCurrencyCategory.stringToEnum(value: v);
+          final currency = CurrencyType.stringToEnum(value: v);
           ref
               .read(acExchangeRateNotificationFormProvider.notifier)
               .update(currency: currency);

@@ -7,6 +7,7 @@ import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 
 class CustomTextFormField extends StatelessWidget {
+  final FocusNode? focusNode;
   final TextEditingController? textEditingController;
   final String? initialValue;
   final String? label;
@@ -16,8 +17,14 @@ class CustomTextFormField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final bool isMultiLine;
   final TextInputType? keyboardType;
+  final Widget? suffix;
+
   final Widget? side;
   final List<TextInputFormatter>? inputFormatters;
+  final bool valid;
+  final String? errorText;
+  final String? validText;
+  final TextInputAction textInputAction;
 
   const CustomTextFormField({
     super.key,
@@ -32,6 +39,12 @@ class CustomTextFormField extends StatelessWidget {
     this.keyboardType,
     this.inputFormatters,
     this.textEditingController,
+    this.suffix,
+    this.valid = true,
+    this.errorText,
+    this.focusNode,
+    this.textInputAction = TextInputAction.done,
+    this.validText,
   });
 
   @override
@@ -51,6 +64,13 @@ class CustomTextFormField extends StatelessWidget {
             Expanded(
               /// constraints 으로 크기를 지정해도 align을 지정 안하면 안됨!
               child: TextFormField(
+                onTap: () {
+                  if (focusNode != null) {
+                    focusNode!.requestFocus();
+                  }
+                },
+                onTapOutside: (v) {},
+                focusNode: focusNode,
                 controller: textEditingController,
                 obscuringCharacter: '●',
                 obscureText: obscureText,
@@ -58,31 +78,39 @@ class CustomTextFormField extends StatelessWidget {
                 initialValue: initialValue,
                 enabled: enable,
                 autofocus: false,
+                textInputAction: textInputAction,
                 maxLines: isMultiLine ? null : 1,
                 keyboardType: keyboardType,
                 inputFormatters: inputFormatters,
                 // expands: true,
                 decoration: InputDecoration(
+                  suffixIcon: suffix,
                   constraints:
                       BoxConstraints(maxHeight: 200.h, minHeight: 48.h),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.r),
-                    borderSide: BorderSide.none,
+                    borderSide: !valid
+                        ? const BorderSide(color: Color(0xFFE21A1A))
+                        : BorderSide.none,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.r),
-                    borderSide: BorderSide.none,
+                    borderSide: !valid
+                        ? const BorderSide(color: Color(0xFFE21A1A))
+                        : BorderSide.none,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.r),
-                    borderSide: BorderSide.none,
+                    borderSide: !valid
+                        ? const BorderSide(color: Color(0xFFE21A1A))
+                        : BorderSide.none,
                   ),
                   hintText: hintText,
                   prefixIconConstraints: BoxConstraints.loose(
                     Size(double.infinity, 36.h),
                   ),
                   suffixIconConstraints: BoxConstraints.loose(
-                    Size(double.infinity, 36.h),
+                    Size(double.infinity, 24.h),
                   ),
                 ),
               ),
@@ -98,6 +126,26 @@ class CustomTextFormField extends StatelessWidget {
               ),
           ],
         ),
+        if (errorText != null)
+          Padding(
+            padding: EdgeInsets.only(top: 8.h),
+            child: Text(
+              errorText!,
+              style: SHFlowTextStyle.label.copyWith(
+                color: const Color(0xFFE21A1A),
+              ),
+            ),
+          )
+        else if (validText != null)
+          Padding(
+            padding: EdgeInsets.only(top: 8.h),
+            child: Text(
+              validText!,
+              style: SHFlowTextStyle.label.copyWith(
+                color: const Color(0xFF0057FF),
+              ),
+            ),
+          )
       ],
     );
   }

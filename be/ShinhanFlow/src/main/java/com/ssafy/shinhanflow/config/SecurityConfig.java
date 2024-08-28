@@ -103,7 +103,7 @@ public class SecurityConfig {
 		http
 			.addFilterAt(
 				new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, accessTokenExpireTime,
-					refreshTokenExpireTime),
+					refreshTokenExpireTime, memberRepository),
 				UsernamePasswordAuthenticationFilter.class);
 
 		// 세션 비활성화
