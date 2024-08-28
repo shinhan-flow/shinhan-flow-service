@@ -57,4 +57,9 @@ public class FlowEntity {
 		this.title = title;
 		this.description = description;
 	}
+
+	public Boolean toggleStatus() {
+		enable = !enable;
+		return enable;
+	}
 }
