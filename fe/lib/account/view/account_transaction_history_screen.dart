@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shinhan_flow/account/provider/account_transaction_history_provider.dart';
+import 'package:shinhan_flow/account/provider/widget/account_transaction_history_form_provider.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/common/component/default_text_button.dart';
 
@@ -12,7 +14,9 @@ import '../../common/model/bank_model.dart';
 import '../../common/model/default_model.dart';
 import '../../theme/text_theme.dart';
 import '../component/account_card.dart';
+import '../model/account_balance_model.dart';
 import '../model/account_model.dart';
+import '../model/account_transaction_history_model.dart';
 import '../provider/account_provider.dart';
 
 class AccountTransactionHistoryScreen extends StatelessWidget {
@@ -58,6 +62,7 @@ class AccountTransactionHistoryScreen extends StatelessWidget {
                               model: m,
                             ))
                         .toList();
+                    // items.add(AccountCard.fromModel(model: model));
                     return CarouselSlider(
                         items: items,
                         options: CarouselOptions(
@@ -73,12 +78,17 @@ class AccountTransactionHistoryScreen extends StatelessWidget {
                           onPageChanged:
                               (int index, CarouselPageChangedReason reason) {
                             log("index = $index , reason $reason");
+                            ref
+                                .read(accountTransactionHistoryFormProvider
+                                    .notifier)
+                                .update(accountNo: items[index].accountNo);
                           },
                           scrollDirection: Axis.horizontal,
                         ));
                   },
                 ),
               ),
+              _TransactionHistoryComponent(),
             ],
           )),
     );
@@ -90,9 +100,42 @@ class _TransactionHistoryComponent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SliverList.builder(itemBuilder: ((_, idx) {
-      return TransactionHistoryCard();
-    }));
+    ref.listen(accountTransactionHistoryFormProvider, (prev, after) {
+      ref.read(accountTransactionHistoryProvider.notifier).getHistories();
+    });
+    final result = ref.watch(accountTransactionHistoryProvider);
+    if (result is LoadingModel) {
+      return SliverToBoxAdapter(
+        child: CircularProgressIndicator(),
+      );
+    } else if (result is ErrorModel) {
+      return SliverToBoxAdapter(
+        child: Text("error"),
+      );
+    }
+
+    final model = (result as ResponseModel<
+            BankBaseModel<RecListModel<AccountTransactionHistoryModel>>>)
+        .data!
+        .rec;
+    if (model.totalCount == '0') {
+      return SliverFillRemaining(
+        child: Center(
+            child: Text(
+          '거래 내역이 없습니다.',
+          style: SHFlowTextStyle.title,
+        )),
+      );
+    }
+
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+      sliver: SliverList.builder(
+        itemBuilder: ((_, idx) {
+          return TransactionHistoryCard.fromModel(model: model.list[idx]);
+        }),
+        itemCount: int.parse(model.totalCount),
+      ),
+    );
   }
 }
-

@@ -177,6 +177,52 @@ class TransactionHistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    final textColor = transactionType == '1'
+        ? const Color(0xFFE21A1A)
+        : const Color(0xFF0057FF);
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          top: BorderSide(color: Color(0xFFAAAAAA)),
+        ),
+      ),
+      padding: EdgeInsets.symmetric(vertical: 12.h),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  transactionTime,
+                ),
+                SizedBox(height: 30.h),
+                Text(transactionDate)
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  transactionTypeName,
+                  style: SHFlowTextStyle.label.copyWith(
+                    color: textColor,
+                  ),
+                ),
+                Text(
+                  '$transactionBalance 원',
+                  style: SHFlowTextStyle.labelBold.copyWith(
+                    color: textColor,
+                  ),
+                ),
+                Text('잔액 $transactionAfterBalance 원'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

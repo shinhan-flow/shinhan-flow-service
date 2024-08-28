@@ -23,4 +23,18 @@ class AccountTransactionHistoryForm extends _$AccountTransactionHistoryForm {
       orderByType: 'DESC',
     );
   }
+
+  void update({
+    String? accountNo,
+    String? startDate,
+    String? endDate,
+    String? orderByType,
+  }) {
+    state = state.copyWith(
+      accountNo: accountNo,
+      startDate: startDate,
+      endDate: endDate,
+      orderByType: orderByType,
+    );
+  }
 }

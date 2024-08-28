@@ -42,7 +42,7 @@ class BankListBaseModel<T> {
   genericArgumentFactories: true,
 )
 class RecListModel<T> {
-  final int totalCount;
+  final String totalCount;
   final List<T> list;
 
   RecListModel({required this.list, required this.totalCount});

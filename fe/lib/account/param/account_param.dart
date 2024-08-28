@@ -49,5 +49,20 @@ class AccountTransactionHistoryParam extends DefaultParam {
         orderByType,
       ];
 
+  AccountTransactionHistoryParam copyWith({
+    String? accountNo,
+    String? startDate,
+    String? endDate,
+    String? transactionType,
+    String? orderByType,
+  }) {
+    return AccountTransactionHistoryParam(
+      accountNo: accountNo ?? this.accountNo,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      orderByType: orderByType ?? this.orderByType,
+    );
+  }
+
   Map<String, dynamic> toJson() => _$AccountTransactionHistoryParamToJson(this);
 }
