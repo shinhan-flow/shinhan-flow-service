@@ -3,21 +3,24 @@ package com.ssafy.shinhanflow.auth.jwt;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.shinhanflow.auth.custom.CustomAuthenticationToken;
 import com.ssafy.shinhanflow.auth.custom.CustomUserDetails;
 import com.ssafy.shinhanflow.auth.dto.LoginSuccessResponseDto;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.ErrorResponse;
 import com.ssafy.shinhanflow.config.error.SuccessResponse;
+import com.ssafy.shinhanflow.domain.entity.MemberEntity;
+import com.ssafy.shinhanflow.repository.MemberRepository;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +36,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	private final JWTUtil jwtUtil;
 	private final long accessTokenExpireTime;
 	private final long refreshTokenExpireTime;
+	private final MemberRepository memberRepository;
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
@@ -42,9 +46,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		String username = obtainUsername(request);
 		String password = obtainPassword(request);
 
+		String fcmToken = request.getParameter("fcmToken");
+
+		log.info("fcmToken: {}", fcmToken);
+
 		// username 과 password 를 검증하기 위해 token 에 담아서 사용 (스프링 시큐리티에서)
-		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password,
-			null);
+		//		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password,
+		//			null);
+		CustomAuthenticationToken authToken = new CustomAuthenticationToken(username, password, fcmToken);
 
 		return authenticationManager.authenticate(authToken);
 	}
@@ -56,10 +65,21 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
 
-		// 사용자 이름 및 사용자 ID를 가져옵니다.
+		// 사용자 이름 , 사용자 ID, fcmToken 을 가져옵니다.
 		String username = userDetails.getUsername();
 		long userId = userDetails.getUserId();
-		log.info("username: {}, useId: {} login 요청 성공", username, userId);
+		String fcmToken = request.getParameter("fcmToken");
+
+		log.info("username: {}, useId: {}, fcmToken: {} login 요청 성공", username, userId, fcmToken);
+
+		// fcmToken DB에 저장
+		Optional<MemberEntity> memberEntityOptional = memberRepository.findById(userId);
+		if (memberEntityOptional.isEmpty()) {
+			// error 던지기
+		}
+		MemberEntity memberEntity = memberEntityOptional.get();
+		memberEntity.setFcmToken(fcmToken);
+		memberRepository.save(memberEntity);
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 		Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
