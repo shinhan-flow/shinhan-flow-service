@@ -14,15 +14,15 @@ root_path, myfile = os.path.split(mypath)
 
 with open(f'{root_path}/prompt/explain_flow.json','r') as f:
     explain_flow = json.load(f)
-with open(f'{root_path}/prompt/enumerate_data_options.json','r') as f:
-    enumerate_data_options = json.load(f)
+with open(f'{root_path}/prompt/set_data_format.json','r') as f:
+    set_data_format = json.load(f)
 with open(f'{root_path}/prompt/enumerate_triggers.json','r') as f:
     enumerate_triggers = json.load(f)
 with open(f'{root_path}/prompt/enumerate_actions.json','r') as f:
     enumerate_actions = json.load(f)
-with open(f'{root_path}/prompt/set_format.json','r') as f:
-    set_format= json.load(f)
-system_prompt = [explain_flow, enumerate_data_options, enumerate_triggers, enumerate_actions, set_format]
+with open(f'{root_path}/prompt/set_output_format.json','r') as f:
+    set_output_format= json.load(f)
+system_prompt = [explain_flow, set_data_format, enumerate_triggers, enumerate_actions, set_output_format]
 
 load_dotenv()
 
