@@ -17,13 +17,13 @@ public class CurrentAccountTransactionHistoryResponseDto extends FinanceApiRespo
 	@JsonProperty("REC")
 	Rec rec;
 
-	private record Rec(String totalCount, List<Transaction> list) {
+	public record Rec(String totalCount, List<Transaction> list) {
 	}
 
-	private record Transaction(Long transactionUniqueNo, String transactionDate, String transactionTime,
-							   String transactionType, String transactionTypeName, String transactionAccountNo,
-							   Long transactionBalance, Long transactionAfterBalance, String transactionSummary,
-							   String transactionMemo) {
+	public record Transaction(Long transactionUniqueNo, String transactionDate, String transactionTime,
+							  String transactionType, String transactionTypeName, String transactionAccountNo,
+							  Long transactionBalance, Long transactionAfterBalance, String transactionSummary,
+							  String transactionMemo) {
 	}
 
 }

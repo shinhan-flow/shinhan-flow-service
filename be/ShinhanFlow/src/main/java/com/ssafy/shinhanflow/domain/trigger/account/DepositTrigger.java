@@ -1,9 +1,11 @@
 package com.ssafy.shinhanflow.domain.trigger.account;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryResponseDto;
 import com.ssafy.shinhanflow.service.finance.FinanceTriggerService;
 
 import jakarta.validation.constraints.NotBlank;
@@ -20,13 +22,27 @@ public record DepositTrigger(
 ) implements Trigger {
 	@Override
 	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
-		//todo: 최근 입금내역 가져오기 몇건중에
-		List<Long> amounts = new ArrayList<>();
-		for (Long amount : amounts) {
-			if (Long.compare(amount, this.amount) >= 0) {
+
+		// CustomUserDetails userDetails = (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication()
+		// 	.getPrincipal();
+		// long userId = userDetails.getUserId();
+		long userId = financeTriggerService.findIdByAccountNo(account);
+
+		String currDay = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+		// 당일 입금 내역 최신순으로 조회 ( transactionType: M -> 입금, D -> 출금)
+		List<CurrentAccountTransactionHistoryResponseDto.Transaction> list = financeTriggerService.currentAccountTransactionHistory(
+			userId, account, currDay, currDay, "M", "DESC").getRec().list();
+		for (CurrentAccountTransactionHistoryResponseDto.Transaction transaction : list) {
+			if (Long.compare(transaction.transactionBalance(), this.amount) >= 0) {
 				return true;
 			}
 		}
 		return false;
+
+		/**
+		 * 현재 true, false 를 반환하고 있지만 true 인 경우 어떤 거래였는지 전달해주면 좋을것 같은데....
+		 */
+
 	}
 }

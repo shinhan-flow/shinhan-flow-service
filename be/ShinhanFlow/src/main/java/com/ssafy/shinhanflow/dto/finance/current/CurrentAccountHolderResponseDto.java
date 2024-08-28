@@ -15,6 +15,6 @@ public class CurrentAccountHolderResponseDto extends FinanceApiResponseDto {
 	@JsonProperty("REC")
 	Rec rec;
 
-	private record Rec(String bankCode, String bankName, String userName, String currency) {
+	public record Rec(String bankCode, String bankName, String userName, String currency) {
 	}
 }
