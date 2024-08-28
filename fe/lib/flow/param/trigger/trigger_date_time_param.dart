@@ -80,3 +80,118 @@ class TgDateTimeParam extends TriggerBaseParam {
   @override
   Map<String, dynamic> toJson() => _$TgDateTimeParamToJson(this);
 }
+
+@JsonSerializable()
+class TgSpecificDateParam extends TriggerBaseParam {
+  final String? localDate;
+
+  TgSpecificDateParam({
+    this.localDate,
+    super.type = TriggerType.SpecificDateTrigger,
+  });
+
+  @override
+  List<Object?> get props => [
+        type,
+        localDate,
+      ];
+
+  @override
+  bool? get stringify => true;
+
+  factory TgSpecificDateParam.fromForm({required TgDateTimeFormModel form}) {
+    return TgSpecificDateParam(type: form.type, localDate: form.date!);
+  }
+
+  @override
+  Map<String, dynamic> toJson() => _$TgSpecificDateParamToJson(this);
+}
+
+@JsonSerializable()
+class TgPeriodDateParam extends TriggerBaseParam {
+  /// 기간
+  final String? startDate;
+  final String? endDate;
+
+  TgPeriodDateParam({
+    this.startDate,
+    this.endDate,
+    super.type = TriggerType.PeriodDateTrigger,
+  });
+
+  @override
+  List<Object?> get props => [type, startDate, endDate];
+
+  @override
+  bool? get stringify => true;
+
+  factory TgPeriodDateParam.fromForm({required TgDateTimeFormModel form}) {
+    return TgPeriodDateParam(
+        type: form.type, startDate: form.startDate!, endDate: form.endDate!);
+  }
+
+  @override
+  Map<String, dynamic> toJson() => _$TgPeriodDateParamToJson(this);
+}
+
+
+@JsonSerializable()
+class TgDayOfWeekParam extends TriggerBaseParam {
+  /// 요일을 설정하는 트리거 생성
+  final List<DayOfWeek>? dayOfWeek;
+
+  TgDayOfWeekParam({
+    this.dayOfWeek,
+    super.type = TriggerType.DayOfWeekTrigger,
+  });
+
+  @override
+  List<Object?> get props => [
+        type,
+        dayOfWeek,
+      ];
+
+  @override
+  bool? get stringify => true;
+
+  factory TgDayOfWeekParam.fromForm({required TgDateTimeFormModel form}) {
+    return TgDayOfWeekParam(
+      type: form.type,
+      dayOfWeek: form.dayOfWeek!,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() => _$TgDayOfWeekParamToJson(this);
+}
+
+@JsonSerializable()
+class TgDayOfMonthParam extends TriggerBaseParam {
+  /// 요일을 설정하는 트리거 생성
+  final List<int>? dayOfMonth;
+
+  TgDayOfMonthParam({
+    this.dayOfMonth,
+    super.type = TriggerType.DayOfMonthTrigger,
+  });
+
+  @override
+  List<Object?> get props => [
+    type,
+    dayOfMonth,
+  ];
+
+  @override
+  bool? get stringify => true;
+
+  factory TgDayOfMonthParam.fromForm({required TgDateTimeFormModel form}) {
+    return TgDayOfMonthParam(
+      type: form.type,
+      dayOfMonth: form.dayOfMonth!,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() => _$TgDayOfMonthParamToJson(this);
+}
+

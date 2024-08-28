@@ -9,20 +9,20 @@ part 'trigger_product_param.g.dart';
 
 @JsonSerializable()
 class TgProductParam extends TriggerBaseParam {
-  final ProductProperty? product;
-  final double? interestRate;
+  final AccountProductType? accountProduct;
+  final double? rate;
 
   TgProductParam({
-    this.product,
-    this.interestRate,
+    this.accountProduct,
+    this.rate,
     super.type = TriggerType.InterestRateTrigger,
   });
 
   @override
   List<Object?> get props => [
         type,
-        product,
-        interestRate,
+        accountProduct,
+        rate,
       ];
 
   @override
@@ -30,8 +30,8 @@ class TgProductParam extends TriggerBaseParam {
 
   factory TgProductParam.fromForm({required TgProductFormModel form}) {
     return TgProductFormModel(
-      product: form.product,
-      interestRate: form.interestRate,
+      accountProduct: form.accountProduct,
+      rate: form.rate,
     );
   }
 }

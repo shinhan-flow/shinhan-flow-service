@@ -137,7 +137,19 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
   }
 
   DefaultParam toParam() {
-    return TgDateTimeParam.fromForm(form: this);
+    switch (type) {
+      case TriggerType.SpecificDateTrigger:
+        return TgSpecificDateParam.fromForm(form: this);
+      case TriggerType.PeriodDateTrigger:
+        return TgPeriodDateParam.fromForm(form: this);
+      case TriggerType.DayOfWeekTrigger:
+        return TgDayOfWeekParam.fromForm(form: this);
+      case TriggerType.DayOfMonthTrigger:
+        return TgDayOfMonthParam.fromForm(form: this);
+
+      default:
+        return TgSpecificDateParam.fromForm(form: this);
+    }
   }
 }
 
