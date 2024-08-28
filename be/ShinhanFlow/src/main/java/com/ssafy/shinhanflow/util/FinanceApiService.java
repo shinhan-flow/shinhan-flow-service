@@ -28,6 +28,8 @@ import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRateRequestDto;
 import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRateResponseDto;
 import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRatesRequestDto;
 import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRatesResponseDto;
+import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRequestDto;
+import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeResponseDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsRequestDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
 import com.ssafy.shinhanflow.dto.finance.product.LoanProductsRequestDto;
@@ -172,5 +174,12 @@ public class FinanceApiService {
 	 */
 	public ExchangeRateResponseDto getExchangeRate(ExchangeRateRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/exchangeRate/search", dto, ExchangeRateResponseDto.class);
+	}
+
+	/**
+	 * 환전 신청
+	 */
+	public ExchangeResponseDto exchange(ExchangeRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/exchange", dto, ExchangeResponseDto.class);
 	}
 }
