@@ -8,12 +8,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
 	private final MemberEntity memberEntity;
+
+	@Getter
+	String fcmToken;
 
 	@Override
 	public boolean isAccountNonExpired() {
@@ -61,4 +65,5 @@ public class CustomUserDetails implements UserDetails {
 	public long getUserId() {
 		return memberEntity.getId();
 	}
+
 }
