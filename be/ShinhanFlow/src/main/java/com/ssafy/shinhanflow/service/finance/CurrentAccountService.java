@@ -9,6 +9,8 @@ import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
 import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDeleteRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDeleteResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountDepositResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderRequestDto;
@@ -202,11 +204,10 @@ public class CurrentAccountService {
 		return financeApiFetcher.currentAccountListInfo(dto);
 	}
 
-	public CurrentAccountTransactionHistoryResponseDto currentAccountTransactionHistory(long userId, String accountNo,
-		String startDate, String endDate, String transactionType,
-		String orderByType) {
+	public CurrentAccountTransactionHistoryResponseDto currentAccountTransactionHistory(long userId,
+		CurrentAccountTransactionHistoryRequestDto dto) {
 		log.info("currentAccountTransactionHistory - userId: {}, accountNo: {}, startDate: {}, endDate: {}", userId,
-			accountNo, startDate, endDate);
+			dto.getAccountNo(), dto.getStartDate(), dto.getEndDate());
 		MemberEntity memberEntity = findMemberOrThrow(userId);
 
 		String userKey = memberEntity.getUserKey();
@@ -214,16 +215,40 @@ public class CurrentAccountService {
 
 		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireTransactionHistoryList", userKey,
 			institutionCode);
-		CurrentAccountTransactionHistoryRequestDto dto = CurrentAccountTransactionHistoryRequestDto.builder()
+
+		CurrentAccountTransactionHistoryRequestDto requestDto = CurrentAccountTransactionHistoryRequestDto.builder()
 			.header(header)
-			.accountNo(accountNo)
-			.startDate(startDate)
-			.endDate(endDate)
-			.transactionType(transactionType)
-			.orderByType(orderByType)
+			.accountNo(dto.getAccountNo())
+			.startDate(dto.getStartDate())
+			.endDate(dto.getEndDate())
+			.transactionType(dto.getTransactionType())
+			.orderByType(dto.getOrderByType())
 			.build();
 
-		return financeApiFetcher.currentAccountTransactionHistory(dto);
+		return financeApiFetcher.currentAccountTransactionHistory(requestDto);
+	}
+
+	/**
+	 * 수시 입출금 계좌 삭제
+	 */
+	public CurrentAccountDeleteResponseDto deleteCurrentAccount(long userId, CurrentAccountDeleteRequestDto dto) {
+		log.info("deleteCurrentAccount - userId: {}", userId);
+		log.info("계좌번호: {}", dto.getAccountNo());
+
+		MemberEntity memberEntity = findMemberOrThrow(userId);
+
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("deleteDemandDepositAccount", userKey,
+			institutionCode);
+		CurrentAccountDeleteRequestDto requestDto = CurrentAccountDeleteRequestDto.builder()
+			.header(header)
+			.accountNo(dto.getAccountNo())
+			.refundAccountNo(dto.getRefundAccountNo())
+			.build();
+
+		return financeApiFetcher.deleteCurrentAccount(requestDto);
 	}
 
 	private MemberEntity findMemberOrThrow(long userId) {
