@@ -171,11 +171,11 @@ public class FlowService {
 		return true;
 	}
 
-	public Boolean activeFlow(Long memberId, Long flowId) {
+	public Boolean toggleFlow(Long memberId, Long flowId) {
 		FlowEntity flowEntity = flowRepository.findById(flowId)
 			.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 
-		Boolean res = flowEntity.active();
+		Boolean res = flowEntity.toggleStatus();
 		flowRepository.save(flowEntity);
 		return res;
 	}

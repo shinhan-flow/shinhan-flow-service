@@ -65,11 +65,11 @@ public class FlowController {
 	}
 
 	@PatchMapping("/{flowId}")
-	public SuccessResponse<Boolean> activeFlow(
+	public SuccessResponse<Boolean> toggleFlow(
 		@RequestHeader("Authorization") String token,
 		@PathVariable Long flowId
 	) {
-		return SuccessResponse.of(flowService.activeFlow(jwtUtil.getId(token), flowId));
+		return SuccessResponse.of(flowService.toggleFlow(jwtUtil.getId(token), flowId));
 	}
 
 }
