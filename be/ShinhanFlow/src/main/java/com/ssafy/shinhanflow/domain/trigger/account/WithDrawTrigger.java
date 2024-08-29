@@ -21,11 +21,7 @@ public record WithDrawTrigger(
 
 ) implements Trigger {
 	@Override
-	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
-		// CustomUserDetails userDetails = (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication()
-		// 	.getPrincipal();
-		// long userId = userDetails.getUserId();
-		long userId = financeTriggerService.findIdByAccountNo(account);
+	public boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId) {
 		String currDay = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
 		// 당일 출금 내역 최신순으로 조회 ( transactionType: D -> 출금, M -> 입금)

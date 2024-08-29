@@ -24,15 +24,10 @@ public record BalanceTrigger(
 
 ) implements Trigger {
 
-	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
+	@Override
+	public boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId) {
 
-		// CustomUserDetails userDetails = (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication()
-		// 	.getPrincipal();
-		// long userId = userDetails.getUserId();
-
-		long userId = financeTriggerService.findIdByAccountNo(account);
-
-		log.info("userId: {}, account: {}", userId, account);
+		log.info("memberId: {}, account: {}", userId, account);
 		CurrentAccountBalanceResponseDto dto = financeTriggerService.currentAccountBalance(userId, account);
 
 		Long accountBalance = dto.getRec().accountBalance();

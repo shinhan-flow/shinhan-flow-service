@@ -49,7 +49,7 @@ public interface Trigger {
 	// default boolean isTriggered() {
 	// 	return true;
 	// }
-	boolean isTriggered(FinanceTriggerService financeTriggerService, Long memberId);
+	boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId);
 
 }
 

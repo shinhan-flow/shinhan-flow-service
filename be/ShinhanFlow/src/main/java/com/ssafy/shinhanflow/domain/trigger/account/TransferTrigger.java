@@ -22,7 +22,7 @@ public record TransferTrigger(
 ) implements Trigger {
 
 	@Override
-	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
+	public boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId) {
 		//todo: 송금하면 이니까 fromAccount에서 최근 거래내역 가져오기
 		List<Long> amounts = new ArrayList<>();
 		for (Long amount : amounts) {

@@ -1,6 +1,5 @@
 package com.ssafy.shinhanflow.service.finance;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -10,8 +9,6 @@ import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
 import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceResponseDto;
-import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderRequestDto;
-import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountHolderResponseDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransactionHistoryResponseDto;
 import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRateRequestDto;
@@ -138,23 +135,6 @@ public class FinanceTriggerService {
 			.build();
 
 		return financeApiService.currentAccountTransactionHistory(dto);
-	}
-
-	/**
-	 * 계좌 -> 예금주 확인 -> userId
-	 */
-	public Long findIdByAccountNo(String accountNo) {
-		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("inquireTransactionHistoryList", null,
-			"00100");
-		CurrentAccountHolderRequestDto dto = CurrentAccountHolderRequestDto.builder()
-			.header(header)
-			.accountNo(accountNo)
-			.build();
-
-		CurrentAccountHolderResponseDto holderInfo = financeApiService.currentAccountHolderName(dto);
-		String userName = holderInfo.getRec().userName();
-		List<MemberEntity> byEmailContaining = memberRepository.findByEmailContaining(userName);
-		return byEmailContaining.get(0).getId();
 	}
 
 	private MemberEntity findMemberOrThrow(long userId) {
