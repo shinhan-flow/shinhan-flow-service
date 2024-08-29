@@ -2,6 +2,7 @@ package com.ssafy.shinhanflow.domain.action;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.ssafy.shinhanflow.util.FirebaseCloudMessageService;
 
 /**
  * Action interface
@@ -26,6 +27,6 @@ public interface Action {
 	 * Action을 실행하는 메소드
 	 * @return Action이 성공적으로 실행되었는지 여부
 	 */
-	boolean execute();
+	boolean execute(FirebaseCloudMessageService firebaseCloudMessageService, Long memberId);
 
 }

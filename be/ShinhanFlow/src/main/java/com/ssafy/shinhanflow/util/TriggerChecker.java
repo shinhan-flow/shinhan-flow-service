@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.shinhanflow.domain.action.Action;
+import com.ssafy.shinhanflow.domain.entity.FlowEntity;
 import com.ssafy.shinhanflow.domain.entity.TriggerEntity;
 import com.ssafy.shinhanflow.domain.trigger.Trigger;
 import com.ssafy.shinhanflow.repository.ActionRepository;
@@ -43,11 +44,14 @@ public class TriggerChecker {
 		triggerRepository.findNotTriggered(LocalDateTime.now()).stream().collect(
 			Collectors.groupingBy(TriggerEntity::getFlowId)
 		).forEach((flowId, triggers) -> {
+			FlowEntity flowEntity = flowRepository.findById(flowId).orElseThrow();
+			Long memberId = flowEntity.getMemberId();
+
 			boolean allTriggered = triggers.stream()
 				.allMatch(trigger -> {
 					try {
 						Trigger t = objectMapper.readValue(trigger.getData(), Trigger.class);
-						return t.isTriggered(financeTriggerService);
+						return t.isTriggered(financeTriggerService, memberId);
 					} catch (JsonProcessingException e) {
 						log.error(e.getMessage());
 						return false;
@@ -59,7 +63,7 @@ public class TriggerChecker {
 					.forEach(actionEntity -> {
 							try {
 								Action a = objectMapper.readValue(actionEntity.getData(), Action.class);
-								a.execute();
+								a.execute(firebaseCloudMessageService, memberId);
 							} catch (JsonProcessingException e) {
 								log.error(e.getMessage());
 							}
