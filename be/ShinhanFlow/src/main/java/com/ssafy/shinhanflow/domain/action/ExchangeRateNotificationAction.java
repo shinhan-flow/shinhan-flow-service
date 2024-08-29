@@ -1,5 +1,6 @@
 package com.ssafy.shinhanflow.domain.action;
 
+import com.ssafy.shinhanflow.service.flow.FinanceActionService;
 import com.ssafy.shinhanflow.util.constants.Currency;
 
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +14,8 @@ public record ExchangeRateNotificationAction(
 ) implements Action {
 
 	@Override
-	public boolean execute() {
-		return false;
+	public boolean execute(FinanceActionService financeActionService, Long memberId) {
+		financeActionService.sendExchangeRateNotification(memberId, currency.name());
+		return true;
 	}
 }
