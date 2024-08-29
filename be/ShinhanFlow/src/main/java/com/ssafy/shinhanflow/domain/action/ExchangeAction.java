@@ -1,5 +1,6 @@
 package com.ssafy.shinhanflow.domain.action;
 
+import com.ssafy.shinhanflow.service.flow.FlowActionService;
 import com.ssafy.shinhanflow.util.constants.Currency;
 
 import jakarta.validation.constraints.NotBlank;
@@ -21,7 +22,9 @@ public record ExchangeAction(
 
 ) implements Action {
 	@Override
-	public boolean execute() {
+	public boolean execute(FlowActionService flowActionService) {
+		// send exchange request with ExchangeService
+
 		return false;
 	}
 }

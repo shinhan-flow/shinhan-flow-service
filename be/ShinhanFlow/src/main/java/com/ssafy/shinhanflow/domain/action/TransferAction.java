@@ -1,5 +1,7 @@
 package com.ssafy.shinhanflow.domain.action;
 
+import com.ssafy.shinhanflow.service.flow.FlowActionService;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -18,7 +20,7 @@ public record TransferAction(
 ) implements Action {
 
 	@Override
-	public boolean execute() {
+	public boolean execute(FlowActionService flowActionService) {
 		return false;
 	}
 }
