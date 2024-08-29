@@ -5,10 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shinhan_flow/action/model/enum/action_type.dart';
 import 'package:shinhan_flow/common/model/base_form_model.dart';
+import 'package:shinhan_flow/flow/model/enum/action_category.dart';
 import 'package:shinhan_flow/flow/param/enum/flow_type.dart';
 
 import '../../../action/param/action_param.dart';
 import '../../../common/param/default_param.dart';
+import '../../model/enum/trigger_category.dart';
 import '../../model/enum/widget/flow_property.dart';
 import '../../param/flow_param.dart';
 import '../../param/trigger/trigger_param.dart';
@@ -87,7 +89,8 @@ class FlowForm extends _$FlowForm {
   void addTrigger({required TriggerBaseParam trigger}) {
     /// final 로 설정한 List 는 add 를 하지 못하기 때문에 deepCopy 한 후 값 추가
     final triggers = state.triggers.toList();
-    if (trigger.type.isTimeType()) {
+    if (trigger.type.isDateType()) {
+      triggers.removeWhere((t) => t.type.isDateType());
       triggers.removeWhere((t) => t.type.isTimeType());
     } else if (trigger.type.isProductType()) {
       triggers.removeWhere((t) => t.type.isProductType());
@@ -113,6 +116,37 @@ class FlowForm extends _$FlowForm {
     }
 
     final newActions = actions..add(action);
+    state = state.copyWith(actions: newActions);
+  }
+
+  void removeTrigger({required TriggerCategoryType trigger}) {
+    final triggers = state.triggers.toList();
+    if (trigger == TriggerCategoryType.time) {
+      triggers.removeWhere((a) => a.type.isDateType());
+      triggers.removeWhere((t) => t.type.isTimeType());
+    } else if (trigger == TriggerCategoryType.transfer) {
+      triggers.removeWhere((a) => a.type.isAccountType());
+    } else if (trigger == TriggerCategoryType.exchange) {
+      triggers.removeWhere((a) => a.type.isExchangeType());
+    } else if (trigger == TriggerCategoryType.product) {
+      triggers.removeWhere((a) => a.type.isProductType());
+    }
+
+    final newTriggers = triggers.toList();
+    state = state.copyWith(triggers: newTriggers);
+  }
+
+  void removeAction({required ActionCategoryType action}) {
+    final actions = state.actions.toList();
+    if (action == ActionCategoryType.notification) {
+      actions.removeWhere((a) => a.type.isNotificationType());
+    } else if (action == ActionCategoryType.transfer) {
+      actions.removeWhere((a) => a.type.isTransferType());
+    } else if (action == ActionCategoryType.exchange) {
+      actions.removeWhere((a) => a.type.isExchangeType());
+    }
+
+    final newActions = actions.toList();
     state = state.copyWith(actions: newActions);
   }
 }

@@ -35,7 +35,7 @@ Future<BaseModel> accountHolder(AccountHolderRef ref,
       .watch(accountRepositoryProvider)
       .getHolder(accountNo: accountNo)
       .then<BaseModel>((value) async {
-    logger.i('login $value!');
+    logger.i('account Holder $value!');
 
     return value;
   }).catchError((e) {

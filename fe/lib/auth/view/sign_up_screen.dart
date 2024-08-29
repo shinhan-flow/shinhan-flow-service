@@ -122,7 +122,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             } else {
               if (context.mounted) {
                 context.goNamed(LoginScreen.routeName);
-                FlashUtil.showFlash(context, "회원가입 완료!");
+                FlashUtil.showFlash(context, "회원가입 완료!",
+                    textColor: const Color(0xFF49B7FF));
               }
             }
           },

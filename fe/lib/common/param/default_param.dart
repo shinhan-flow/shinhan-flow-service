@@ -4,3 +4,4 @@ abstract class DefaultParam extends Equatable {
   @override
   bool? get stringify => true;
 }
+

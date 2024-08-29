@@ -14,6 +14,7 @@ import '../../dio/dio_interceptor.dart';
 import '../../dio/provider/dio_provider.dart';
 import '../model/account_balance_model.dart';
 import '../model/account_model.dart';
+import '../model/account_transaction_history_model.dart';
 import '../param/account_param.dart';
 
 part 'account_repository.g.dart';
@@ -61,5 +62,18 @@ abstract class AccountRepository {
   Future<ResponseModel<BankBaseModel<AccountBalanceModel>>> getBalance(
       {@Path() required String accountNo});
 
-  /// 입금 (수시입출금)
+  /// 거래 내역 조회
+  @Headers({'token': 'true'})
+  @POST('/current-accounts/transaction-history')
+  Future<
+          ResponseModel<
+              BankBaseModel<RecListModel<AccountTransactionHistoryModel>>>>
+      getTransactionHistory(
+          {@Body() required AccountTransactionHistoryParam param});
+
+  /// 계좌 이체
+  @Headers({'token': 'true'})
+  @POST('/current-accounts/transfer')
+  Future<ResponseModel<BankListBaseModel<AccountTransferModel>>>
+      transferDeposit({@Body() required AccountTransferParam param});
 }

@@ -34,6 +34,7 @@ abstract class AuthRepository {
   Future<ResponseModel<AuthModel>> login({
     @Field() required String username,
     @Field() required String password,
+    @Field() required String fcmToken,
   });
 
   @POST('/api/v1/members')
