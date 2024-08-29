@@ -14,4 +14,5 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
 
 	List<MemberEntity> findByEmailContaining(String keyword);
 
+	List<MemberEntity> findByEmailStartingWith(String prefix);
 }
