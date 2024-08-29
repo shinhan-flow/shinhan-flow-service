@@ -7,7 +7,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Builder
 public record ExchangeAction(
 	@NotNull
@@ -23,8 +25,13 @@ public record ExchangeAction(
 ) implements Action {
 	@Override
 	public boolean execute(FlowActionService flowActionService) {
-		// send exchange request with ExchangeService
-
-		return false;
+		Long userId = flowActionService.findIdByAccountNo(fromAccount);
+		try {
+			flowActionService.exchange(userId, fromAccount, currency.name(), amount.intValue());
+			return true;
+		} catch (Exception e) {
+			log.error("Failed to execute exchange action", e);
+			return false;
+		}
 	}
 }
