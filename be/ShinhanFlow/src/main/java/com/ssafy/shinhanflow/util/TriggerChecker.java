@@ -15,6 +15,7 @@ import com.ssafy.shinhanflow.repository.ActionRepository;
 import com.ssafy.shinhanflow.repository.FlowRepository;
 import com.ssafy.shinhanflow.repository.TriggerRepository;
 import com.ssafy.shinhanflow.service.finance.FinanceTriggerService;
+import com.ssafy.shinhanflow.service.flow.FinanceActionService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class TriggerChecker {
 	private final ActionRepository actionRepository;
 	private final FlowRepository flowRepository;
 	private final ObjectMapper objectMapper;
-	private final FirebaseCloudMessageService firebaseCloudMessageService;
+	private final FinanceActionService financeActionService;
 
 	/**
 	 *
@@ -63,7 +64,7 @@ public class TriggerChecker {
 					.forEach(actionEntity -> {
 							try {
 								Action a = objectMapper.readValue(actionEntity.getData(), Action.class);
-								a.execute(firebaseCloudMessageService, memberId);
+								a.execute(financeActionService, memberId);
 							} catch (JsonProcessingException e) {
 								log.error(e.getMessage());
 							}
