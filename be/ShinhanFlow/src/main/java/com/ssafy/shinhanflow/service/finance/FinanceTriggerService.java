@@ -153,7 +153,7 @@ public class FinanceTriggerService {
 
 		CurrentAccountHolderResponseDto holderInfo = financeApiService.currentAccountHolderName(dto);
 		String userName = holderInfo.getRec().userName();
-		List<MemberEntity> byEmailContaining = memberRepository.findByEmailContaining(userName);
+		List<MemberEntity> byEmailContaining = memberRepository.findByEmailStartingWith(userName);
 		return byEmailContaining.get(0).getId();
 	}
 
