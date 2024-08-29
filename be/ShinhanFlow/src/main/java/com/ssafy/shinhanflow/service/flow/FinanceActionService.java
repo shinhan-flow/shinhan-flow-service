@@ -1,5 +1,6 @@
 package com.ssafy.shinhanflow.service.flow;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRequestDto;
 import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
 import com.ssafy.shinhanflow.repository.MemberRepository;
+import com.ssafy.shinhanflow.service.finance.ExchangeRateService;
 import com.ssafy.shinhanflow.util.FinanceApiHeaderGenerator;
 import com.ssafy.shinhanflow.util.FinanceApiService;
 import com.ssafy.shinhanflow.util.FirebaseCloudMessageService;
@@ -29,6 +31,7 @@ public class FinanceActionService {
 	private final MemberRepository memberRepository;
 	private final FinanceApiService financeApiService;
 	private final FinanceApiHeaderGenerator financeApiHeaderGenerator;
+	private final ExchangeRateService exchangeRateService;
 
 	public void sendTextNotification(Long memberId, String text) {
 
@@ -54,6 +57,15 @@ public class FinanceActionService {
 			.memberId(memberId)
 			.title("플로우 알림")
 			.content(message)
+			.build());
+	}
+
+	public void sendExchangeRateNotification(Long memberId, String currency) {
+		BigDecimal exchangeRate = exchangeRateService.getExchangeRate(currency).getRec().getExchangeRate();
+		fcmService.sendMessage(FcmMessageRequestDto.builder()
+			.memberId(memberId)
+			.title("플로우 알림")
+			.content("환율이 " + exchangeRate + "로 변경되었습니다.")
 			.build());
 	}
 
