@@ -65,7 +65,15 @@ abstract class AccountRepository {
   /// 거래 내역 조회
   @Headers({'token': 'true'})
   @POST('/current-accounts/transaction-history')
-  Future<ResponseModel<BankBaseModel<RecListModel<AccountTransactionHistoryModel>>>>
+  Future<ResponseModel<BankListBaseModel<AccountTransactionHistoryModel>>>
       getTransactionHistory(
           {@Body() required AccountTransactionHistoryParam param});
+
+  /// 계좌 이체
+  @Headers({'token': 'true'})
+  @POST('/current-accounts/transfer')
+  Future<
+          ResponseModel<
+              BankBaseModel<RecListModel<AccountTransferModel>>>>
+      transferDeposit({@Body() required AccountTransactionHistoryParam param});
 }

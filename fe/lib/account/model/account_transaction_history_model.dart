@@ -3,6 +3,35 @@ import 'package:shinhan_flow/common/model/default_model.dart';
 
 part 'account_transaction_history_model.g.dart';
 
+/*
+    "transactionUniqueNo": 4541,
+    "transactionAccountNO": null,
+    "transactionDate": "20240829",
+        "transactionType": "2",
+    "transactionTypeName": "출금(이체)",
+
+    "accountNo": "0010301441449430",
+
+ */
+@JsonSerializable()
+class AccountTransferModel extends BaseModel {
+  final int transactionUniqueNo;
+  final String? transactionAccountNO;
+  final String transactionDate;
+  final String transactionType;
+  final String transactionTypeName;
+
+  AccountTransferModel({
+    required this.transactionUniqueNo,
+    required this.transactionAccountNO,
+    required this.transactionDate,
+    required this.transactionType,
+    required this.transactionTypeName,
+  });
+
+  factory AccountTransferModel.fromJson(Map<String, dynamic> json) =>
+      _$AccountTransferModelFromJson(json);
+}
 
 @JsonSerializable()
 class AccountTransactionHistoryModel extends BaseModel {

@@ -66,3 +66,25 @@ class AccountTransactionHistoryParam extends DefaultParam {
 
   Map<String, dynamic> toJson() => _$AccountTransactionHistoryParamToJson(this);
 }
+
+@JsonSerializable()
+class AccountTransferParam extends DefaultParam {
+  final String accountTypeUniqueNo;
+
+  AccountTransferParam({required this.accountTypeUniqueNo});
+
+  @override
+  List<Object?> get props => [
+    accountTypeUniqueNo,
+  ];
+
+  Map<String, dynamic> toJson() => _$AccountTransferParamToJson(this);
+}
+
+/*
+    "depositAccountNo": "0010337226851755",
+    "transactionBalance" : 100,
+    "withdrawalAccountNo":"0010301441449430",
+    "depositTransferSummary":"입금 내용 작성 필수값 아님",
+    "withdrawalTransferSummary":"출금 내용 작성 필수값 아님"
+ */

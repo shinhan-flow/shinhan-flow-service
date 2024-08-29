@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:shinhan_flow/account/view/account_transfer_screen.dart';
+import 'package:shinhan_flow/action/view/action_exchange_screen.dart';
 
 import '../../theme/text_theme.dart';
+import '../../util/util.dart';
 import '../model/account_model.dart';
 import '../model/account_transaction_history_model.dart';
 
@@ -39,6 +44,9 @@ class AccountCard extends StatelessWidget {
       required this.currency});
 
   factory AccountCard.fromModel({required AccountDetailModel model}) {
+    final accountBalance =
+        FormatUtil.formatNumber(int.parse(model.accountBalance));
+
     return AccountCard(
       bankCode: model.bankCode,
       bankName: model.bankName,
@@ -51,7 +59,7 @@ class AccountCard extends StatelessWidget {
       accountExpiryDate: model.accountExpiryDate,
       dailyTransferLimit: model.dailyTransferLimit,
       oneTimeTransferLimit: model.oneTimeTransferLimit,
-      accountBalance: model.accountBalance,
+      accountBalance: accountBalance,
       lastTransactionDate: model.lastTransactionDate,
       currency: model.currency,
     );
@@ -101,7 +109,9 @@ class AccountCard extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        context.pushNamed(AccountTransferScreen.routeName);
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.white),
@@ -141,8 +151,8 @@ class TransactionHistoryCard extends StatelessWidget {
   final String transactionType;
   final String transactionTypeName;
   final String transactionAccountNo;
-  final int transactionBalance;
-  final int transactionAfterBalance;
+  final String transactionBalance;
+  final String transactionAfterBalance;
   final String transactionSummary;
   final String transactionMemo;
 
@@ -161,18 +171,31 @@ class TransactionHistoryCard extends StatelessWidget {
 
   factory TransactionHistoryCard.fromModel(
       {required AccountTransactionHistoryModel model}) {
+    final transactionBalance =
+        FormatUtil.formatNumber(model.transactionBalance);
+    final transactionAfterBalance =
+        FormatUtil.formatNumber(model.transactionAfterBalance);
+    final transactionDate = FormatUtil.formatDate(model.transactionDate);
+    final transactionTime = FormatUtil.formatTime(model.transactionTime);
+
     return TransactionHistoryCard(
       transactionUniqueNo: model.transactionUniqueNo,
-      transactionDate: model.transactionDate,
-      transactionTime: model.transactionTime,
+      transactionDate: transactionDate,
+      transactionTime: transactionTime,
       transactionType: model.transactionType,
       transactionTypeName: model.transactionTypeName,
       transactionAccountNo: model.transactionAccountNo,
-      transactionBalance: model.transactionBalance,
-      transactionAfterBalance: model.transactionAfterBalance,
+      transactionBalance: transactionBalance,
+      transactionAfterBalance: transactionAfterBalance,
       transactionSummary: model.transactionSummary,
       transactionMemo: model.transactionMemo,
     );
+  }
+
+  String addCommas(String number) {
+    // 숫자만 포함된 정규식
+    final regExp = RegExp(r'\B(?=(\d{3})+(?!\d))');
+    return number.replaceAllMapped(regExp, (Match match) => ',');
   }
 
   @override
