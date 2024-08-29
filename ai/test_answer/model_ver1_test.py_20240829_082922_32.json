@@ -1,0 +1,34 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:29:22.251331",
+    "request": "매달 15일 오후 3시에 환전해 주세요.\n",
+    "output": {
+        "title": "매월 15일 오후 3시에 환전",
+        "description": "매달 15일 오후 3시에 특정 환전 작업을 진행합니다.",
+        "triggers": [
+            {
+                "type": "specificTimeTrigger",
+                "time": {
+                    "hour": 15,
+                    "minute": 0,
+                    "second": 0,
+                    "nano": 0
+                }
+            },
+            {
+                "type": "dayOfMonthTrigger",
+                "days": [
+                    15
+                ]
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

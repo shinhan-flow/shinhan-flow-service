@@ -1,0 +1,16 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:17.269486",
+    "request": "예금액을 기준으로 text 알림을 설정해 주세요.\n",
+    "output": {
+        "title": "예금액 기준 텍스트 알림 설정",
+        "description": "사용자의 예금액을 기준으로 텍스트 알림을 설정합니다.",
+        "triggers": [],
+        "actions": [
+            {
+                "type": "textNotificationAction",
+                "text": "예금액 기준 알림입니다."
+            }
+        ]
+    }
+}

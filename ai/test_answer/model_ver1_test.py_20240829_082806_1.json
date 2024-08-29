@@ -1,0 +1,16 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:06.707836",
+    "request": "환율 알림을 설정해 주세요.\n",
+    "output": {
+        "title": "환율 알림 설정",
+        "description": "사용자가 요청한 환율 알림을 설정합니다.",
+        "triggers": [],
+        "actions": [
+            {
+                "type": "exchangeRateNotificationAction",
+                "currency": "USD"
+            }
+        ]
+    }
+}

@@ -5,7 +5,6 @@ import json
 import sys
 from datetime import datetime
 
-
 mypath = sys.argv[0]
 # MY_REQUEST = sys.argv[1]
 MY_REQUEST = "매월 25일에 5만원을 111-113-111111 계좌에서 123-456-123123 계좌로 송금" 
@@ -46,10 +45,7 @@ print(chat_completion.choices[0].message.content)
 result = {}
 result['test_code'] = myfile
 result['date'] = str(datetime.today())
-try:
-    result['output'] = eval(chat_completion.choices[0].message.content)
-except:
-    result['output'] = 'error'
+result['output'] = eval(chat_completion.choices[0].message.content)
 str_today = datetime.today().strftime("%Y%m%d_%H%M%S")
 with open(f'{root_path}/test_answer/{myfile}_{str_today}.json','w') as f:
     json.dump(result, f, ensure_ascii=False, indent=4)

@@ -1,0 +1,28 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:58.787048",
+    "request": "오후 3시에 환전해 주세요.\n",
+    "output": {
+        "title": "오후 3시에 환전하기",
+        "description": "사용자가 요청한 시간에 환전 실행",
+        "triggers": [
+            {
+                "type": "specificTimeTrigger",
+                "time": {
+                    "hour": 15,
+                    "minute": 0,
+                    "second": 0,
+                    "nano": 0
+                }
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

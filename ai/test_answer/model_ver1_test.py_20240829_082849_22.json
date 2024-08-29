@@ -1,0 +1,24 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:49.652116",
+    "request": "이자율이 3% 이상일 때 환전해 주세요.\n",
+    "output": {
+        "title": "이자율이 3% 이상일 때 환전",
+        "description": "이자율이 3% 이상이면 자동으로 환전하는 Flow",
+        "triggers": [
+            {
+                "type": "interestRateTrigger",
+                "accountProduct": "CURRENT_ACCOUNT",
+                "rate": 3
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

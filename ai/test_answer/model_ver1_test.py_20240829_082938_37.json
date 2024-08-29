@@ -1,0 +1,26 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:29:38.262579",
+    "request": "이자율이 변동되면 특정일에 맞춰 text 알림을 보내 주세요.",
+    "output": {
+        "title": "이자율 변동에 따른 알림",
+        "description": "이자율이 변동될 때 특정일에 맞춰 text 알림을 보냅니다.",
+        "triggers": [
+            {
+                "type": "interestRateTrigger",
+                "accountProduct": "CURRENT_ACCOUNT",
+                "rate": 0
+            },
+            {
+                "type": "specificDateTrigger",
+                "localDate": "2024-08-27"
+            }
+        ],
+        "actions": [
+            {
+                "type": "textNotificationAction",
+                "text": "얼른 운동가자"
+            }
+        ]
+    }
+}

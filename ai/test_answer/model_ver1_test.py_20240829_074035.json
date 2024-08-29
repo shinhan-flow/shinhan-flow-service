@@ -1,0 +1,22 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 07:40:35.610659",
+    "output": {
+        "title": "입출금계좌 잔액 확인",
+        "description": "사용자가 자신의 입출금계좌 잔액을 확인하고자 합니다.",
+        "triggers": [
+            {
+                "type": "balanceTrigger",
+                "account": "123123123456",
+                "balance": 0,
+                "condition": "EQ"
+            }
+        ],
+        "actions": [
+            {
+                "type": "balanceNotificationAction",
+                "account": "123123123456"
+            }
+        ]
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:29:11.841716",
+    "request": "송금하고 나서 10월 10일에 환율 알림을 보내 주세요.\n",
+    "output": {
+        "title": "송금 및 환율 알림 설정",
+        "description": "사용자가 송금 후 10월 10일에 환율 알림을 받도록 설정합니다.",
+        "triggers": [
+            {
+                "type": "specificDateTrigger",
+                "localDate": "2024-10-10"
+            }
+        ],
+        "actions": [
+            {
+                "type": "transferAction",
+                "fromAccount": "123123123456",
+                "toAccount": "456456456789",
+                "amount": 0
+            },
+            {
+                "type": "exchangeRateNotificationAction",
+                "currency": "USD"
+            }
+        ]
+    }
+}

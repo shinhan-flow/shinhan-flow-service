@@ -1,0 +1,22 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:55.301381",
+    "request": "이자율이 변동될 때마다 환율 알림을 설정해 주세요.\n",
+    "output": {
+        "title": "이자율 변동 시 환율 알림 설정",
+        "description": "이자율이 변동될 때마다 환율 알림을 발송합니다.",
+        "triggers": [
+            {
+                "type": "interestRateTrigger",
+                "accountProduct": "CURRENT_ACCOUNT",
+                "rate": 0
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeRateNotificationAction",
+                "currency": "USD"
+            }
+        ]
+    }
+}

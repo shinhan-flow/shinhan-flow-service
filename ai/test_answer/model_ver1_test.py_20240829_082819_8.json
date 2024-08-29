@@ -1,0 +1,24 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:19.712279",
+    "request": "송금 후 환전해 주세요.\n",
+    "output": {
+        "title": "송금 후 환전",
+        "description": "사용자의 요청에 따라 송금을 진행한 후 환전 작업을 수행합니다.",
+        "triggers": [],
+        "actions": [
+            {
+                "type": "transferAction",
+                "fromAccount": "123-123-123456",
+                "toAccount": "456-456-456789",
+                "amount": 0
+            },
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123-123-123456",
+                "amount": 0
+            }
+        ]
+    }
+}

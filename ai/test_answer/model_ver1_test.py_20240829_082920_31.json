@@ -1,0 +1,29 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:29:20.124559",
+    "request": "예금액을 확인하고 인출한 뒤 송금해 주세요.\n",
+    "output": {
+        "title": "예금 확인 후 인출 및 송금",
+        "description": "사용자가 예금액을 확인한 후 인출하고 송금하는 자동화 작업입니다.",
+        "triggers": [
+            {
+                "type": "depositTrigger",
+                "account": "123123123456",
+                "amount": 0
+            }
+        ],
+        "actions": [
+            {
+                "type": "withdrawTrigger",
+                "account": "123123123456",
+                "amount": 0
+            },
+            {
+                "type": "transferAction",
+                "fromAccount": "123123123456",
+                "toAccount": "456456456789",
+                "amount": 0
+            }
+        ]
+    }
+}

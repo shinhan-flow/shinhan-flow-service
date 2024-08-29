@@ -1,0 +1,21 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:41.561113",
+    "request": "특정일에 text 알림을 보내 주세요.\n",
+    "output": {
+        "title": "특정일 알림 설정",
+        "description": "사용자가 특정일에 text 알림을 요청했습니다.",
+        "triggers": [
+            {
+                "type": "specificDateTrigger",
+                "localDate": "2024-08-27"
+            }
+        ],
+        "actions": [
+            {
+                "type": "textNotificationAction",
+                "text": "얼른 운동가자"
+            }
+        ]
+    }
+}

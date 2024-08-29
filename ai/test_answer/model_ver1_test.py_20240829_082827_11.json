@@ -1,0 +1,24 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:27.519701",
+    "request": "인출 후 바로 송금해 주세요.\n",
+    "output": {
+        "title": "인출 후 송금 작업",
+        "description": "사용자의 요청에 따라 인출 후 바로 송금을 수행합니다.",
+        "triggers": [
+            {
+                "type": "withdrawTrigger",
+                "account": "123123123456",
+                "amount": 0
+            }
+        ],
+        "actions": [
+            {
+                "type": "transferAction",
+                "fromAccount": "123123123456",
+                "toAccount": "456456456789",
+                "amount": 0
+            }
+        ]
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:29:15.398073",
+    "request": "예금액을 조회한 다음, 인출 후 환전해 주세요.\n",
+    "output": {
+        "title": "예금액 조회 후 인출 및 환전",
+        "description": "사용자의 요청에 따라 예금액을 조회한 후 인출하고 환전을 진행합니다.",
+        "triggers": [
+            {
+                "type": "depositTrigger",
+                "account": "123123123456",
+                "amount": 0
+            },
+            {
+                "type": "withdrawTrigger",
+                "account": "123123123456",
+                "amount": 0
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

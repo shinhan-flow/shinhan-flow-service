@@ -1,0 +1,10 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 07:37:11.958769",
+    "output": {
+        "title": "Shinhan Flow 기능 안내",
+        "description": "Shinhan Flow에서 사용할 수 있는 조건과 액션에 대한 설명입니다.",
+        "triggers": [],
+        "actions": []
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:37.014621",
+    "request": "이번 주 동안 환전해 주세요.\n",
+    "output": {
+        "title": "환전 요청",
+        "description": "이번 주 동안 환전 요청을 처리합니다.",
+        "triggers": [],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

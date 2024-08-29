@@ -1,0 +1,25 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:11.212050",
+    "request": "계좌 잔액이 100만 원 이상일 때 환전해 주세요.\n",
+    "output": {
+        "title": "환전 요청",
+        "description": "계좌 잔액이 100만 원 이상일 때 환전합니다.",
+        "triggers": [
+            {
+                "type": "balanceTrigger",
+                "account": "123123123456",
+                "balance": 1000000,
+                "condition": "GT"
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:38.414418",
+    "request": "다음 달까지 매일 환율 알림을 보내 주세요.\n",
+    "output": {
+        "title": "매일 환율 알림 설정",
+        "description": "사용자가 요청한 내용에 따라 매일 환율 알림을 설정합니다.",
+        "triggers": [],
+        "actions": [
+            {
+                "type": "exchangeRateNotificationAction",
+                "currency": "USD"
+            }
+        ]
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:30.558329",
+    "request": "매주 월요일마다 환전해 주세요.\n",
+    "output": {
+        "title": "매주 월요일 환전 자동화",
+        "description": "사용자가 요청한 매주 월요일에 자동으로 환전을 수행합니다.",
+        "triggers": [
+            {
+                "type": "daysOfWeekTrigger",
+                "daysOfWeek": [
+                    "MONDAY"
+                ]
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

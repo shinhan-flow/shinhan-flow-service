@@ -1,0 +1,24 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:24.763250",
+    "request": "인출 후 환전해 주세요.\n",
+    "output": {
+        "title": "인출 후 환전 작업",
+        "description": "사용자가 인출 후 환전을 요청했습니다.",
+        "triggers": [
+            {
+                "type": "withdrawTrigger",
+                "account": "123123123456",
+                "amount": 0
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

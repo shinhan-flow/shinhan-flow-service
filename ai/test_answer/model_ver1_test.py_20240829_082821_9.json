@@ -1,0 +1,22 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:21.689298",
+    "request": "송금한 다음에 환율 알림을 설정해 주세요.\n",
+    "output": {
+        "title": "송금 후 환율 알림 설정",
+        "description": "사용자가 송금을 요청한 뒤에 환율 알림을 설정합니다.",
+        "triggers": [],
+        "actions": [
+            {
+                "type": "transferAction",
+                "fromAccount": "123-123-123456",
+                "toAccount": "456-456-456789",
+                "amount": 0
+            },
+            {
+                "type": "exchangeRateNotificationAction",
+                "currency": "USD"
+            }
+        ]
+    }
+}
