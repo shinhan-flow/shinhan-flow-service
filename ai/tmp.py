@@ -1,127 +1,40 @@
-import os
 import openai
-from cryptography.fernet import Fernet
-import logging
-from datetime import datetime
-import re
+import os
+from utils import *
+import json
 
-# 환경 변수에서 API 키 불러오기
-api_key = os.getenv("OPENAI_API_KEY")
-
-if not api_key:
-    raise ValueError("API 키가 설정되지 않았습니다. 환경 변수 'OPENAI_API_KEY'를 설정하세요.")
-
-openai.api_key = api_key
-
-# 암호화 키 생성 (한 번만 생성하고 안전한 장소에 저장하세요)
-encryption_key = Fernet.generate_key()
-
-# Fernet 객체 생성
-cipher_suite = Fernet(encryption_key)
-
-# 사용자 역할 설정
-roles = {
-    "admin": {"can_access_sensitive_data": True},
-    "user": {"can_access_sensitive_data": False}
-}
-
-# 현재 사용자 역할 (실제 애플리케이션에서는 사용자 인증을 통해 역할을 부여해야 합니다)
-current_user_role = "user"
-
-# 로그 설정
-logging.basicConfig(filename='access_log.txt', level=logging.INFO)
-
-def log_access(action, success=True):
-    """접근 로그를 기록합니다."""
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    status = "SUCCESS" if success else "FAILED"
-    log_message = f"[{timestamp}] {action} - {status}"
-    logging.info(log_message)
-
-def encrypt_data(data):
-    """데이터를 암호화합니다."""
-    return cipher_suite.encrypt(data.encode())
-
-def decrypt_data(encrypted_data):
-    """암호화된 데이터를 복호화합니다."""
-    return cipher_suite.decrypt(encrypted_data).decode()
-
-def validate_input(input_text):
-    """입력 데이터를 검증합니다."""
-    if not isinstance(input_text, str):
-        raise ValueError("입력은 문자열이어야 합니다.")
-    
-    # 악의적인 SQL 인젝션 패턴 검출
-    if re.search(r"(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|(?:;)|(\b(ALTER|CREATE|DELETE|DROP|EXEC(UTE)?|INSERT|MERGE|SELECT|UPDATE|UNION|USE)\b)", input_text, re.IGNORECASE):
-        raise ValueError("악의적인 입력이 감지되었습니다.")
-    
-    return input_text
-
-def anonymize_data(data):
-    """민감한 정보를 비식별화합니다."""
-    # 예: 이메일 주소와 같은 민감한 데이터를 비식별화
-    anonymized_data = re.sub(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', '[REDACTED]', data)
-    
-    # 추가적인 민감한 정보가 있다면 여기에 더 추가
-    return anonymized_data
-
-def ask_openai(question):
-    try:
-        # 입력 데이터 검증
-        validated_question = validate_input(question)
-        
-        # OpenAI에게 질문하기
-        response = openai.Completion.create(
-            engine="text-davinci-003",  # 사용할 모델 지정
-            prompt=validated_question,  # 검증된 질문 사용
-            max_tokens=100,             # 응답에서 반환할 최대 토큰 수
-            n=1,                        # 반환할 응답의 개수
-            stop=None,                  # 응답을 중단시킬 단어 또는 문자
-            temperature=0.7,            # 응답의 창의성 조절 (0.0 - 1.0)
-        )
-
-        # 응답 추출
-        answer = response.choices[0].text.strip()
-
-        # 민감한 정보 비식별화
-        anonymized_answer = anonymize_data(answer)
-
-        # 응답을 암호화하여 파일에 저장 (admin 역할만 가능)
-        if roles[current_user_role]["can_access_sensitive_data"]:
-            encrypted_answer = encrypt_data(anonymized_answer)
-            with open("encrypted_response.txt", "wb") as file:
-                file.write(encrypted_answer)
-            log_access("File write: encrypted_response.txt")
-        else:
-            log_access("File write: encrypted_response.txt", success=False)
-            return "Access Denied: You do not have permission to write sensitive data."
-
-        return anonymized_answer
-
-    except Exception as e:
-        log_access("ask_openai execution", success=False)
-        return f"Error: {str(e)}"
-
-def read_encrypted_data():
-    """암호화된 파일 읽기 (admin 역할만 가능)"""
-    if roles[current_user_role]["can_access_sensitive_data"]:
-        try:
-            with open("encrypted_response.txt", "rb") as file:
-                encrypted_data = file.read()
-            log_access("File read: encrypted_response.txt")
-            return decrypt_data(encrypted_data)
-        except FileNotFoundError:
-            log_access("File read: encrypted_response.txt", success=False)
-            return "File not found."
-    else:
-        log_access("File read: encrypted_response.txt", success=False)
-        return "Access Denied: You do not have permission to read sensitive data."
-
-# 질의 실행
-question = "Please send an email to john.doe@example.com"
-answer = ask_openai(question)
-print("OpenAI의 응답:", answer)
-
-# 암호화된 파일에서 데이터 복호화 및 출력 (현재 사용자 역할에 따라 접근 제한)
-decrypted_answer = read_encrypted_data()
-print("복호화된 응답:", decrypted_answer)
+ROOT_DIR = find_root_dir()
+client = openai.OpenAI(api_key=os.getenv("API_KEY"))
+with open(f"{ROOT_DIR}/prompt/ver1/explain_flow.json", "r") as f:
+    explain_flow = json.load(f)
+with open(f"{ROOT_DIR}/prompt/ver1/set_data_format.json", "r") as f:
+    set_data_format = json.load(f)
+with open(f"{ROOT_DIR}/prompt/ver1/enumerate_triggers.json", "r") as f:
+    enumerate_triggers = json.load(f)
+with open(f"{ROOT_DIR}/prompt/ver1/enumerate_actions.json", "r") as f:
+    enumerate_actions = json.load(f)
+with open(f"{ROOT_DIR}/prompt/ver1/set_output_format.json", "r") as f:
+    set_output_format = json.load(f)
+system_prompt = [
+    explain_flow,
+    set_data_format,
+    enumerate_triggers,
+    enumerate_actions,
+    set_output_format,
+]
+chat_completion = client.chat.completions.create(
+    messages=[
+        {
+            "role": "system",
+            "content": "너는 점검자야. 사용자가 너에게 요청을 보낼거야. 내가 말하는 확인사항들을 체크해\n 에러사항 1.사용자의 요청에서 계좌관련 요청이지만, 계좌번호가 없다면 '에러'출력\n 2. 요청에 언급된 날짜가 달력에 존재하지 않는 날짜라면 '에러2'출력\n 3. 25시 67분 처럼 존재하지 않는 시간이라면 에러3 출력\n 4. 외화는 USD, EUR, JPY, CNY, GBP, CHF, CAD의 6개만 서비스가 가능하다. 그 외의 외화에 대한 요청을 한다면 '에러4'출력\n 5. 은행상품은 입출금, 예금, 저축, 대출 이렇게 4가지가 있다. 사용자가 상품관련 요청을 했을때, 예금,입출금,저축,대출 4가지 외에 다른 상품을 언급 하면 '에러 5'출력",
+        },
+        {
+            "role": "user",
+            "content": """
+저축상품의 이자율이 25이상일때 사랑해라고 알려줘. 
+            """,
+        },
+    ],
+    model="gpt-4o-mini",
+)
+print(chat_completion.choices[0].message.content)
