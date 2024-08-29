@@ -10,6 +10,8 @@ import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
 import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 import com.ssafy.shinhanflow.dto.FcmMessageRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountBalanceRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferRequestDto;
+import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountTransferResponseDto;
 import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRequestDto;
 import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
@@ -86,6 +88,29 @@ public class FinanceActionService {
 			.build();
 
 		return financeApiService.exchange(dto);
+	}
+
+	public CurrentAccountTransferResponseDto transfer(long userId, String fromAccount, String toAccount, long amount) {
+		log.info("transfer - userId: {}, fromAccount: {}, toAccount: {}, amount: {}", userId, fromAccount, toAccount,
+			amount);
+		MemberEntity memberEntity = findMemberOrThrow(userId);
+
+		String userKey = memberEntity.getUserKey();
+		String institutionCode = memberEntity.getInstitutionCode();
+
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("transfer", userKey, institutionCode);
+		CurrentAccountTransferResponseDto response = financeApiService.transferCurrentAccount(
+			CurrentAccountTransferRequestDto.builder()
+				.header(header)
+				.withdrawalAccountNo(fromAccount)
+				.depositAccountNo(toAccount)
+				.transactionBalance(amount)
+				.build());
+		
+		// sendBalanceNotification(userId, fromAccount);
+		// sendBalanceNotification(userId, toAccount);
+
+		return response;
 	}
 
 	private MemberEntity findMemberOrThrow(long userId) {
