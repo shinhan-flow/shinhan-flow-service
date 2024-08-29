@@ -20,7 +20,7 @@ public record ExchangeRateTrigger(
 ) implements Trigger {
 
 	@Override
-	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
+	public boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId) {
 		ExchangeRateResponseDto dto = financeTriggerService.getExchangeRate(currency.name());
 		BigDecimal rate = dto.getRec().getExchangeRate();
 		return this.rate.compareTo(rate) >= 0;

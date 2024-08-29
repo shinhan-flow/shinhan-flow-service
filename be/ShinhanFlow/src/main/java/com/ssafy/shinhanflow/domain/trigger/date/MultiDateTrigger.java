@@ -18,7 +18,7 @@ public record MultiDateTrigger(
 
 ) implements Trigger {
 	@Override
-	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
+	public boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId) {
 		LocalDate today = LocalDate.now();
 		for (LocalDate date : dates) {
 			if (today.isEqual(date)) {

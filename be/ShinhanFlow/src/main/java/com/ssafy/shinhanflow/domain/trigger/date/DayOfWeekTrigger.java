@@ -14,7 +14,7 @@ public record DayOfWeekTrigger(
 
 ) implements Trigger {
 	@Override
-	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
+	public boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId) {
 		LocalDate today = LocalDate.now();
 		DayOfWeek todayOfWeek = today.getDayOfWeek();
 

@@ -189,6 +189,6 @@ public class FlowService {
 		// String str = " { \"type\": \"DepositTrigger\", \"account\": \"0011104781451776\", \"amount\": 10000 }";
 		String str = " { \"type\": \"WithDrawTrigger\", \"account\": \"0011104781451776\", \"amount\": 100000000 }";
 		Trigger trigger = objectMapper.readValue(str, Trigger.class);
-		log.info("trigger.isTriggered: {}", trigger.isTriggered(financeTriggerService));
+		// log.info("trigger.isTriggered: {}", trigger.isTriggered(financeTriggerService));
 	}
 }

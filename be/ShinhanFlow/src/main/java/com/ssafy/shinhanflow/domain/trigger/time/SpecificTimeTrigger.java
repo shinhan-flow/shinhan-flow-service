@@ -14,7 +14,7 @@ public record SpecificTimeTrigger(
 ) implements Trigger {
 
 	@Override
-	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
+	public boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId) {
 		LocalTime now = LocalTime.now();
 		return this.time.getHour() == now.getHour();
 	}

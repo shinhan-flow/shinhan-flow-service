@@ -21,7 +21,7 @@ public record InterestRateTrigger(
 	BigDecimal rate
 ) implements Trigger {
 	@Override
-	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
+	public boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId) {
 
 		List<BigDecimal> rates = getProductRates(accountProduct, financeTriggerService);
 		return rates.stream().anyMatch(rate -> this.rate.compareTo(rate) >= 0);

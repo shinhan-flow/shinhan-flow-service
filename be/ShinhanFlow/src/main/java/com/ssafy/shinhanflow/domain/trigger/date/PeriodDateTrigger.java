@@ -18,7 +18,7 @@ public record PeriodDateTrigger(
 
 ) implements Trigger {
 	@Override
-	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
+	public boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId) {
 		LocalDate today = LocalDate.now();
 		return
 			today.isEqual(startDate) || today.isEqual(endDate)

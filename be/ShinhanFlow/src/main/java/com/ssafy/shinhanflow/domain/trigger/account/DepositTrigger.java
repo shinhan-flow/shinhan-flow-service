@@ -21,12 +21,7 @@ public record DepositTrigger(
 
 ) implements Trigger {
 	@Override
-	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
-
-		// CustomUserDetails userDetails = (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication()
-		// 	.getPrincipal();
-		// long userId = userDetails.getUserId();
-		long userId = financeTriggerService.findIdByAccountNo(account);
+	public boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId) {
 
 		String currDay = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 

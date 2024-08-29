@@ -15,7 +15,7 @@ public record DayOfMonthTrigger(
 ) implements Trigger {
 
 	@Override
-	public boolean isTriggered(FinanceTriggerService financeTriggerService) {
+	public boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId) {
 		LocalDate today = LocalDate.now();
 		for (Integer day : days) {
 			if (today.getDayOfMonth() == day) {
