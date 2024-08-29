@@ -26,12 +26,7 @@ public record ExchangeAction(
 	@Override
 	public boolean execute(FlowActionService flowActionService) {
 		Long userId = flowActionService.findIdByAccountNo(fromAccount);
-		try {
-			flowActionService.exchange(userId, fromAccount, currency.name(), amount.intValue());
-			return true;
-		} catch (Exception e) {
-			log.error("Failed to execute exchange action", e);
-			return false;
-		}
+		flowActionService.exchange(userId, fromAccount, currency.name(), amount.intValue());
+		return true;
 	}
 }
