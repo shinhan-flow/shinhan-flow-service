@@ -27,7 +27,7 @@ final flowRepositoryProvider = Provider<FlowRepository>((ref) {
   return repository;
 });
 
-@RestApi(baseUrl: serverURL )
+@RestApi(baseUrl: serverURL)
 abstract class FlowRepository {
   factory FlowRepository(Dio dio, {ParseErrorLogger errorLogger}) =
       _FlowRepository;
@@ -37,17 +37,19 @@ abstract class FlowRepository {
   @POST('/api/v1/flows')
   Future<ResponseModel<bool>> createFlow({@Body() required FlowParam param});
 
-  /// Flow pagination 조회
+  /// Flow 상태 변경
   @Headers({'token': 'true'})
-  @GET('/api/v1/flows')
-  Future<ResponseModel<FlowModel>> paginate({@Queries() required PaginationParam param});
+  @PATCH('/api/v1/flows/{flowId}')
+  Future<ResponseModel<bool>> toggleFlow({
+    @Path() required int flowId,
+  });
 }
-
 
 final flowPRepositoryProvider = Provider<FlowPRepository>((ref) {
   final dio = ref.watch(dioProvider);
   return FlowPRepository(dio);
 });
+
 @RestApi(baseUrl: serverURL)
 abstract class FlowPRepository
     extends IBasePaginationRepository<FlowModel, FlowPParam> {

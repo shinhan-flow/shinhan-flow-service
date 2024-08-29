@@ -18,6 +18,7 @@ import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
 import 'package:shinhan_flow/flow/view/flow_init_screen.dart';
 import 'package:shinhan_flow/home_screen.dart';
 
+import '../../account/model/account_model.dart';
 import '../../account/view/account_transfer_screen.dart';
 import '../../action/view/action_exchange_screen.dart';
 import '../../action/view/action_transfer_screen.dart';
@@ -99,23 +100,25 @@ final routerProvider = Provider<GoRouter>((ref) {
             },
             routes: [
               GoRoute(
-                path: 'transactionHistory',
-                parentNavigatorKey: rootNavKey,
-                name: AccountTransactionHistoryScreen.routeName,
-                builder: (context, state) {
-                  return const AccountTransactionHistoryScreen();
-                },
-                routes: [
-                  GoRoute(
-                    path: 'transfer',
-                    parentNavigatorKey: rootNavKey,
-                    name: AccountTransferScreen.routeName,
-                    builder: (context, state) {
-                      return const AccountTransferScreen();
-                    },
-                  ),
-                ]
-              ),
+                  path: 'transactionHistory',
+                  parentNavigatorKey: rootNavKey,
+                  name: AccountTransactionHistoryScreen.routeName,
+                  builder: (context, state) {
+                    return const AccountTransactionHistoryScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                      path: 'transfer',
+                      parentNavigatorKey: rootNavKey,
+                      name: AccountTransferScreen.routeName,
+                      builder: (context, state) {
+                        final account = state.extra as AccountDetailModel;
+                        return AccountTransferScreen(
+                          account: account,
+                        );
+                      },
+                    ),
+                  ]),
               GoRoute(
                 path: 'productAccount',
                 parentNavigatorKey: rootNavKey,

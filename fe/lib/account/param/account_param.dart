@@ -69,14 +69,46 @@ class AccountTransactionHistoryParam extends DefaultParam {
 
 @JsonSerializable()
 class AccountTransferParam extends DefaultParam {
-  final String accountTypeUniqueNo;
+  final String depositAccountNo;
+  final int transactionBalance;
+  final String withdrawalAccountNo;
+  final String depositTransferSummary;
+  final String withdrawalTransferSummary;
 
-  AccountTransferParam({required this.accountTypeUniqueNo});
+  AccountTransferParam({
+    required this.depositAccountNo,
+    required this.transactionBalance,
+    required this.withdrawalAccountNo,
+    required this.depositTransferSummary,
+    required this.withdrawalTransferSummary,
+  });
+
+  AccountTransferParam copyWith({
+    String? depositAccountNo,
+    int? transactionBalance,
+    String? withdrawalAccountNo,
+    String? depositTransferSummary,
+    String? withdrawalTransferSummary,
+  }) {
+    return AccountTransferParam(
+      depositAccountNo: depositAccountNo ?? this.depositAccountNo,
+      transactionBalance: transactionBalance ?? this.transactionBalance,
+      withdrawalAccountNo: withdrawalAccountNo ?? this.withdrawalAccountNo,
+      depositTransferSummary:
+          depositTransferSummary ?? this.depositTransferSummary,
+      withdrawalTransferSummary:
+          withdrawalTransferSummary ?? this.withdrawalTransferSummary,
+    );
+  }
 
   @override
   List<Object?> get props => [
-    accountTypeUniqueNo,
-  ];
+        depositAccountNo,
+        transactionBalance,
+        withdrawalAccountNo,
+        depositTransferSummary,
+        withdrawalTransferSummary,
+      ];
 
   Map<String, dynamic> toJson() => _$AccountTransferParamToJson(this);
 }

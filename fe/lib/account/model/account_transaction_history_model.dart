@@ -15,7 +15,7 @@ part 'account_transaction_history_model.g.dart';
  */
 @JsonSerializable()
 class AccountTransferModel extends BaseModel {
-  final int transactionUniqueNo;
+  final int? transactionUniqueNo;
   final String? transactionAccountNO;
   final String transactionDate;
   final String transactionType;
@@ -62,6 +62,20 @@ class AccountTransactionHistoryModel extends BaseModel {
   factory AccountTransactionHistoryModel.fromJson(Map<String, dynamic> json) =>
       _$AccountTransactionHistoryModelFromJson(json);
 }
+
+/*
+                    "transactionUniqueNo": 4542,
+                    "transactionDate": "20240829",
+                    "transactionTime": "143425",
+                    "transactionType": "1",
+                    "transactionTypeName": "입금(이체)",
+                    "transactionAccountNo": "0010301441449430",
+                    "transactionBalance": 100,
+                    "transactionAfterBalance": 11001400100,
+                    "transactionSummary": "",
+                    "transactionMemo": ""
+
+ */
 
 /*
                     "transactionUniqueNo": 4385,

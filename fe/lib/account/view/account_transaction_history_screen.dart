@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shinhan_flow/account/provider/account_transaction_history_provider.dart';
 import 'package:shinhan_flow/account/provider/widget/account_transaction_history_form_provider.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
@@ -18,6 +19,7 @@ import '../model/account_balance_model.dart';
 import '../model/account_model.dart';
 import '../model/account_transaction_history_model.dart';
 import '../provider/account_provider.dart';
+import 'account_transfer_screen.dart';
 
 class AccountTransactionHistoryScreen extends StatelessWidget {
   static String get routeName => 'transactionHistory';
@@ -30,7 +32,7 @@ class AccountTransactionHistoryScreen extends StatelessWidget {
       body: NestedScrollView(
           headerSliverBuilder: (_, __) {
             return [
-              DefaultAppBar(
+              const DefaultAppBar(
                 isSliver: true,
                 title: "입출금 거래내역",
               )
@@ -60,6 +62,11 @@ class AccountTransactionHistoryScreen extends StatelessWidget {
                     final items = modelList
                         .map((m) => AccountCard.fromModel(
                               model: m,
+                              onTap: () {
+                                context.pushNamed(
+                                    AccountTransferScreen.routeName,
+                                    extra: m);
+                              },
                             ))
                         .toList();
                     // items.add(AccountCard.fromModel(model: model));

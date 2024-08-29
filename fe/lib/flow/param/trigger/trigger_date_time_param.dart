@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shinhan_flow/flow/param/trigger/trigger_param.dart';
 import 'package:shinhan_flow/trigger/model/enum/time_category.dart';
@@ -134,7 +135,6 @@ class TgPeriodDateParam extends TriggerBaseParam {
   Map<String, dynamic> toJson() => _$TgPeriodDateParamToJson(this);
 }
 
-
 @JsonSerializable()
 class TgDayOfWeekParam extends TriggerBaseParam {
   /// 요일을 설정하는 트리거 생성
@@ -155,6 +155,7 @@ class TgDayOfWeekParam extends TriggerBaseParam {
   bool? get stringify => true;
 
   factory TgDayOfWeekParam.fromForm({required TgDateTimeFormModel form}) {
+    // form.dayOfWeek!.sort();
     return TgDayOfWeekParam(
       type: form.type,
       dayOfWeek: form.dayOfWeek!,
@@ -177,14 +178,15 @@ class TgDayOfMonthParam extends TriggerBaseParam {
 
   @override
   List<Object?> get props => [
-    type,
-    days,
-  ];
+        type,
+        days,
+      ];
 
   @override
   bool? get stringify => true;
 
   factory TgDayOfMonthParam.fromForm({required TgDateTimeFormModel form}) {
+    form.dayOfMonth!.sort();
     return TgDayOfMonthParam(
       type: form.type,
       days: form.dayOfMonth!,
@@ -195,3 +197,35 @@ class TgDayOfMonthParam extends TriggerBaseParam {
   Map<String, dynamic> toJson() => _$TgDayOfMonthParamToJson(this);
 }
 
+@JsonSerializable()
+class TgTimeParam extends TriggerBaseParam {
+  /// 요일을 설정하는 트리거 생성
+  final String time;
+
+  TgTimeParam({
+    this.time = "00:00:00",
+    super.type = TriggerType.SpecificTimeTrigger,
+  });
+
+  @override
+  List<Object?> get props => [
+        type,
+        time,
+      ];
+
+  @override
+  bool? get stringify => true;
+
+  // factory TgTimeParam.fromForm({required TgDateTimeFormModel form}) {
+  //   // form.dayOfWeek!.sort();
+  //   return TgTimeParam(
+  //     type: form.type,
+  //     time: form.time!,
+  //   );
+  // }
+
+  @override
+  Map<String, dynamic> toJson() => _$TgTimeParamToJson(this);
+}
+
+final timeProvider = StateProvider.autoDispose<String>((ref) => "00:00:00");

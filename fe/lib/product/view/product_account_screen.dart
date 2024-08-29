@@ -55,10 +55,9 @@ class ProductAccountScreen extends StatelessWidget {
                       (result as ResponseModel<List<ProductBankAccountModel>>)
                           .data!;
                   return SliverPadding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 24.w, vertical: 16.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
                     sliver: SliverList.builder(
-
                         itemCount: modelList.length,
                         itemBuilder: (_, idx) {
                           if (modelList[idx].products.isEmpty) {
@@ -242,6 +241,7 @@ class _ProductCard extends ConsumerWidget {
                                       FlashUtil.showFlash(
                                         context,
                                         '계좌 생성을 성공하였습니다!',
+                                        textColor: const Color(0xFF49B7FF),
                                       );
                                     }
                                   }

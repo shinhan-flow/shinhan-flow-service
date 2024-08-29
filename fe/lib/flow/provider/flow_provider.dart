@@ -28,8 +28,23 @@ Future<BaseModel> createFlow(CreateFlowRef ref) async {
   });
 }
 
-final flowProvider = StateNotifierProvider.autoDispose<FlowStateNotifier,
-    BaseModel>((ref) {
+@riverpod
+Future<BaseModel> toggleFlow(ToggleFlowRef ref, {required int flowId}) async {
+  final repository = ref.read(flowRepositoryProvider);
+  return await repository
+      .toggleFlow(flowId: flowId)
+      .then<BaseModel>((value) async {
+    logger.i(value);
+    return value;
+  }).catchError((e) {
+    final error = ErrorModel.respToError(e);
+    logger.e('code ${error.code}\nmessage = ${error.message}');
+    return error;
+  });
+}
+
+final flowProvider =
+    StateNotifierProvider.autoDispose<FlowStateNotifier, BaseModel>((ref) {
   final repository = ref.watch(flowPRepositoryProvider);
   return FlowStateNotifier(
     repository: repository,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +21,7 @@ import 'package:shinhan_flow/util/util.dart';
 
 import 'account/component/account_card.dart';
 import 'account/model/account_model.dart';
+import 'account/view/account_transfer_screen.dart';
 import 'common/model/bank_model.dart';
 import 'common/model/default_model.dart';
 import 'flow/model/flow_model.dart';
@@ -163,32 +166,6 @@ class _HomeScreenState extends State<HomeScreen> {
           body: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: CupertinoTimerPicker(onTimerDurationChanged: (t) {}),
-              ),
-              SliverToBoxAdapter(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      showPicker(
-                        context: context,
-                        value: Time(hour: 12, minute: 13),
-                        // sunrise: TimeOfDay(hour: 6, minute: 0),
-                        // optional
-                        // sunset: TimeOfDay(hour: 18, minute: 0),
-                        // optional
-                        duskSpanInMinutes: 120,
-                        // optional
-                        onChange: (t) {},
-                      ),
-                    );
-                  },
-                  child: Text(
-                    "Open time picker",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              SliverToBoxAdapter(
                 child: Column(
                   children: [
                     _AccountCardComponent(),
@@ -275,10 +252,21 @@ class _AccountCardComponent extends ConsumerWidget {
                   .rec;
               if (modelList.isEmpty) {
                 return InkWell(
-                  onTap: () {},
-                  child: Text(
-                    '입출금 계좌 만들러가기',
-                    style: SHFlowTextStyle.subTitle,
+                  onTap: () {
+                    context.pushNamed(ProductAccountScreen.routeName);
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
+                    decoration: BoxDecoration(
+                        color: Colors.blueGrey,
+                        borderRadius: BorderRadius.circular(12.r)),
+                    child: Text(
+                      '입출금 계좌 만들러가기',
+                      style: SHFlowTextStyle.subTitle
+                          .copyWith(color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 );
               }
@@ -288,7 +276,13 @@ class _AccountCardComponent extends ConsumerWidget {
                 onTap: () {
                   context.pushNamed(AccountTransactionHistoryScreen.routeName);
                 },
-                child: AccountCard.fromModel(model: model),
+                child: AccountCard.fromModel(
+                  model: model,
+                  onTap: () {
+                    context.pushNamed(AccountTransferScreen.routeName,
+                        extra: model);
+                  },
+                ),
               );
             },
           )
@@ -389,17 +383,19 @@ class _FlowComponent extends ConsumerWidget {
 }
 
 class FlowCard extends StatefulWidget {
+  final int id;
   final int memberId;
   final String title;
   final String description;
-  final bool enable;
+  bool enable;
 
-  const FlowCard(
+  FlowCard(
       {super.key,
       required this.memberId,
       required this.title,
       required this.description,
-      required this.enable});
+      required this.enable,
+      required this.id});
 
   factory FlowCard.fromModel({required FlowModel model}) {
     return FlowCard(
@@ -407,6 +403,7 @@ class FlowCard extends StatefulWidget {
       title: model.title,
       description: model.description,
       enable: model.enable,
+      id: model.id,
     );
   }
 
@@ -415,8 +412,6 @@ class FlowCard extends StatefulWidget {
 }
 
 class _FlowCardState extends State<FlowCard> {
-  bool isOn = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -452,19 +447,27 @@ class _FlowCardState extends State<FlowCard> {
             ),
           ),
           SizedBox(width: 24.w),
-          Switch(
-            value: widget.enable,
-            onChanged: (v) {
-              setState(() {
-                isOn = v;
-              });
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              return Switch(
+                value: widget.enable,
+                onChanged: (v) async {
+                  final result = await ref
+                      .read(toggleFlowProvider(flowId: widget.id).future);
+                  if (result is ErrorModel) {
+                  } else {
+                    widget.enable = (result as ResponseModel<bool>).data!;
+                  }
+                  setState(() {});
+                },
+                activeColor: Colors.white,
+                activeTrackColor: const Color(0xFF0046FF),
+                inactiveTrackColor: const Color(0xFFCBCFD7),
+                inactiveThumbColor: Colors.white,
+                trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
+                thumbIcon: WidgetStateProperty.all(const Icon(null)),
+              );
             },
-            activeColor: Colors.white,
-            activeTrackColor: const Color(0xFF0046FF),
-            inactiveTrackColor: const Color(0xFFCBCFD7),
-            inactiveThumbColor: Colors.white,
-            trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
-            thumbIcon: WidgetStateProperty.all(const Icon(null)),
           ),
         ],
       ),

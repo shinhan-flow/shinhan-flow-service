@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shinhan_flow/common/component/bottom_nav_button.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
+import 'package:shinhan_flow/flow/param/trigger/trigger_date_time_param.dart';
 import 'package:shinhan_flow/flow/provider/widget/flow_form_provider.dart';
 import 'package:shinhan_flow/flow/provider/widget/time_form_provider.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
@@ -16,6 +17,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../common/component/default_text_button.dart';
 import '../../common/component/table_calendar.dart';
+import '../../common/component/time_picker.dart';
 import '../../flow/param/enum/flow_type.dart';
 import '../../flow/param/trigger/trigger_param.dart';
 import '../model/enum/time_category.dart';
@@ -40,6 +42,13 @@ class TimeTriggerScreen extends StatelessWidget {
 
                       ref.read(flowFormProvider.notifier).addTrigger(
                           trigger: trigger.toParam() as TriggerBaseParam);
+                      final time = ref.read(timeProvider);
+                      final timeTrigger = TgTimeParam(
+                          type: TriggerType.SpecificTimeTrigger, time: time);
+                      ref
+                          .read(flowFormProvider.notifier)
+                          .addTrigger(trigger: timeTrigger as TriggerBaseParam);
+
                       context.pop();
                     }
                   : null,
@@ -64,6 +73,29 @@ class TimeTriggerScreen extends StatelessWidget {
             slivers: [
               SliverToBoxAdapter(
                 child: _TimeCategoryComponent(),
+              ),
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 24.w, vertical: 12.h),
+                      child: Text(
+                        "시간을 설정해 주세요.",
+                        style: SHFlowTextStyle.form.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 96.h,
+                      child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          child: const CustomTimePicker()),
+                    ),
+                  ],
+                ),
               ),
               SliverFillRemaining(
                 child: Consumer(
@@ -90,7 +122,7 @@ class TimeTriggerScreen extends StatelessWidget {
                     return Container();
                   },
                 ),
-              )
+              ),
             ],
           )),
     );
@@ -128,9 +160,10 @@ class _IterateComponentState extends ConsumerState<_IterateComponent>
   void changeFlowType() {
     log("tabController.index ${tabController.index}");
     int idx = tabController.index;
-    ref
-        .read(tgDateTimeFormProvider.notifier)
-        .update(flowType: idx == 0 ? TriggerType.DayOfWeekTrigger : TriggerType.DayOfMonthTrigger);
+    ref.read(tgDateTimeFormProvider.notifier).update(
+        flowType: idx == 0
+            ? TriggerType.DayOfWeekTrigger
+            : TriggerType.DayOfMonthTrigger);
   }
 
   @override
@@ -400,13 +433,13 @@ class _TimeCategoryComponent extends ConsumerWidget {
     if (flowType != null) {
       switch (flowType) {
         case TimeCategory.normal:
-          title = '조건의 특정 날짜를 선택해보세요!';
+          title = '조건의 시간과 특정 날짜를 선택해보세요!';
           break;
         case TimeCategory.period:
-          title = '조건의 기간을 선택해보세요!';
+          title = '조건의 시간과 기간을 선택해보세요!';
           break;
         case TimeCategory.iterate:
-          title = '조건을 반복하고 싶은\n날짜 또는 요일을 선택해보세요!';
+          title = '조건을 반복하고 싶은\n시간과 날짜 또는 요일을 선택해보세요!';
           break;
         // case TimeCategory.multi:
         //   title = '트리거의 여러 날짜를 선택해보세요!';

@@ -89,7 +89,8 @@ class FlowForm extends _$FlowForm {
   void addTrigger({required TriggerBaseParam trigger}) {
     /// final 로 설정한 List 는 add 를 하지 못하기 때문에 deepCopy 한 후 값 추가
     final triggers = state.triggers.toList();
-    if (trigger.type.isTimeType()) {
+    if (trigger.type.isDateType()) {
+      triggers.removeWhere((t) => t.type.isDateType());
       triggers.removeWhere((t) => t.type.isTimeType());
     } else if (trigger.type.isProductType()) {
       triggers.removeWhere((t) => t.type.isProductType());
@@ -121,7 +122,8 @@ class FlowForm extends _$FlowForm {
   void removeTrigger({required TriggerCategoryType trigger}) {
     final triggers = state.triggers.toList();
     if (trigger == TriggerCategoryType.time) {
-      triggers.removeWhere((a) => a.type.isTimeType());
+      triggers.removeWhere((a) => a.type.isDateType());
+      triggers.removeWhere((t) => t.type.isTimeType());
     } else if (trigger == TriggerCategoryType.transfer) {
       triggers.removeWhere((a) => a.type.isAccountType());
     } else if (trigger == TriggerCategoryType.exchange) {

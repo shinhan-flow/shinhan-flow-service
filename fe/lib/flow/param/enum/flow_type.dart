@@ -41,6 +41,10 @@ enum TriggerType {
 
 extension TriggerExtension on TriggerType {
   bool isTimeType() {
+    return TriggerType.SpecificTimeTrigger == this;
+  }
+
+  bool isDateType() {
     return TriggerType.PeriodDateTrigger == this ||
         TriggerType.SpecificDateTrigger == this ||
         TriggerType.DayOfMonthTrigger == this ||

@@ -25,6 +25,7 @@ class AccountCard extends StatelessWidget {
   final String accountBalance;
   final String lastTransactionDate;
   final String currency;
+  final VoidCallback? onTap;
 
   const AccountCard(
       {super.key,
@@ -41,9 +42,11 @@ class AccountCard extends StatelessWidget {
       required this.oneTimeTransferLimit,
       required this.accountBalance,
       required this.lastTransactionDate,
-      required this.currency});
+      required this.currency,
+      this.onTap});
 
-  factory AccountCard.fromModel({required AccountDetailModel model}) {
+  factory AccountCard.fromModel(
+      {required AccountDetailModel model, VoidCallback? onTap}) {
     final accountBalance =
         FormatUtil.formatNumber(int.parse(model.accountBalance));
 
@@ -62,6 +65,7 @@ class AccountCard extends StatelessWidget {
       accountBalance: accountBalance,
       lastTransactionDate: model.lastTransactionDate,
       currency: model.currency,
+      onTap: onTap,
     );
   }
 
@@ -108,23 +112,22 @@ class AccountCard extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        context.pushNamed(AccountTransferScreen.routeName);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(8.r)),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 12.w, vertical: 4.h),
-                        child: Text(
-                          "이체",
-                          style: SHFlowTextStyle.labelBold
-                              .copyWith(color: Colors.white),
+                    if (onTap != null)
+                      GestureDetector(
+                        onTap: onTap,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(8.r)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 12.w, vertical: 4.h),
+                          child: Text(
+                            "이체",
+                            style: SHFlowTextStyle.labelBold
+                                .copyWith(color: Colors.white),
+                          ),
                         ),
-                      ),
-                    )
+                      )
                   ],
                 ),
                 const Spacer(),

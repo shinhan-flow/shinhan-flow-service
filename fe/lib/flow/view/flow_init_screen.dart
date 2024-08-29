@@ -57,12 +57,24 @@ class FlowInitScreen extends StatelessWidget {
           return BottomNavButton(
               child: DefaultTextButton(
             onPressed: () async {
+              final dateTimeTriggers = ref
+                  .read(flowFormProvider)
+                  .triggers
+                  .where((t) => t.type.isTimeType() || t.type.isDateType())
+                  .toList();
+              for (var t in dateTimeTriggers) {
+                if (t.type == TriggerType.SpecificTimeTrigger) {
+
+                } else {}
+              }
+
               final result = await ref.read(createFlowProvider.future);
               if (result is ErrorModel) {
               } else {
                 if (context.mounted) {
                   context.goNamed(HomeScreen.routeName);
-                  FlashUtil.showFlash(context, '플로우 생성 성공!');
+                  FlashUtil.showFlash(context, '플로우 생성 성공!',
+                      textColor: const Color(0xFF49B7FF));
                 }
               }
             },
@@ -399,7 +411,7 @@ class _FlowInitCard extends ConsumerWidget {
     if (triggerType == TriggerCategoryType.time) {
       final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
       try {
-        final findTrigger = triggers.singleWhere((t) => t.type.isTimeType());
+        final findTrigger = triggers.singleWhere((t) => t.type.isDateType());
 
         switch (findTrigger.type) {
           case TriggerType.SpecificDateTrigger:
