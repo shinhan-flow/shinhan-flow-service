@@ -1,6 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
 enum TriggerCategoryType {
+  @JsonValue("DATE")
+  date('날짜'),
   @JsonValue("TIME")
   time('시간'),
   @JsonValue("TRANSFER")

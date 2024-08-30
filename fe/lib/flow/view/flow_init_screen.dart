@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:shinhan_flow/account/view/account_transfer_screen.dart';
 import 'package:shinhan_flow/action/param/action_balance_notification_param.dart';
 import 'package:shinhan_flow/action/param/action_exchange_param.dart';
 import 'package:shinhan_flow/action/param/action_exchange_rate_notification_param.dart';
@@ -13,6 +14,7 @@ import 'package:shinhan_flow/action/param/action_text_notification_param.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/common/component/default_flashbar.dart';
 import 'package:shinhan_flow/common/component/default_text_button.dart';
+import 'package:shinhan_flow/common/component/time_picker.dart';
 import 'package:shinhan_flow/common/model/default_model.dart';
 import 'package:shinhan_flow/flow/model/enum/action_category.dart';
 import 'package:shinhan_flow/flow/model/enum/trigger_category.dart';
@@ -41,14 +43,45 @@ import '../../action/view/action_transfer_screen.dart';
 import '../../common/component/bottom_nav_button.dart';
 import '../../trigger/view/exchange_trigger_screen.dart';
 import '../../trigger/view/product_trigger_screen.dart';
+import '../model/flow_model.dart';
 import '../param/trigger/trigger_date_time_param.dart';
 import '../param/trigger/trigger_exchange_param.dart';
 import '../param/trigger/trigger_param.dart';
+import 'package:collection/collection.dart';
 
-class FlowInitScreen extends StatelessWidget {
+import 'flow_detail_screen.dart';
+
+final flowIdProvider = StateProvider.autoDispose<int?>((ref) => null);
+
+class FlowInitScreen extends ConsumerStatefulWidget {
   static String get routeName => 'flowInit';
 
-  const FlowInitScreen({super.key});
+  const FlowInitScreen({
+    super.key,
+  });
+
+  @override
+  ConsumerState<FlowInitScreen> createState() => _FlowInitScreenState();
+}
+
+class _FlowInitScreenState extends ConsumerState<FlowInitScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final flowId = ref.read(flowIdProvider);
+    if (flowId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((t) {
+        final result = ref.read(flowDetailProvider(id: flowId));
+        final model = (result as ResponseModel<FlowDetailModel>).data!;
+        ref.read(flowFormProvider.notifier).update(
+              title: model.title,
+              description: model.description,
+              triggers: model.triggers.toList(),
+              actions: model.actions.toList(),
+            );
+      });
+    }
+  }
 
   bool validDate(String date) {
     final now = DateTime.now();
@@ -114,7 +147,7 @@ class FlowInitScreen extends StatelessWidget {
               } else {
                 FlashUtil.showFlash(
                   context,
-                  '날짜 및 시간이 현재 이후 여야 합니다!',
+                  '날짜 및 시간이 현재 이후 이어야 합니다!',
                   textColor: const Color(0xFFe21a1a),
                 );
               }
@@ -166,7 +199,7 @@ class _FlowInitComponent extends ConsumerWidget {
   });
 
   Widget getTriggerAddBtn(
-      BuildContext context, Set<TriggerCategoryType> triggers, WidgetRef ref) {
+      BuildContext context, List<TriggerBaseParam> triggers, WidgetRef ref) {
     return _AddButton(
       onTap: () {
         Set<TriggerCategoryType> tempSelected = {};
@@ -175,18 +208,33 @@ class _FlowInitComponent extends ConsumerWidget {
             isScrollControlled: true,
             context: context,
             builder: (_) {
-              final unSelectedTriggers = TriggerCategoryType.values.toList()
-                ..removeWhere((t) => triggers.contains(t));
-              final cards = unSelectedTriggers
-                  .map((t) => _FlowInitCard(
-                        triggerType: t,
-                        onTap: () {
-                          if (!tempSelected.add(t)) {
-                            tempSelected.remove(t);
-                          }
-                        },
-                      ))
-                  .toList();
+              final date =
+                  triggers.firstWhereOrNull((t) => t.type.isDateType());
+              final time =
+                  triggers.firstWhereOrNull((t) => t.type.isTimeType());
+              final product =
+                  triggers.firstWhereOrNull((t) => t.type.isProductType());
+              final exchange =
+                  triggers.firstWhereOrNull((t) => t.type.isExchangeType());
+              final account =
+                  triggers.firstWhereOrNull((t) => t.type.isAccountType());
+
+              final List<TriggerCategoryType> unSelected = [];
+              if (date == null) {
+                unSelected.add(TriggerCategoryType.date);
+              }
+              if (time == null) {
+                unSelected.add(TriggerCategoryType.time);
+              }
+              if (product == null) {
+                unSelected.add(TriggerCategoryType.product);
+              }
+              if (exchange == null) {
+                unSelected.add(TriggerCategoryType.exchange);
+              }
+              if (account == null) {
+                unSelected.add(TriggerCategoryType.transfer);
+              }
 
               return StatefulBuilder(
                   builder: (BuildContext context, StateSetter setState) {
@@ -209,33 +257,48 @@ class _FlowInitComponent extends ConsumerWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (_, idx) {
                             return _FlowInitCard(
-                              triggerType: unSelectedTriggers[idx],
+                              triggerType: unSelected[idx],
                               onTap: () {
-                                setState(() {
-                                  if (!tempSelected
-                                      .add(unSelectedTriggers[idx])) {
-                                    tempSelected
-                                        .remove(unSelectedTriggers[idx]);
-                                  }
-                                });
+                                context.pop();
+                                if (unSelected[idx] ==
+                                    TriggerCategoryType.date) {
+                                  context
+                                      .pushNamed(TimeTriggerScreen.routeName);
+                                } else if (unSelected[idx] ==
+                                    TriggerCategoryType.time) {
+                                  context
+                                      .pushNamed(TimeTriggerScreen.routeName);
+                                } else if (unSelected[idx] ==
+                                    TriggerCategoryType.exchange) {
+                                  context.pushNamed(
+                                      ExchangeTriggerScreen.routeName);
+                                } else if (unSelected[idx] ==
+                                    TriggerCategoryType.product) {
+                                  context.pushNamed(
+                                      ProductTriggerScreen.routeName);
+                                } else if (unSelected[idx] ==
+                                    TriggerCategoryType.transfer) {
+                                  context.pushNamed(
+                                      AccountTriggerScreen.routeName);
+                                }
                               },
-                              isSelected: tempSelected
-                                  .contains(unSelectedTriggers[idx]),
+                              // isSelected: tempSelected
+                              //     .contains(unSelectedTriggers[idx]),
                             );
                           },
                           separatorBuilder: (_, idx) => SizedBox(height: 12.h),
-                          itemCount: cards.length),
+                          itemCount: unSelected.length),
                       SizedBox(height: 20.h),
                       Align(
                         child: DefaultTextButton(
                           onPressed: tempSelected.isNotEmpty
                               ? () {
-                                  triggers.addAll(tempSelected);
-                                  final newTriggers = triggers.toSet();
-
-                                  ref
-                                      .read(triggerCategoryProvider.notifier)
-                                      .update((t) => newTriggers);
+                                  // triggers.addAll(tempSelected);
+                                  // final newTriggers = triggers.toSet();
+                                  //
+                                  // ref
+                                  //     .read(triggerCategoryProvider.notifier)
+                                  //     .update((t) => newTriggers);
                                   context.pop();
                                 }
                               : null,
@@ -254,7 +317,7 @@ class _FlowInitComponent extends ConsumerWidget {
   }
 
   Widget getActionAddBtn(
-      BuildContext context, Set<ActionCategoryType> triggers, WidgetRef ref) {
+      BuildContext context, List<ActionBaseParam> actions, WidgetRef ref) {
     return _AddButton(
       onTap: () {
         Set<ActionCategoryType> tempSelected = {};
@@ -263,18 +326,23 @@ class _FlowInitComponent extends ConsumerWidget {
             isScrollControlled: true,
             context: context,
             builder: (_) {
-              final unSelectedTriggers = ActionCategoryType.values.toList()
-                ..removeWhere((t) => triggers.contains(t));
-              final cards = unSelectedTriggers
-                  .map((t) => _FlowInitCard(
-                        actionType: t,
-                        onTap: () {
-                          if (!tempSelected.add(t)) {
-                            tempSelected.remove(t);
-                          }
-                        },
-                      ))
-                  .toList();
+              final exchange =
+                  actions.firstWhereOrNull((t) => t.type.isExchangeType());
+              final notification =
+                  actions.firstWhereOrNull((t) => t.type.isNotificationType());
+              final transfer =
+                  actions.firstWhereOrNull((t) => t.type.isTransferType());
+
+              final List<ActionCategoryType> unSelected = [];
+              if (exchange == null) {
+                unSelected.add(ActionCategoryType.exchange);
+              }
+              if (notification == null) {
+                unSelected.add(ActionCategoryType.notification);
+              }
+              if (transfer == null) {
+                unSelected.add(ActionCategoryType.transfer);
+              }
 
               return StatefulBuilder(
                   builder: (BuildContext context, StateSetter setState) {
@@ -287,7 +355,7 @@ class _FlowInitComponent extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        "추가로 선택하실 행동은 무엇인가요?",
+                        "추가로 선택하실 조건은 무엇인가요?",
                         style: SHFlowTextStyle.subTitle,
                       ),
                       SizedBox(height: 20.h),
@@ -297,33 +365,40 @@ class _FlowInitComponent extends ConsumerWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (_, idx) {
                             return _FlowInitCard(
-                              actionType: unSelectedTriggers[idx],
+                              actionType: unSelected[idx],
                               onTap: () {
-                                setState(() {
-                                  if (!tempSelected
-                                      .add(unSelectedTriggers[idx])) {
-                                    tempSelected
-                                        .remove(unSelectedTriggers[idx]);
-                                  }
-                                });
+                                context.pop();
+                                if (unSelected[idx] ==
+                                    ActionCategoryType.transfer) {
+                                  context.pushNamed(
+                                      ActionExchangeScreen.routeName);
+                                } else if (unSelected[idx] ==
+                                    ActionCategoryType.notification) {
+                                  context.pushNamed(
+                                      ActionNotificationScreen.routeName);
+                                } else if (unSelected[idx] ==
+                                    ActionCategoryType.exchange) {
+                                  context.pushNamed(
+                                      ActionTransferScreen.routeName);
+                                }
                               },
-                              isSelected: tempSelected
-                                  .contains(unSelectedTriggers[idx]),
+                              // isSelected: tempSelected
+                              //     .contains(unSelectedTriggers[idx]),
                             );
                           },
                           separatorBuilder: (_, idx) => SizedBox(height: 12.h),
-                          itemCount: cards.length),
+                          itemCount: unSelected.length),
                       SizedBox(height: 20.h),
                       Align(
                         child: DefaultTextButton(
                           onPressed: tempSelected.isNotEmpty
                               ? () {
-                                  triggers.addAll(tempSelected);
-                                  final newTriggers = triggers.toSet();
-
-                                  ref
-                                      .read(actionCategoryProvider.notifier)
-                                      .update((t) => newTriggers);
+                                  // triggers.addAll(tempSelected);
+                                  // final newTriggers = triggers.toSet();
+                                  //
+                                  // ref
+                                  //     .read(triggerCategoryProvider.notifier)
+                                  //     .update((t) => newTriggers);
                                   context.pop();
                                 }
                               : null,
@@ -343,14 +418,73 @@ class _FlowInitComponent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final flowId = ref.watch(flowIdProvider);
+
     final visibleDelete = ref.watch(showFlowDeleteProvider(property));
     final triggers = property == FlowProperty.trigger
         ? ref.watch(triggerCategoryProvider)
         : ref.watch(actionCategoryProvider);
 
-    late final List<_FlowInitCard> cards;
+    final form = ref.watch(flowFormProvider);
 
+    /// 트리거 모으기
+    final timeTrigger =
+        form.triggers.firstWhereOrNull((t) => t.type.isTimeType());
+    final productTrigger =
+        form.triggers.firstWhereOrNull((t) => t.type.isProductType());
+    final accountTrigger =
+        form.triggers.firstWhereOrNull((t) => t.type.isAccountType());
+    final exchangeTrigger =
+        form.triggers.firstWhereOrNull((t) => t.type.isExchangeType());
+    final dateTrigger =
+        form.triggers.firstWhereOrNull((t) => t.type.isDateType());
+
+    /// 액션 모으기
+    final transferAction =
+        form.actions.firstWhereOrNull((t) => t.type.isTransferType());
+    final exchangeAction =
+        form.actions.firstWhereOrNull((t) => t.type.isExchangeType());
+    final notificationAction =
+        form.actions.firstWhereOrNull((t) => t.type.isNotificationType());
+    final formTriggers = [
+      dateTrigger,
+      timeTrigger,
+      productTrigger,
+      accountTrigger,
+      exchangeTrigger
+    ];
+    final formActions = [
+      transferAction,
+      exchangeAction,
+      notificationAction,
+    ];
+
+    late final List<_FlowInitCard> cards;
+    List<GestureDetector> tCards = [];
+    List<GestureDetector> aCards = [];
     if (property == FlowProperty.trigger) {
+      // 트리거 카드 주입
+      tCards = formTriggers
+          .where((t) => t != null)
+          .map((t) => GestureDetector(
+                onTap: () {
+                  if (t.type.isTimeType() || t.type.isDateType()) {
+                    context.pushNamed(TimeTriggerScreen.routeName);
+                  } else if (t.type.isAccountType()) {
+                    context.pushNamed(AccountTriggerScreen.routeName);
+                  } else if (t.type.isExchangeType()) {
+                    context.pushNamed(ExchangeTriggerScreen.routeName);
+                  } else if (t.type.isProductType()) {
+                    context.pushNamed(ProductTriggerScreen.routeName);
+                  }
+                },
+                child: TriggerCard(
+                  trigger: t!,
+                  visibleDelete: visibleDelete,
+                ),
+              ))
+          .toList();
+
       triggers as Set<TriggerCategoryType>;
       cards = triggers
           .map((t) => _FlowInitCard(
@@ -370,21 +504,43 @@ class _FlowInitComponent extends ConsumerWidget {
               ))
           .toList();
     } else {
-      triggers as Set<ActionCategoryType>;
-      cards = triggers
-          .map((t) => _FlowInitCard(
-                actionType: t,
+      // 액션 카드 주입
+      aCards = formActions
+          .where((t) => t != null)
+          .map((t) => GestureDetector(
                 onTap: () {
-                  if (ActionCategoryType.notification == t) {
+                  if (t.type.isNotificationType()) {
                     context.pushNamed(ActionNotificationScreen.routeName);
-                  } else if (ActionCategoryType.exchange == t) {
+                  } else if (t.type.isExchangeType()) {
                     context.pushNamed(ActionExchangeScreen.routeName);
                   } else {
                     context.pushNamed(ActionTransferScreen.routeName);
                   }
                 },
-                visibleDelete: visibleDelete,
+                child: ActionCard(
+                  action: t!,
+                  visibleDelete: visibleDelete,
+                ),
               ))
+          .toList();
+
+      triggers as Set<ActionCategoryType>;
+      cards = triggers
+          .map(
+            (t) => _FlowInitCard(
+              actionType: t,
+              onTap: () {
+                if (ActionCategoryType.notification == t) {
+                  context.pushNamed(ActionNotificationScreen.routeName);
+                } else if (ActionCategoryType.exchange == t) {
+                  context.pushNamed(ActionExchangeScreen.routeName);
+                } else {
+                  context.pushNamed(ActionTransferScreen.routeName);
+                }
+              },
+              visibleDelete: visibleDelete,
+            ),
+          )
           .toList();
     }
 
@@ -416,14 +572,16 @@ class _FlowInitComponent extends ConsumerWidget {
           padding: EdgeInsets.zero,
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemBuilder: (_, idx) => cards[idx],
+          itemBuilder: (_, idx) =>
+              property == FlowProperty.trigger ? tCards[idx] : aCards[idx],
           separatorBuilder: (_, idx) => SizedBox(height: 12.h),
-          itemCount: cards.length,
+          itemCount:
+              property == FlowProperty.trigger ? tCards.length : aCards.length,
         ),
-        if (cards.length != 4 && property == FlowProperty.trigger)
-          getTriggerAddBtn(context, triggers as Set<TriggerCategoryType>, ref),
-        if (cards.length != 3 && property == FlowProperty.action)
-          getActionAddBtn(context, triggers as Set<ActionCategoryType>, ref)
+        if (tCards.length != 4 && property == FlowProperty.trigger)
+          getTriggerAddBtn(context, form.triggers, ref),
+        if (aCards.length != 3 && property == FlowProperty.action)
+          getActionAddBtn(context, form.actions, ref)
       ],
     );
   }
@@ -449,139 +607,6 @@ class _FlowInitCard extends ConsumerWidget {
     String content = triggerType != null
         ? '${triggerType!.name} 조건 생성 하기'
         : '${actionType!.name} 액션 생성 하기';
-    if (triggerType == TriggerCategoryType.time) {
-      final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
-      try {
-        final findTrigger = triggers.singleWhere((t) => t.type.isDateType());
-
-        switch (findTrigger.type) {
-          case TriggerType.SpecificDateTrigger:
-            final param = (findTrigger as TgSpecificDateParam);
-            content = "${param.localDate}";
-            break;
-          case TriggerType.PeriodDateTrigger:
-            final param = (findTrigger as TgPeriodDateParam);
-            content = "${param.startDate}부터\n${param.endDate}까지";
-            break;
-          case TriggerType.DayOfWeekTrigger:
-            final param = (findTrigger as TgDayOfWeekParam);
-            final dayOfWeek = param.daysOfWeek
-                ?.map((d) => d.name)
-                .reduce((v, e) => "$v, ${e}");
-            content = "매주 $dayOfWeek 반복";
-            break;
-          case TriggerType.DayOfMonthTrigger:
-            final param = (findTrigger as TgDayOfMonthParam);
-            final dayOfWeek =
-                param.days?.map((d) => d.toString()).reduce((v, e) => "$v, $e");
-            content = "매월 $dayOfWeek일 반복";
-            break;
-          default:
-            break;
-        }
-      } on Error catch (e) {
-        log("Error ${e}");
-      }
-    } else if (triggerType == TriggerCategoryType.product) {
-      final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
-      try {
-        final findTrigger = triggers
-            .singleWhere((t) => t.type == TriggerType.InterestRateTrigger);
-        final param = (findTrigger as TgProductParam);
-        if (param.accountProduct != null) {
-          content = "${param.accountProduct!.name} 금리 ${param.rate}%";
-        }
-      } on Error catch (e) {
-        log("Error ${e}");
-      }
-    } else if (triggerType == TriggerCategoryType.exchange) {
-      final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
-      try {
-        final findTrigger = triggers
-            .singleWhere((t) => t.type == TriggerType.ExchangeRateTrigger);
-        final param = (findTrigger as TgExchangeParam);
-        if (param.currency != null) {
-          content = "${param.currency!.displayName}가 ${param.rate} 이하";
-        }
-      } on Error catch (e) {
-        log("Error ${e}");
-      }
-    } else if (triggerType == TriggerCategoryType.transfer) {
-      final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
-      try {
-        final findTrigger = triggers.singleWhere((t) => t.type.isAccountType());
-
-        switch (findTrigger.type) {
-          case TriggerType.BalanceTrigger:
-            final param = (findTrigger as TgAccountBalanceParam);
-            content =
-                '${param.account} ${param.balance}원 ${param.condition.name}';
-            break;
-          case TriggerType.DepositTrigger:
-            final param = (findTrigger as TgAccountDepositParam);
-            content = '${param.account} ${param.amount}원';
-
-            break;
-          case TriggerType.TransferTrigger:
-            final param = (findTrigger as TgAccountTransferParam);
-            content =
-                '${param.fromAccount} ${param.toAccount} ${param.amount}원';
-
-            break;
-          case TriggerType.WithDrawTrigger:
-            final param = (findTrigger as TgAccountWithdrawParam);
-            content = '${param.account} ${param.amount}원';
-            break;
-          default:
-            break;
-        }
-      } on Error catch (e) {
-        log("Error ${e}");
-      }
-    }
-
-    if (actionType == ActionCategoryType.notification) {
-      final actions = ref.watch(flowFormProvider.select((f) => f.actions));
-      try {
-        final findAction =
-            actions.singleWhere((t) => t.type.isNotificationType());
-        if (findAction.type == ActionType.BalanceNotificationAction) {
-          final param = (findAction as AcBalanceNotificationParam);
-          if (param.account.isNotEmpty) {
-            content = "계좌번호 ${param.account} 잔액 알림";
-          }
-        } else if (findAction.type ==
-            ActionType.ExchangeRateNotificationAction) {
-          final param = (findAction as AcExchangeRateNotificationParam);
-          content = '${param.currency.displayName} 환전 알림';
-        } else if (findAction.type == ActionType.TextNotificationAction) {
-          final param = (findAction as AcTextNotificationParam);
-          content = '${param.text} 알림';
-        }
-      } on Error catch (e) {
-        log("Error ${e}");
-      }
-    } else if (actionType == ActionCategoryType.transfer) {
-      final actions = ref.watch(flowFormProvider.select((a) => a.actions));
-      try {
-        final findAction =
-            actions.singleWhere((t) => t.type == ActionType.TransferAction);
-        final param = (findAction as AcTransferParam);
-        content = "${param.holder}에게 ${param.amount} 원 송금";
-      } on Error catch (e) {
-        log("Error ${e}");
-      }
-    } else if (actionType == ActionCategoryType.exchange) {
-      final actions = ref.watch(flowFormProvider.select((a) => a.actions));
-      try {
-        final findAction =
-            actions.singleWhere((t) => t.type == ActionType.ExchangeAction);
-        final param = (findAction as AcExchangeParam);
-        content = "${param.currency.name} ${param.amount} 원 환전";
-      } on Error catch (e) {
-        log("Error ${e}");
-      }
-    }
 
     return ConstrainedBox(
       constraints: BoxConstraints.tight(Size(double.infinity, 100.h)),
@@ -630,18 +655,18 @@ class _FlowInitCard extends ConsumerWidget {
                         ref
                             .read(triggerCategoryProvider.notifier)
                             .update((t) => triggers.toSet());
-                        ref
-                            .read(flowFormProvider.notifier)
-                            .removeTrigger(trigger: triggerType!);
+                        // ref
+                        //     .read(flowFormProvider.notifier)
+                        //     .removeTrigger(trigger: triggerType!);
                       } else {
                         final triggers = ref.read(actionCategoryProvider);
                         triggers.remove(actionType);
                         ref
                             .read(actionCategoryProvider.notifier)
                             .update((t) => triggers.toSet());
-                        ref
-                            .read(flowFormProvider.notifier)
-                            .removeAction(action: actionType!);
+                        // ref
+                        //     .read(flowFormProvider.notifier)
+                        //     .removeAction(action: actionType!);
                       }
                     },
                     child: child!,
