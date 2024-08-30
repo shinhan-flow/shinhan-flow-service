@@ -26,7 +26,7 @@ system_prompt = [
 
 messages = [
     {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "1+1?"},
+    {"role": "user", "content": "의자==1, 책상==2, 의자*2?"},
 ]
 
 # 첫 번째 요청 보내기
@@ -36,7 +36,7 @@ response = client.chat.completions.create(model="gpt-4o", messages=messages)
 messages.append({"role": "assistant", "content": response.choices[0].message.content})
 
 # 다음 사용자 요청 추가
-messages.append({"role": "user", "content": "2*2?"})
+messages.append({"role": "user", "content": "의자+책상?"})
 
 # 두 번째 요청 보내기
 response = client.chat.completions.create(model="gpt-4o", messages=messages)

@@ -31,7 +31,7 @@ def main():
         type=str,
         help="enter user's request",
         required=False,
-        default="매달 25일에 나에게 사랑해 라는 알림을 줘",
+        default="매달 33일에 나에게 사랑해 라는 알림을 줘",
     )
     args = parser.parse_args()
 
