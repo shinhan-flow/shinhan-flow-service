@@ -1,11 +1,17 @@
 package com.ssafy.shinhanflow.auth.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.shinhanflow.auth.dto.UserDetailDto;
 import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
 import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
+import com.ssafy.shinhanflow.domain.entity.MemberEntity;
+import com.ssafy.shinhanflow.repository.MemberRepository;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
 	private final JWTUtil jwtUtil;
+	private final MemberRepository memberRepository;
 
 	@Value("${jwt.access.expire-time}")
 	private long accessTokenExpireTime;
@@ -43,5 +50,22 @@ public class AuthService {
 		String role = jwtUtil.getRole(refreshToken);
 
 		return jwtUtil.createJwt("access", userId, role, accessTokenExpireTime);
+	}
+
+	public UserDetailDto getUserInfoFromToken(String token) {
+
+		long userId = jwtUtil.getId(token);
+
+		MemberEntity memberEntity = memberRepository.findById(userId)
+			.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_FOUND));
+
+		LocalDate localDate = memberEntity.getCreatedAt().toLocalDate();
+		String createdAt = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+		return UserDetailDto.builder()
+			.name(memberEntity.getName())
+			.email(memberEntity.getEmail())
+			.createdAt(createdAt)
+			.build();
 	}
 }
