@@ -38,8 +38,6 @@ public class FlowGeneratorService {
 
 		log.info("flowGeneratorLambdaFunctionResponseBodyDto: {}",
 			flowGeneratorLambdaFunctionResponseBodyDto.toString());
-		log.info("flowGeneratorLambdaFunctionResponseBodyDto.flow(): {}",
-			flowGeneratorLambdaFunctionResponseBodyDto.flow().toString());
 		return flowGeneratorLambdaFunctionResponseBodyDto.flow();
 	}
 }
