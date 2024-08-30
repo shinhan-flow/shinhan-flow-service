@@ -111,13 +111,6 @@ class AccountCard extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    //
-                    // Text(
-                    //   bankName,
-                    //   style: SHFlowTextStyle.subTitle.copyWith(
-                    //     color: Colors.white,
-                    //   ),
-                    // ),
                   ],
                 ),
                 SizedBox(height: 2.h),
