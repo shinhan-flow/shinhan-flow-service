@@ -35,3 +35,20 @@ class BankListBaseModel<T> {
     return _$BankListBaseModelFromJson(json, fromJsonT);
   }
 }
+
+
+
+@JsonSerializable(
+  genericArgumentFactories: true,
+)
+class RecListModel<T> {
+  final String totalCount;
+  final List<T> list;
+
+  RecListModel({required this.list, required this.totalCount});
+
+  factory RecListModel.fromJson(
+      Map<String, dynamic> json, T Function(Object? json) fromJsonT) {
+    return _$RecListModelFromJson(json, fromJsonT);
+  }
+}

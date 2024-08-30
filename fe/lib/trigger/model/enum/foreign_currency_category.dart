@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
 enum CurrencyType {
-  // @JsonValue("KRW")
-  // KRW('한국(원화)'),
+  @JsonValue("KRW")
+  KRW('한국(원화)'),
   @JsonValue("USD")
   USD('미국(달러)'),
   @JsonValue("EUR")

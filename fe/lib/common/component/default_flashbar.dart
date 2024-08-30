@@ -16,9 +16,9 @@ class FlashUtil {
         await controller.dismiss();
       });
       return DefaultFlash(
-
         controller: controller,
         content: content,
+        textColor: textColor,
       );
     });
   }
@@ -27,13 +27,14 @@ class FlashUtil {
 class DefaultFlash extends StatelessWidget {
   final FlashController controller;
   final String content;
-  final Color textColor;
+  final Color? textColor;
 
-  const DefaultFlash(
-      {super.key,
-      required this.controller,
-      required this.content,
-      this.textColor = const Color(0xFF49B7FF)});
+  const DefaultFlash({
+    super.key,
+    required this.controller,
+    required this.content,
+    this.textColor = const Color(0xFF49B7FF),
+  });
 
   @override
   Widget build(BuildContext context) {

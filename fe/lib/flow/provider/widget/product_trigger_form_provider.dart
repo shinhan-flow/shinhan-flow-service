@@ -20,24 +20,24 @@ part 'product_trigger_form_provider.g.dart';
 class TgProductFormModel extends TgProductParam with BaseFormModel {
   TgProductFormModel({
     bool valid = false,
-    super.product,
-    super.interestRate,
+    super.accountProduct,
+    super.rate,
   }) {
     this.valid = valid;
   }
 
   TgProductFormModel copyWith({
-    ProductProperty? product,
+    AccountProductType? product,
     double? interestRate,
     TriggerType? type,
   }) {
-    final validProduct = product ?? this.product;
-    final validInterestRate = interestRate ?? this.interestRate;
+    final validProduct = product ?? this.accountProduct;
+    final validInterestRate = interestRate ?? this.rate;
     final valid = validProduct != null && validInterestRate != null;
     return TgProductFormModel(
       valid: valid,
-      product: product ?? this.product,
-      interestRate: interestRate ?? this.interestRate,
+      accountProduct: product ?? this.accountProduct,
+      rate: interestRate ?? this.rate,
     );
   }
 
@@ -55,7 +55,7 @@ class TgProductForm extends _$TgProductForm {
   }
 
   void update({
-    ProductProperty? property,
+    AccountProductType? property,
     double? interestRate,
   }) {
     state = state.copyWith(

@@ -1,21 +1,49 @@
+import 'dart:developer';
+
+import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
+import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shinhan_flow/account/provider/account_provider.dart';
+import 'package:shinhan_flow/account/view/account_transaction_history_screen.dart';
 import 'package:shinhan_flow/auth/provider/auth_provider.dart';
 import 'package:shinhan_flow/auth/view/login_screen.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
+import 'package:shinhan_flow/common/component/sliver_pagination_list_view.dart';
 import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
 import 'package:shinhan_flow/product/view/product_account_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 import 'package:shinhan_flow/util/util.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'account/component/account_card.dart';
+import 'account/model/account_model.dart';
+import 'account/view/account_transfer_screen.dart';
+import 'common/model/bank_model.dart';
+import 'common/model/default_model.dart';
+import 'flow/model/flow_model.dart';
+import 'flow/provider/flow_provider.dart';
+
+class HomeScreen extends StatefulWidget {
   static String get routeName => 'home';
 
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +122,7 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: NestedScrollView(
+          controller: _scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
               DefaultAppBar(
@@ -151,14 +180,33 @@ class HomeScreen extends StatelessWidget {
                   right: 28.w,
                   bottom: 12.h,
                 ),
-                sliver: SliverList.separated(
-                  itemBuilder: (_, idx) => FlowCard(),
-                  separatorBuilder: (_, idx) => SizedBox(
-                    height: 12.h,
-                  ),
-                  itemCount: 10,
+                sliver: DisposeSliverPaginationListView(
+                  provider: flowProvider,
+                  itemBuilder: (BuildContext _, int idx, Base pModel) {
+                    final model = pModel as FlowModel;
+                    return FlowCard.fromModel(
+                      model: model,
+                    );
+                  },
+                  skeleton: Container(),
+                  controller: _scrollController,
+                  emptyWidget: Container(),
                 ),
               ),
+              // SliverPadding(
+              //   padding: EdgeInsets.only(
+              //     left: 28.w,
+              //     right: 28.w,
+              //     bottom: 12.h,
+              //   ),
+              //   sliver: SliverList.separated(
+              //     itemBuilder: (_, idx) => FlowCard(),
+              //     separatorBuilder: (_, idx) => SizedBox(
+              //       height: 12.h,
+              //     ),
+              //     itemCount: 10,
+              //   ),
+              // ),
             ],
           )),
     );
@@ -186,57 +234,57 @@ class _AccountCardComponent extends ConsumerWidget {
               },
               child: Text("수시 입출금 상품")),
           Text(
-            '금융정보를 알려드려요',
+            '금융 정보를 알려드려요',
             style: SHFlowTextStyle.subTitle,
           ),
           SizedBox(height: 12.h),
-          Container(
-            padding: EdgeInsets.all(18.r),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.r),
-                color: const Color(0xFF3F73FF)),
-            child: Row(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey,
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              final result = ref.watch(accountListProvider);
+              if (result is LoadingModel) {
+                return CircularProgressIndicator();
+              } else if (result is ErrorModel) {
+                return Text("error");
+              }
+              final modelList = (result
+                      as ResponseModel<BankListBaseModel<AccountDetailModel>>)
+                  .data!
+                  .rec;
+              if (modelList.isEmpty) {
+                return InkWell(
+                  onTap: () {
+                    context.pushNamed(ProductAccountScreen.routeName);
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
+                    decoration: BoxDecoration(
+                        color: Colors.blueGrey,
+                        borderRadius: BorderRadius.circular(12.r)),
+                    child: Text(
+                      '입출금 계좌 만들러가기',
+                      style: SHFlowTextStyle.subTitle
+                          .copyWith(color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                  width: 98.r,
-                  height: 98.r,
+                );
+              }
+
+              final model = modelList.first;
+              return GestureDetector(
+                onTap: () {
+                  context.pushNamed(AccountTransactionHistoryScreen.routeName);
+                },
+                child: AccountCard.fromModel(
+                  model: model,
+                  onTap: () {
+                    context.pushNamed(AccountTransferScreen.routeName,
+                        extra: model);
+                  },
                 ),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        "저축예금",
-                        style: SHFlowTextStyle.subTitle.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        "110-123-123456",
-                        style: SHFlowTextStyle.subTitle.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
-                      Text(
-                        "10,000원",
-                        style: SHFlowTextStyle.subTitle.copyWith(
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.end,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           )
         ],
       ),
@@ -309,11 +357,11 @@ class QuickCard extends StatelessWidget {
   }
 }
 
-class _FlowComponent extends StatelessWidget {
+class _FlowComponent extends ConsumerWidget {
   const _FlowComponent({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
       child: Column(
@@ -335,15 +383,35 @@ class _FlowComponent extends StatelessWidget {
 }
 
 class FlowCard extends StatefulWidget {
-  const FlowCard({super.key});
+  final int id;
+  final int memberId;
+  final String title;
+  final String description;
+  bool enable;
+
+  FlowCard(
+      {super.key,
+      required this.memberId,
+      required this.title,
+      required this.description,
+      required this.enable,
+      required this.id});
+
+  factory FlowCard.fromModel({required FlowModel model}) {
+    return FlowCard(
+      memberId: model.memberId,
+      title: model.title,
+      description: model.description,
+      enable: model.enable,
+      id: model.id,
+    );
+  }
 
   @override
   State<FlowCard> createState() => _FlowCardState();
 }
 
 class _FlowCardState extends State<FlowCard> {
-  bool isOn = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -359,7 +427,7 @@ class _FlowCardState extends State<FlowCard> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "Flow 제목Flow 제목Flow 제목Flow 제목",
+                  widget.title,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: SHFlowTextStyle.subTitle.copyWith(
@@ -368,7 +436,7 @@ class _FlowCardState extends State<FlowCard> {
                 ),
                 SizedBox(height: 12.h),
                 Text(
-                  "Flow 내용Flow 내용Flow 내용Flow 내용Flow 내용Flow 내용",
+                  widget.description,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: SHFlowTextStyle.labelSmall.copyWith(
@@ -379,19 +447,27 @@ class _FlowCardState extends State<FlowCard> {
             ),
           ),
           SizedBox(width: 24.w),
-          Switch(
-            value: isOn,
-            onChanged: (v) {
-              setState(() {
-                isOn = v;
-              });
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              return Switch(
+                value: widget.enable,
+                onChanged: (v) async {
+                  final result = await ref
+                      .read(toggleFlowProvider(flowId: widget.id).future);
+                  if (result is ErrorModel) {
+                  } else {
+                    widget.enable = (result as ResponseModel<bool>).data!;
+                  }
+                  setState(() {});
+                },
+                activeColor: Colors.white,
+                activeTrackColor: const Color(0xFF0046FF),
+                inactiveTrackColor: const Color(0xFFCBCFD7),
+                inactiveThumbColor: Colors.white,
+                trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
+                thumbIcon: WidgetStateProperty.all(const Icon(null)),
+              );
             },
-            activeColor: Colors.white,
-            activeTrackColor: const Color(0xFF0046FF),
-            inactiveTrackColor: const Color(0xFFCBCFD7),
-            inactiveThumbColor: Colors.white,
-            trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
-            thumbIcon: WidgetStateProperty.all(const Icon(null)),
           ),
         ],
       ),

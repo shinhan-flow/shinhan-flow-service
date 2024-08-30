@@ -42,44 +42,70 @@ class ProductAccountScreen extends StatelessWidget {
           },
           body: CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(
-                child: Consumer(
-                  builder:
-                      (BuildContext context, WidgetRef ref, Widget? child) {
-                    final result = ref.watch(productAccountProvider);
-                    if (result is LoadingModel) {
-                      return const CircularProgressIndicator();
-                    } else if (result is ErrorModel) {
-                      return Text("에러");
-                    }
-                    final modelList =
-                        (result as ResponseModel<List<ProductBankAccountModel>>)
-                            .data!;
+              Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  final result = ref.watch(productAccountProvider);
+                  if (result is LoadingModel) {
+                    return SliverToBoxAdapter(
+                        child: const CircularProgressIndicator());
+                  } else if (result is ErrorModel) {
+                    return const SliverToBoxAdapter(child: Text("에러"));
+                  }
+                  final modelList =
+                      (result as ResponseModel<List<ProductBankAccountModel>>)
+                          .data!;
+                  return SliverPadding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                    sliver: SliverList.builder(
+                        itemCount: modelList.length,
+                        itemBuilder: (_, idx) {
+                          if (modelList[idx].products.isEmpty) {
+                            return Container();
+                          }
 
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 24.w, vertical: 16.h),
-                      itemBuilder: (_, idx) {
-                        if(modelList[idx].products.isEmpty) {
-                          return Container();
-                        }
-                        return _BankProductComponent.fromModel(
-                            model: modelList[idx]);
-                      },
-                      itemCount: modelList.length,
-                    );
-                  },
-                ),
+                          return _BankProductComponent.fromModel(
+                              model: modelList[idx]);
+                        }),
+                  );
+                },
               ),
-
+              // SliverToBoxAdapter(
+              //   child: Consumer(
+              //     builder:
+              //         (BuildContext context, WidgetRef ref, Widget? child) {
+              //       final result = ref.watch(productAccountProvider);
+              //       if (result is LoadingModel) {
+              //         return const CircularProgressIndicator();
+              //       } else if (result is ErrorModel) {
+              //         return Text("에러");
+              //       }
+              //       final modelList =
+              //           (result as ResponseModel<List<ProductBankAccountModel>>)
+              //               .data!;
+              //
+              //       return ListView.builder(
+              //         shrinkWrap: true,
+              //         physics: const NeverScrollableScrollPhysics(),
+              //         padding: EdgeInsets.symmetric(
+              //             horizontal: 24.w, vertical: 16.h),
+              //         itemBuilder: (_, idx) {
+              //           if (modelList[idx].products.isEmpty) {
+              //             return Container();
+              //           }
+              //           return _BankProductComponent.fromModel(
+              //               model: modelList[idx]);
+              //         },
+              //         itemCount: modelList.length,
+              //       );
+              //     },
+              //   ),
+              // ),
             ],
           )),
     );
   }
 }
-
 
 class _BankProductComponent extends ConsumerWidget {
   final BankType bankType;
@@ -215,6 +241,7 @@ class _ProductCard extends ConsumerWidget {
                                       FlashUtil.showFlash(
                                         context,
                                         '계좌 생성을 성공하였습니다!',
+                                        textColor: const Color(0xFF49B7FF),
                                       );
                                     }
                                   }

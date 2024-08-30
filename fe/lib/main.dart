@@ -80,7 +80,7 @@ Future<void> getFcmToken(WidgetRef ref) async {
   } else {
     token = await messaging.getToken();
   }
-  // ref.read(fcmTokenProvider.notifier).update((state) => token);
+  ref.read(fcmTokenProvider.notifier).update((state) => token);
   print("FCM Token: $token");
   log('FCM Token: $token');
 }

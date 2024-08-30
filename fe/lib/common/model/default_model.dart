@@ -7,6 +7,16 @@ import '../logger/custom_logger.dart';
 
 part 'default_model.g.dart';
 
+abstract class Base {}
+
+abstract class IModelWithId extends Base {
+  final int id;
+
+  IModelWithId({
+    required this.id,
+  });
+}
+
 abstract class BaseModel {}
 
 class LoadingModel extends BaseModel {}
@@ -123,7 +133,7 @@ class PaginationModel<T> extends BaseModel {
   });
 
   PaginationModel<T> copyWith({
-    int? start_index,
+    // int? start_index,
     int? totalPage,
     int? nowPage,
     List<T>? pageContent,

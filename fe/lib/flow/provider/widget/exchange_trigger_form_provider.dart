@@ -23,7 +23,7 @@ class TgExchangeFormModel extends TgExchangeParam with BaseFormModel {
   TgExchangeFormModel({
     bool valid = false,
     super.currency = CurrencyType.USD,
-    super.exRate = 1300,
+    super.rate = 1300,
   }) {
     this.valid = valid;
   }
@@ -33,12 +33,12 @@ class TgExchangeFormModel extends TgExchangeParam with BaseFormModel {
     double? exRate,
   }) {
     final validCurrency = currency ?? this.currency;
-    final validExRate = exRate ?? this.exRate;
+    final validExRate = exRate ?? this.rate;
     final valid = validCurrency != null && validExRate != null;
     return TgExchangeFormModel(
       valid: valid,
       currency: currency ?? this.currency,
-      exRate: exRate ?? this.exRate,
+      rate: exRate ?? this.rate,
     );
   }
 

@@ -93,15 +93,15 @@ class _ProductFormState extends ConsumerState<_ProductForm> {
   @override
   Widget build(BuildContext context) {
     ref.listen(tgProductFormProvider, (prev, next) {
-      if (prev?.product != next.product) {
+      if (prev?.accountProduct != next.accountProduct) {
         textEditingController.clear();
       }
     });
     final form = ref.watch(tgProductFormProvider);
 
-    final filters = ProductProperty.values
+    final filters = AccountProductType.values
         .map((a) => _ProductTriggerFilter(
-              isSelected: form.product == a,
+              isSelected: form.accountProduct == a,
               property: a,
               onTap: () {
                 ref.read(tgProductFormProvider.notifier).update(property: a);
@@ -124,12 +124,12 @@ class _ProductFormState extends ConsumerState<_ProductForm> {
             children: filters,
           ),
           SizedBox(height: 24.h),
-          Text('${form.product?.name ?? '상품'} 금리',
+          Text('${form.accountProduct?.name ?? '상품'} 금리',
               style: SHFlowTextStyle.subTitle),
           SizedBox(height: 8.h),
           CustomTextFormField(
             textEditingController: textEditingController,
-            hintText: '${form.product?.name ?? '상품'} 금리를 입력해주세요.',
+            hintText: '${form.accountProduct?.name ?? '상품'} 금리를 입력해주세요.',
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
               FilteringTextInputFormatter(RegExp(r"^\d?\.?\d{0,2}"),
@@ -138,7 +138,7 @@ class _ProductFormState extends ConsumerState<_ProductForm> {
             ],
             onChanged: (v) {
               ref.read(tgProductFormProvider.notifier).update(
-                  property: form.product,
+                  property: form.accountProduct,
                   interestRate: v.isNotEmpty ? double.parse(v) : null);
             },
           ),
@@ -150,7 +150,7 @@ class _ProductFormState extends ConsumerState<_ProductForm> {
 }
 
 class _ProductTriggerFilter extends StatelessWidget {
-  final ProductProperty property;
+  final AccountProductType property;
   final bool isSelected;
   final VoidCallback onTap;
 

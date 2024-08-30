@@ -9,7 +9,9 @@ import 'package:shinhan_flow/action/param/action_exchange_param.dart';
 import 'package:shinhan_flow/action/param/action_exchange_rate_notification_param.dart';
 import 'package:shinhan_flow/action/param/action_text_notification_param.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
+import 'package:shinhan_flow/common/component/default_flashbar.dart';
 import 'package:shinhan_flow/common/component/default_text_button.dart';
+import 'package:shinhan_flow/common/model/default_model.dart';
 import 'package:shinhan_flow/flow/model/enum/action_category.dart';
 import 'package:shinhan_flow/flow/model/enum/trigger_category.dart';
 import 'package:shinhan_flow/flow/model/enum/widget/flow_property.dart';
@@ -19,9 +21,11 @@ import 'package:shinhan_flow/flow/param/trigger/account/trigger_deposit_account_
 import 'package:shinhan_flow/flow/param/trigger/account/trigger_transfer_account_param.dart';
 import 'package:shinhan_flow/flow/param/trigger/account/trigger_withdraw_account_param.dart';
 import 'package:shinhan_flow/flow/param/trigger/trigger_product_param.dart';
+import 'package:shinhan_flow/flow/provider/flow_provider.dart';
 import 'package:shinhan_flow/flow/provider/widget/time_form_provider.dart';
 import 'package:shinhan_flow/flow/provider/widget/trigger_category_provider.dart';
 import 'package:shinhan_flow/flow/provider/widget/flow_form_provider.dart';
+import 'package:shinhan_flow/home_screen.dart';
 import 'package:shinhan_flow/trigger/model/enum/product_property.dart';
 import 'package:shinhan_flow/trigger/view/account_trigger_screen.dart';
 import 'package:shinhan_flow/trigger/view/time_trigger_screen.dart';
@@ -52,7 +56,28 @@ class FlowInitScreen extends StatelessWidget {
           final valid = ref.watch(flowFormProvider).valid;
           return BottomNavButton(
               child: DefaultTextButton(
-            onPressed: () {},
+            onPressed: () async {
+              final dateTimeTriggers = ref
+                  .read(flowFormProvider)
+                  .triggers
+                  .where((t) => t.type.isTimeType() || t.type.isDateType())
+                  .toList();
+              for (var t in dateTimeTriggers) {
+                if (t.type == TriggerType.SpecificTimeTrigger) {
+
+                } else {}
+              }
+
+              final result = await ref.read(createFlowProvider.future);
+              if (result is ErrorModel) {
+              } else {
+                if (context.mounted) {
+                  context.goNamed(HomeScreen.routeName);
+                  FlashUtil.showFlash(context, '플로우 생성 성공!',
+                      textColor: const Color(0xFF49B7FF));
+                }
+              }
+            },
             text: '생성하기',
             able: valid,
           ));
@@ -88,15 +113,6 @@ class FlowInitScreen extends StatelessWidget {
             ],
           )),
     );
-  }
-}
-
-class _ActionComponent extends StatelessWidget {
-  const _ActionComponent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }
 
@@ -395,26 +411,28 @@ class _FlowInitCard extends ConsumerWidget {
     if (triggerType == TriggerCategoryType.time) {
       final triggers = ref.watch(flowFormProvider.select((f) => f.triggers));
       try {
-        final findTrigger = triggers.singleWhere((t) => t.type.isTimeType());
-        final param = (findTrigger as TgDateTimeParam);
+        final findTrigger = triggers.singleWhere((t) => t.type.isDateType());
 
         switch (findTrigger.type) {
           case TriggerType.SpecificDateTrigger:
-            content = "${param.date}";
+            final param = (findTrigger as TgSpecificDateParam);
+            content = "${param.localDate}";
             break;
           case TriggerType.PeriodDateTrigger:
+            final param = (findTrigger as TgPeriodDateParam);
             content = "${param.startDate}부터\n${param.endDate}까지";
             break;
           case TriggerType.DayOfWeekTrigger:
+            final param = (findTrigger as TgDayOfWeekParam);
             final dayOfWeek = param.dayOfWeek
                 ?.map((d) => d.name)
                 .reduce((v, e) => "$v, ${e}");
             content = "매주 $dayOfWeek 반복";
             break;
           case TriggerType.DayOfMonthTrigger:
-            final dayOfWeek = param.dayOfMonth
-                ?.map((d) => d.toString())
-                .reduce((v, e) => "$v, $e");
+            final param = (findTrigger as TgDayOfMonthParam);
+            final dayOfWeek =
+                param.days?.map((d) => d.toString()).reduce((v, e) => "$v, $e");
             content = "매월 $dayOfWeek일 반복";
             break;
           default:
@@ -429,8 +447,8 @@ class _FlowInitCard extends ConsumerWidget {
         final findTrigger = triggers
             .singleWhere((t) => t.type == TriggerType.InterestRateTrigger);
         final param = (findTrigger as TgProductParam);
-        if (param.product != null) {
-          content = "${param.product!.name} 금리 ${param.interestRate}%";
+        if (param.accountProduct != null) {
+          content = "${param.accountProduct!.name} 금리 ${param.rate}%";
         }
       } on Error catch (e) {
         log("Error ${e}");
@@ -442,7 +460,7 @@ class _FlowInitCard extends ConsumerWidget {
             .singleWhere((t) => t.type == TriggerType.ExchangeRateTrigger);
         final param = (findTrigger as TgExchangeParam);
         if (param.currency != null) {
-          content = "${param.currency!.displayName}가 ${param.exRate} 이하";
+          content = "${param.currency!.displayName}가 ${param.rate} 이하";
         }
       } on Error catch (e) {
         log("Error ${e}");
@@ -516,7 +534,7 @@ class _FlowInitCard extends ConsumerWidget {
       final actions = ref.watch(flowFormProvider.select((a) => a.actions));
       try {
         final findAction =
-        actions.singleWhere((t) => t.type == ActionType.ExchangeAction);
+            actions.singleWhere((t) => t.type == ActionType.ExchangeAction);
         final param = (findAction as AcExchangeParam);
         content = "${param.currency.name} ${param.amount} 원 환전";
       } on Error catch (e) {
@@ -547,7 +565,7 @@ class _FlowInitCard extends ConsumerWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Text(
                     content,
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: SHFlowTextStyle.subTitle.copyWith(
                         color: isSelected ? Colors.white : Colors.black),
@@ -571,12 +589,18 @@ class _FlowInitCard extends ConsumerWidget {
                         ref
                             .read(triggerCategoryProvider.notifier)
                             .update((t) => triggers.toSet());
+                        ref
+                            .read(flowFormProvider.notifier)
+                            .removeTrigger(trigger: triggerType!);
                       } else {
                         final triggers = ref.read(actionCategoryProvider);
                         triggers.remove(actionType);
                         ref
                             .read(actionCategoryProvider.notifier)
                             .update((t) => triggers.toSet());
+                        ref
+                            .read(flowFormProvider.notifier)
+                            .removeAction(action: actionType!);
                       }
                     },
                     child: child!,

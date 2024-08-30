@@ -12,19 +12,19 @@ part 'trigger_exchange_param.g.dart';
 @JsonSerializable()
 class TgExchangeParam extends TriggerBaseParam {
   final CurrencyType? currency;
-  @JsonKey(name: 'ex_rate')
-  final double? exRate;
+  // @JsonKey(name: 'ex_rate')
+  final double? rate;
 
    TgExchangeParam({
     this.currency,
-    this.exRate,
+    this.rate,
     super.type = TriggerType.ExchangeRateTrigger,
   });
 
   @override
   List<Object?> get props => [
         type,
-        exRate,
+        rate,
         currency,
       ];
 
@@ -33,7 +33,7 @@ class TgExchangeParam extends TriggerBaseParam {
 
   factory TgExchangeParam.fromForm({required TgExchangeFormModel form}) {
     return TgExchangeParam(
-      exRate: form.exRate,
+      rate: form.rate,
       currency: form.currency,
     );
   }

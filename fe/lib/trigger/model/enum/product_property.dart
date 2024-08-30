@@ -1,9 +1,10 @@
-enum ProductProperty {
-  DEPOSIT('예금'),
-  SAVING('적금'),
-  LOAN('대출');
+enum AccountProductType {
+  CURRENT_ACCOUNT('입출금'),
+  DEPOSIT_ACCOUNT('예금'),
+  SAVING_ACCOUNT('적금'),
+  LOAN_ACCOUNT('대출');
 
   final String name;
 
-  const ProductProperty(this.name);
+  const AccountProductType(this.name);
 }

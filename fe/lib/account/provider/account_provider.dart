@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shinhan_flow/account/model/account_model.dart';
+import 'package:shinhan_flow/account/provider/widget/account_transaction_history_form_provider.dart';
 import 'package:shinhan_flow/account/repository/account_repository.dart';
 import 'package:shinhan_flow/common/model/default_model.dart';
 
@@ -70,6 +71,7 @@ class AccountList extends _$AccountList {
       ref
           .read(acExchangeFormProvider.notifier)
           .update(fromAccount: fromAccount);
+      ref.read(defaultAccountNoProvider.notifier).update((n) => fromAccount);
       state = value;
     }).catchError((e) {
       final error = ErrorModel.respToError(e);

@@ -19,15 +19,31 @@ import '../../common/component/text_input_form.dart';
 import '../../common/model/bank_model.dart';
 import '../../flow/param/trigger/trigger_param.dart';
 import '../../flow/provider/widget/flow_form_provider.dart';
+import '../../product/view/product_account_screen.dart';
 import '../../theme/text_theme.dart';
 import '../../util/text_form_formatter.dart';
 import '../provider/widget/exchange_action_form_provider.dart';
 import '../provider/widget/transfer_action_form_provider.dart';
 
-class ActionTransferScreen extends StatelessWidget {
+class ActionTransferScreen extends ConsumerStatefulWidget {
   static String get routeName => 'transferAction';
 
   const ActionTransferScreen({super.key});
+
+  @override
+  ConsumerState<ActionTransferScreen> createState() =>
+      _ActionTransferScreenState();
+}
+
+class _ActionTransferScreenState extends ConsumerState<ActionTransferScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((t) {
+      ref.invalidate(accountListProvider);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -261,6 +277,37 @@ class _AccountDropDownState extends ConsumerState<AccountDropDown> {
               child: getAccounts(m),
             ))
         .toList();
+    if (model.isEmpty) {
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              "보유하신 계좌가 없습니다.",
+              style: SHFlowTextStyle.subTitle,
+            ),
+            SizedBox(height: 20.h),
+            InkWell(
+              onTap: () {
+                context.goNamed(ProductAccountScreen.routeName);
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
+                decoration: BoxDecoration(
+                    color: Colors.blueGrey,
+                    borderRadius: BorderRadius.circular(12.r)),
+                child: Text(
+                  '입출금 계좌 만들러가기',
+                  style: SHFlowTextStyle.subTitle.copyWith(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),

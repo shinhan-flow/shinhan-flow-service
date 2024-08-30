@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shinhan_flow/auth/provider/auth_provider.dart';
 import 'package:shinhan_flow/auth/provider/widget/widget/login_form_provider.dart';
+import 'package:shinhan_flow/notification/provider/notification_provider.dart';
 
 import '../../common/logger/custom_logger.dart';
 import '../../common/model/default_model.dart';
@@ -14,14 +15,15 @@ part 'login_provider.g.dart';
 
 @riverpod
 Future<BaseModel> login(LoginRef ref) async {
-  // final fcmToken = ref.read(fcmTokenProvider)!;
-  // print("login fcm_token ${fcmToken}");
   final form = ref.read(loginFormProvider);
   final param = form.toParam() as LoginParam;
-
+  final fcmToken = ref.read(fcmTokenProvider);
   return await ref
       .watch(authRepositoryProvider)
-      .login(username: param.email, password: param.password)
+      .login(
+          username: param.email,
+          password: param.password,
+          fcmToken: fcmToken ?? '')
       .then<BaseModel>((value) async {
     logger.i('login $value!');
     final model = value.data!;

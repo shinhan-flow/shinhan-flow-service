@@ -1,5 +1,5 @@
 enum TimeCategory {
-  normal('일반'),
+  normal('단일'),
   period('기간'),
   iterate('반복'),
   // multi('다중')
@@ -20,5 +20,6 @@ enum DayOfWeek {
   SUN('일');
 
   final String name;
+
   const DayOfWeek(this.name);
 }
