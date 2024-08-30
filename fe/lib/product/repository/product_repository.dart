@@ -14,6 +14,8 @@ import '../../common/model/bank_model.dart';
 import '../../common/model/default_model.dart';
 import '../../dio/dio_interceptor.dart';
 import '../../dio/provider/dio_provider.dart';
+import '../model/product_loan_model.dart';
+import '../model/product_saving_model.dart';
 
 part 'product_repository.g.dart';
 
@@ -35,4 +37,15 @@ abstract class ProductRepository {
   @GET('/api/v1/finances/products/current-accounts')
   Future<ResponseModel<BankListBaseModel<ProductAccountModel>>>
       getProductAccount();
+
+  /// 대출 상품 조회
+  @Headers({'token': 'true'})
+  @GET('/api/v1/finances/products/loans')
+  Future<ResponseModel<BankListBaseModel<ProductLoanModel>>> getProductLoan();
+
+  /// 적금 상품 조회
+  @Headers({'token': 'true'})
+  @GET('/api/v1/finances/products/savings')
+  Future<ResponseModel<BankListBaseModel<ProductSavingModel>>>
+      getProductSaving();
 }

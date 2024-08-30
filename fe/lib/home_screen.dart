@@ -12,12 +12,21 @@ import 'package:shinhan_flow/account/provider/account_provider.dart';
 import 'package:shinhan_flow/account/view/account_transaction_history_screen.dart';
 import 'package:shinhan_flow/auth/provider/auth_provider.dart';
 import 'package:shinhan_flow/auth/view/login_screen.dart';
+import 'package:shinhan_flow/common/component/bottom_nav_button.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
+import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/common/component/sliver_pagination_list_view.dart';
+import 'package:shinhan_flow/exchange/provider/exchange_provider.dart';
 import 'package:shinhan_flow/flow/view/flow_detail_screen.dart';
 import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
+import 'package:shinhan_flow/member/provider/member_provider.dart';
+import 'package:shinhan_flow/member/view/member_info_screen.dart';
+import 'package:shinhan_flow/product/model/product_loan_model.dart';
+import 'package:shinhan_flow/product/model/product_saving_model.dart';
+import 'package:shinhan_flow/product/provider/product_provider.dart';
 import 'package:shinhan_flow/product/view/product_account_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
+import 'package:shinhan_flow/trigger/model/enum/foreign_currency_category.dart';
 import 'package:shinhan_flow/util/util.dart';
 
 import 'account/component/account_card.dart';
@@ -25,8 +34,10 @@ import 'account/model/account_model.dart';
 import 'account/view/account_transfer_screen.dart';
 import 'common/model/bank_model.dart';
 import 'common/model/default_model.dart';
+import 'exchange/model/exchange_rate_model.dart';
 import 'flow/model/flow_model.dart';
 import 'flow/provider/flow_provider.dart';
+import 'member/model/member_model.dart';
 
 class HomeScreen extends StatefulWidget {
   static String get routeName => 'home';
@@ -50,78 +61,48 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: ExpandableFab.location,
-      // floatingActionButton: ExpandableFab(
-      //   type: ExpandableFabType.fan,
-      //   pos: ExpandableFabPos.center,
-      //   overlayStyle: ExpandableFabOverlayStyle(
-      //       color: Colors.black.withOpacity(0.5), blur: 2),
-      //   fanAngle: 60,
-      //   children: [
-      //     FloatingActionButton.small(
-      //       heroTag: null,
-      //       child: const Icon(Icons.edit),
-      //       onPressed: () {},
-      //     ),
-      //     FloatingActionButton.small(
-      //       heroTag: null,
-      //       child: const Icon(Icons.search),
-      //       onPressed: () {},
-      //     ),
-      //   ],
-      // ),
-      bottomNavigationBar: Container(
-        constraints: BoxConstraints.tight(Size(
-          double.infinity,
-          90.h,
-        )),
-        decoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(color: Color(0xFFDFDFDF)),
-          ),
-        ),
-        child: Align(
-          child: Container(
-            constraints: BoxConstraints.tight(Size(110.w, 60.h)),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.r),
-              gradient: const LinearGradient(
-                  colors: [Color(0xFF0046FF), Color(0xFFAFB9D3)]),
-            ),
-            child:
-                // ExpandableFab(
-                //   // type: ExpandableFabType.fan,
-                //   pos: ExpandableFabPos.center,
-                //   fanAngle: 30,
-                //   children: [
-                //     FloatingActionButton.small(
-                //       heroTag: null,
-                //       child: const Icon(Icons.edit),
-                //       onPressed: () {},
-                //     ),
-                //     FloatingActionButton.small(
-                //       heroTag: null,
-                //       child: const Icon(Icons.search),
-                //       onPressed: () {},
-                //     ),
-                //   ],
-                // )
+      bottomNavigationBar: BottomNavButton(
+          child: DefaultTextButton(
+              onPressed: () {
+                context.pushNamed(TriggerCategoryScreen.routeName);
+              },
+              text: '플로우 만들기',
+              able: true)),
 
-                ElevatedButton(
-                    onPressed: () {
-                      context.pushNamed(TriggerCategoryScreen.routeName);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent),
-                    child: Text(
-                      "NEW",
-                      style: SHFlowTextStyle.button.copyWith(
-                        color: Colors.white,
-                      ),
-                    )),
-          ),
-        ),
-      ),
+      // Container(
+      //   constraints: BoxConstraints.tight(Size(
+      //     double.infinity,
+      //     90.h,
+      //   )),
+      //   decoration: const BoxDecoration(
+      //     border: Border(
+      //       top: BorderSide(color: Color(0xFFDFDFDF)),
+      //     ),
+      //   ),
+      //   child: Align(
+      //     child: Container(
+      //       constraints: BoxConstraints.tight(Size(110.w, 60.h)),
+      //       decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(30.r),
+      //         gradient: const LinearGradient(
+      //             colors: [Color(0xFF0046FF), Color(0xFFAFB9D3)]),
+      //       ),
+      //       child: ElevatedButton(
+      //           onPressed: () {
+      //             context.pushNamed(TriggerCategoryScreen.routeName);
+      //           },
+      //           style: ElevatedButton.styleFrom(
+      //               backgroundColor: Colors.transparent,
+      //               shadowColor: Colors.transparent),
+      //           child: Text(
+      //             "NEW",
+      //             style: SHFlowTextStyle.button.copyWith(
+      //               color: Colors.white,
+      //             ),
+      //           )),
+      //     ),
+      //   ),
+      // ),
       body: NestedScrollView(
           controller: _scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -138,27 +119,45 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(width: 4.w),
                     Text(
-                      "신한 Flow",
+                      "신한 플로우",
                       style: SHFlowTextStyle.appbar,
                     ),
                   ],
                 ),
                 actions: [
-                  Row(
-                    children: [
-                      Image.asset(
-                        AssetUtil.getAssetPath(
-                          name: 'profile',
-                          extension: 'png',
+                  GestureDetector(
+                    onTap: () {
+                      context.pushNamed(MemberInfoScreen.routeName);
+                    },
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          AssetUtil.getAssetPath(
+                            name: 'profile',
+                            extension: 'png',
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        "김정현님",
-                        style: SHFlowTextStyle.subTitle,
-                      ),
-                      SizedBox(width: 15.w),
-                    ],
+                        SizedBox(width: 4.w),
+                        Consumer(
+                          builder: (BuildContext context, WidgetRef ref,
+                              Widget? child) {
+                            final result = ref.watch(memberInfoProvider);
+                            if (result is LoadingModel) {
+                              return Container();
+                            } else if (result is ErrorModel) {
+                              return Text("error");
+                            }
+                            final model =
+                                (result as ResponseModel<MemberModel>);
+                            return Text(
+                              "${model.data!.name}님",
+                              style: SHFlowTextStyle.subTitle,
+                            );
+                          },
+                        ),
+                        SizedBox(width: 15.w),
+                      ],
+                    ),
                   ),
                 ],
               )
@@ -170,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     _AccountCardComponent(),
-                    // _QuickComponent(),
+                    _FinanceInfoComponent(),
                     _FlowComponent(),
                   ],
                 ),
@@ -241,11 +240,45 @@ class _AccountCardComponent extends ConsumerWidget {
                 context.pushNamed(ProductAccountScreen.routeName);
               },
               child: Text("수시 입출금 상품")),
-          Text(
-            '금융 정보를 알려드려요',
-            style: SHFlowTextStyle.subTitle,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: [
+                    Text(
+                      '계좌',
+                      style: SHFlowTextStyle.subTitle,
+                    ),
+                    // SizedBox(width: 7.w),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: Color(0xFF8D8D8D),
+                    )
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: [
+                    Text(
+                      '전체계좌보기',
+                      style: SHFlowTextStyle.caption
+                          .copyWith(color: const Color(0xFF747474)),
+                    ),
+                    // SizedBox(width: 7.w),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: Color(0xFF8D8D8D),
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 5.h),
           Consumer(
             builder: (BuildContext context, WidgetRef ref, Widget? child) {
               final result = ref.watch(accountListProvider);
@@ -268,7 +301,7 @@ class _AccountCardComponent extends ConsumerWidget {
                         EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
                     decoration: BoxDecoration(
                         color: Colors.blueGrey,
-                        borderRadius: BorderRadius.circular(12.r)),
+                        borderRadius: BorderRadius.circular(15.r)),
                     child: Text(
                       '입출금 계좌 만들러가기',
                       style: SHFlowTextStyle.subTitle
@@ -300,11 +333,11 @@ class _AccountCardComponent extends ConsumerWidget {
   }
 }
 
-class _QuickComponent extends StatelessWidget {
-  const _QuickComponent({super.key});
+class _FinanceInfoComponent extends ConsumerWidget {
+  const _FinanceInfoComponent({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     List<int> quicks = [1, 2, 3, 4, 5, 6, 7];
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.h),
@@ -315,44 +348,140 @@ class _QuickComponent extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 28.w),
             child: Text(
-              "빠른 시작",
+              "금융 정보",
               style: SHFlowTextStyle.subTitle,
             ),
           ),
           SizedBox(height: 12.h),
-          Container(
-            constraints: BoxConstraints.loose(Size(double.infinity, 135.r)),
-            child: ListView.separated(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 28.w),
-                itemBuilder: (_, idx) {
-                  return QuickCard();
-                },
-                separatorBuilder: (_, idx) => SizedBox(
-                      width: 30.w,
-                    ),
-                itemCount: quicks.length),
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              List<FinanceCard> cards = [];
+
+              final memberResult = ref.watch(memberCreditScoreProvider);
+              final exchangeResult = ref.watch(exchangeRateProvider);
+              final loanResult = ref.watch(productLoanProvider);
+              final savingResult = ref.watch(productSavingProvider);
+              if (isLoading(
+                  memberResult, exchangeResult, loanResult, savingResult)) {
+                return CircularProgressIndicator();
+              } else if (isError(
+                  memberResult, exchangeResult, loanResult, savingResult)) {
+                return Text("error");
+              }
+              final assetValue = (memberResult
+                      as ResponseModel<BankBaseModel<MemberCreditScoreModel>>)
+                  .data!
+                  .rec
+                  .totalAssetValue;
+              final asset = '${FormatUtil.formatNumber(assetValue)} 원';
+              final currency = (exchangeResult
+                      as ResponseModel<BankListBaseModel<ExchangeRateModel>>)
+                  .data!
+                  .rec
+                  .firstWhere((e) => e.currency == CurrencyType.USD);
+              final loanList = (loanResult
+                      as ResponseModel<BankListBaseModel<ProductLoanModel>>)
+                  .data!
+                  .rec;
+              final savingList = (savingResult
+                      as ResponseModel<BankListBaseModel<ProductSavingModel>>)
+                  .data!
+                  .rec;
+
+              loanList
+                  .sort((l1, l2) => l1.interestRate.compareTo(l1.interestRate));
+              savingList
+                  .sort((l1, l2) => l1.interestRate.compareTo(l1.interestRate));
+              final exchange =
+                  '${FormatUtil.formatDouble(currency.exchangeRate)} 원';
+              cards.add(FinanceCard(
+                title: '총 자산',
+                desc: asset,
+              ));
+              cards.add(FinanceCard(
+                title: currency.currency.name,
+                desc: exchange,
+              ));
+              if (loanList.isNotEmpty) {
+                final desc =
+                    '${FormatUtil.formatDouble(loanList.first.interestRate)} %';
+                cards.add(FinanceCard(
+                  title: loanList.first.accountName.toString(),
+                  desc: desc,
+                  color: const Color(0xFF1CB800),
+                ));
+              }
+              if (savingList.isNotEmpty) {
+                final desc =
+                    '${FormatUtil.formatDouble(savingList.first.interestRate)} %';
+                cards.add(FinanceCard(
+                  title: savingList.first.accountName.toString(),
+                  desc: desc,
+                  color: const Color(0xFFFF0000),
+                ));
+              }
+
+              return Container(
+                constraints: BoxConstraints.loose(Size(double.infinity, 100.r)),
+                child: ListView.separated(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: 28.w),
+                    itemBuilder: (_, idx) {
+                      return cards[idx];
+                    },
+                    separatorBuilder: (_, idx) => SizedBox(
+                          width: 30.w,
+                        ),
+                    itemCount: cards.length),
+              );
+            },
           )
         ],
       ),
     );
   }
+
+  bool isLoading(BaseModel memberResult, BaseModel exchangeResult,
+      BaseModel loanResult, BaseModel savingResult) {
+    return memberResult is LoadingModel ||
+        exchangeResult is LoadingModel ||
+        loanResult is LoadingModel ||
+        savingResult is LoadingModel;
+  }
+
+  bool isError(BaseModel memberResult, BaseModel exchangeResult,
+      BaseModel loanResult, BaseModel savingResult) {
+    return memberResult is ErrorModel ||
+        exchangeResult is ErrorModel ||
+        loanResult is ErrorModel ||
+        savingResult is ErrorModel;
+  }
 }
 
-class QuickCard extends StatelessWidget {
-  const QuickCard({super.key});
+class FinanceCard extends StatelessWidget {
+  final String title;
+  final String desc;
+  final Color? color;
+
+  const FinanceCard({
+    super.key,
+    required this.title,
+    required this.desc,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: const Alignment(0, -1),
       child: Container(
-        constraints: BoxConstraints.tight(Size(128.r, 128.r)),
+        constraints: BoxConstraints.tight(Size(120.r, 90.r)),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.r),
             color: Colors.white,
-            border: Border.all(color: const Color(0xFF0057FF), width: 2.r),
+            border: Border.all(
+                color: const Color(0xFFB5B5B5).withOpacity(.3), width: .5.r),
             boxShadow: [
               BoxShadow(
                 color: const Color(0xFF000000).withOpacity(0.25),
@@ -360,6 +489,26 @@ class QuickCard extends StatelessWidget {
                 blurRadius: 4.r,
               ),
             ]),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: SHFlowTextStyle.caption,
+              textAlign: TextAlign.start,
+            ),
+            SizedBox(height: 7.h),
+            Text(
+              desc,
+              style: SHFlowTextStyle.caption.copyWith(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w800,
+                  color: color ?? Colors.black),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -375,10 +524,20 @@ class _FlowComponent extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            "내가 만든 Flow",
-            style: SHFlowTextStyle.subTitle,
+          Row(
+            children: [
+              Text(
+                '플로우',
+                style: SHFlowTextStyle.subTitle,
+              ),
+              // SizedBox(width: 7.w),
+              const Icon(
+                Icons.chevron_right,
+                color: Color(0xFF8D8D8D),
+              )
+            ],
           ),
+
           // SizedBox(height: 12.h),
           // ListView.separated(
           //     itemBuilder: (_, idx) => FlowCard(),
@@ -432,7 +591,8 @@ class _FlowCardState extends State<FlowCard> {
         padding: EdgeInsets.all(18.r),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.r),
-          color: const Color(0xFF3F73FF),
+          color:
+              widget.enable ? const Color(0xFF3F73FF) : const Color(0xFFEDEDED),
         ),
         child: Row(
           children: [
@@ -445,7 +605,9 @@ class _FlowCardState extends State<FlowCard> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: SHFlowTextStyle.subTitle.copyWith(
-                      color: Colors.white,
+                      color: widget.enable
+                          ? Colors.white
+                          : const Color(0xFF5F5F5F),
                     ),
                   ),
                   SizedBox(height: 12.h),
@@ -454,7 +616,9 @@ class _FlowCardState extends State<FlowCard> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: SHFlowTextStyle.labelSmall.copyWith(
-                      color: Colors.white,
+                      color: widget.enable
+                          ? Colors.white
+                          : const Color(0xFF5F5F5F),
                     ),
                   ),
                 ],
@@ -475,7 +639,7 @@ class _FlowCardState extends State<FlowCard> {
                     setState(() {});
                   },
                   activeColor: Colors.white,
-                  activeTrackColor: const Color(0xFF0046FF),
+                  activeTrackColor: Colors.black.withOpacity(0.25),
                   inactiveTrackColor: const Color(0xFFCBCFD7),
                   inactiveThumbColor: Colors.white,
                   trackOutlineColor:

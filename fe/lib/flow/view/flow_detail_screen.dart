@@ -106,7 +106,7 @@ class FlowDetailScreen extends ConsumerWidget {
               sliver: SliverMainAxisGroup(slivers: [
                 SliverToBoxAdapter(
                   child: Text(
-                    "플로우 조건",
+                    "조건",
                     style: SHFlowTextStyle.subTitle,
                   ),
                 ),
@@ -118,12 +118,17 @@ class FlowDetailScreen extends ConsumerWidget {
                 ),
               ]),
             ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 20.h,
+              ),
+            ),
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               sliver: SliverMainAxisGroup(slivers: [
                 SliverToBoxAdapter(
                   child: Text(
-                    "플로우 행동",
+                    "행동",
                     style: SHFlowTextStyle.subTitle,
                   ),
                 ),
