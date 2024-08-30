@@ -27,10 +27,10 @@ public class LambdaFunctionInvoker {
 			.build();
 
 		InvokeResponse invokeResponse = lambdaClient.invoke(invokeRequest);
-		log.info(invokeResponse.payload().asUtf8String());
+		// log.info(invokeResponse.payload().asUtf8String().replace("\\", ""));
 		try {
 			JsonNode jsonNode = objectMapper.readTree(
-				invokeResponse.payload().asUtf8String());
+				invokeResponse.payload().asUtf8String().replace("\\", ""));
 			log.info(jsonNode.toString());
 			// {"statusCode":200,"body":"{\"userId\":1,\"prompt\":\"test\"}"}
 			return jsonNode.get("body");
