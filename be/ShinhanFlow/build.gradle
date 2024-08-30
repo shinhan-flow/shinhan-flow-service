@@ -46,6 +46,10 @@ dependencies {
     // firebase
     implementation 'com.google.firebase:firebase-admin:9.2.0'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+    // aws lambda
+    implementation platform('software.amazon.awssdk:bom:2.21.1')
+    implementation 'software.amazon.awssdk:lambda'
 }
 
 tasks.named('test') {
