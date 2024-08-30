@@ -54,7 +54,7 @@ new_message = client.beta.threads.messages.create(
 run = client.beta.threads.runs.create(thread_id=thread.id, assistant_id=assistant.id)
 while True:
     run_check = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
-    run_check
+
     if run_check.status not in ["queued", "in_progress"]:
         break
     else:
