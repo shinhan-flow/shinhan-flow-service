@@ -8,6 +8,8 @@ class DefaultTextButton extends StatelessWidget {
   final String text;
   final bool able;
   final bool stretch;
+  final Color? fillColor;
+  final Color? textColor;
 
   const DefaultTextButton({
     super.key,
@@ -15,6 +17,8 @@ class DefaultTextButton extends StatelessWidget {
     required this.text,
     required this.able,
     this.stretch = true,
+    this.fillColor,
+    this.textColor,
   });
 
   @override
@@ -24,13 +28,14 @@ class DefaultTextButton extends StatelessWidget {
       style: TextButton.styleFrom(
         minimumSize: stretch ? Size(double.infinity, 48.h) : null,
         maximumSize: stretch ? Size(double.infinity, 48.h) : null,
-        backgroundColor:
-            able ? const Color(0xFF0057FF) : const Color(0xFFcbcfd7),
+        backgroundColor: able
+            ? fillColor ?? const Color(0xFF0057FF)
+            : const Color(0xFFcbcfd7),
       ),
       child: Text(
         text,
         style: SHFlowTextStyle.button.copyWith(
-          color: able ? Colors.white : const Color(0xFF525252),
+          color: able ? textColor ?? Colors.white : const Color(0xFF525252),
         ),
       ),
     );

@@ -48,6 +48,11 @@ abstract class FlowRepository {
   Future<ResponseModel<bool>> toggleFlow({
     @Path() required int flowId,
   });
+
+  /// Flow 상세 조회
+  @Headers({'token': 'true'})
+  @DELETE('/api/v1/flows/{flowId}')
+  Future<ResponseModel<bool>> deleteFlow({@Path() required int flowId});
 }
 
 final flowPRepositoryProvider = Provider<FlowPRepository>((ref) {

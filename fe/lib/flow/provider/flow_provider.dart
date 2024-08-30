@@ -87,6 +87,33 @@ Future<BaseModel> toggleFlow(ToggleFlowRef ref, {required int flowId}) async {
   });
 }
 
+@riverpod
+Future<BaseModel> deleteFlow(DeleteFlowRef ref, {required int flowId}) async {
+  final repository = ref.read(flowRepositoryProvider);
+  return await repository
+      .deleteFlow(flowId: flowId)
+      .then<BaseModel>((value) async {
+    logger.i(value);
+    final provider = ref.read(flowProvider);
+    final models = provider as ResponseModel<PaginationModel<FlowModel>>;
+    final list = models.data!.pageContent;
+
+    final newPageContent = list
+      ..removeWhere((l) => l.id == flowId)
+      ..toList();
+
+    final newProvider = provider.data!.copyWith(pageContent: newPageContent);
+    final contents = ResponseModel(code: '', message: '', data: newProvider);
+    ref.read(flowProvider.notifier).update(contents: contents);
+
+    return value;
+  }).catchError((e) {
+    final error = ErrorModel.respToError(e);
+    logger.e('code ${error.code}\nmessage = ${error.message}');
+    return error;
+  });
+}
+
 final flowProvider =
     StateNotifierProvider.autoDispose<FlowStateNotifier, BaseModel>((ref) {
   final repository = ref.watch(flowPRepositoryProvider);
@@ -94,7 +121,7 @@ final flowProvider =
     repository: repository,
     pageParams: const PaginationParam(
       nowPage: 0,
-      perPage: 2,
+      perPage: 5,
     ),
   );
 });

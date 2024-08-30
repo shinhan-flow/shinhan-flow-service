@@ -14,6 +14,8 @@
     4. 다중(3)
         마구잡이로 여러 날짜를 선택합니다.
  */
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shinhan_flow/action/param/action_balance_notification_param.dart';
@@ -89,7 +91,6 @@ class TriggerBaseParam extends DefaultParam {
 
   factory TriggerBaseParam.fromJson(Map<String, dynamic> json) {
     TriggerType type = TriggerType.values.byName(json['type'] as String);
-
     switch (type) {
       case TriggerType.SpecificTimeTrigger:
         return TgTimeParam.fromJson(json);

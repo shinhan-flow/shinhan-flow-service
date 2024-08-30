@@ -15,7 +15,7 @@ class AcTransferParam extends ActionBaseParam {
   final String fromAccount;
   final String toAccount;
   @JsonKey(includeToJson: false)
-  final String holder;
+  final String? holder ;
 
   AcTransferParam({
     required this.toAccount,
