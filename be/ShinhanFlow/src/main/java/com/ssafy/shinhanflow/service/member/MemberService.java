@@ -81,28 +81,17 @@ public class MemberService {
 		CreditScoreEntity creditScoreEntity = creditScoreRepository.findByMemberId(userId);
 		// 우리 데이터베이스에 없거나 updateAt 이 하루 이상 지난 경우
 		if (creditScoreEntity == null || creditScoreEntity.getUpdatedAt().plusDays(1).isBefore(now)) {
-			creditScore = getCreditScore(token); // finance api 에서 조회
-			if (creditScoreEntity == null) {
-				log.info("creditScoreEntity is null");
-				log.info("userId : {}", userId);
-				// 데이터베이스에 새로 저장
-				creditScoreEntity = creditScoreEntity.builder()
-					.ratingName(creditScore.getRec().ratingName())
-					.demandDepositAssetValue(creditScore.getRec().demandDepositAssetValue())
-					.depositSavingsAssetValue(creditScore.getRec().depositSavingsAssetValue())
-					.totalAssetValue(creditScore.getRec().totalAssetValue())
-					.memberId(userId)
-					.build();
-			} else {
-				log.info("creditScoreEntity is not null");
-				// 데이터베이스에 업데이트
-				creditScoreEntity.setRatingName(creditScore.getRec().ratingName());
-				creditScoreEntity.setDemandDepositAssetValue(creditScore.getRec().demandDepositAssetValue());
-				creditScoreEntity.setDepositSavingsAssetValue(creditScore.getRec().depositSavingsAssetValue());
-				creditScoreEntity.setTotalAssetValue(creditScore.getRec().totalAssetValue());
-				creditScoreEntity.setUpdatedAt(now);
-			}
-			log.info("2. creditScoreEntity: {}", creditScoreEntity.toString());
+			// finance api 에서 조회
+			creditScore = getCreditScore(token);
+			// 우리 데이터베이스에 저장 및 업데이트
+			creditScoreEntity = creditScoreEntity.builder()
+				.id(userId)
+				.ratingName(creditScore.getRec().ratingName())
+				.demandDepositAssetValue(creditScore.getRec().demandDepositAssetValue())
+				.depositSavingsAssetValue(creditScore.getRec().depositSavingsAssetValue())
+				.totalAssetValue(creditScore.getRec().totalAssetValue())
+				.memberId(userId)
+				.build();
 			creditScoreRepository.save(creditScoreEntity);
 		} else {
 			// 우리 데이터베이스에서 조회
