@@ -39,4 +39,7 @@ class TgAccountTransferParam extends TriggerBaseParam {
       toAccount: form.toAccount!,
     );
   }
+
+  factory TgAccountTransferParam.fromJson(Map<String, dynamic> json) =>
+      _$TgAccountTransferParamFromJson(json);
 }

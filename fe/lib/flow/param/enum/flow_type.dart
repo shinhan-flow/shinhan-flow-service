@@ -25,7 +25,7 @@ enum TriggerType {
 
   /// 특정 여러 날짜를 설정하는 트리거 생성
   /// ex) ["2024-08-11", "2024-08-15", "2024-08-17"]
-  multiDate,
+  // multiDate,
 
   /// 환율 트리거 생성
   /// ex) USD, EUR, JPY, CNY, GBP, CHF, CAD

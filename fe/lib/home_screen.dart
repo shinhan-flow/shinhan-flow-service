@@ -14,6 +14,7 @@ import 'package:shinhan_flow/auth/provider/auth_provider.dart';
 import 'package:shinhan_flow/auth/view/login_screen.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/common/component/sliver_pagination_list_view.dart';
+import 'package:shinhan_flow/flow/view/flow_detail_screen.dart';
 import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
 import 'package:shinhan_flow/product/view/product_account_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
@@ -169,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     _AccountCardComponent(),
-                    _QuickComponent(),
+                    // _QuickComponent(),
                     _FlowComponent(),
                   ],
                 ),
@@ -186,6 +187,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     final model = pModel as FlowModel;
                     return FlowCard.fromModel(
                       model: model,
+                      onTap: () {
+                        Map<String, String> path = {
+                          'flowId': model.id.toString()
+                        };
+                        context.pushNamed(FlowDetailScreen.routeName,
+                            pathParameters: path);
+                      },
                     );
                   },
                   skeleton: Container(),
@@ -251,7 +259,7 @@ class _AccountCardComponent extends ConsumerWidget {
                   .data!
                   .rec;
               if (modelList.isEmpty) {
-                return InkWell(
+                return GestureDetector(
                   onTap: () {
                     context.pushNamed(ProductAccountScreen.routeName);
                   },
@@ -388,6 +396,7 @@ class FlowCard extends StatefulWidget {
   final String title;
   final String description;
   bool enable;
+  final VoidCallback onTap;
 
   FlowCard(
       {super.key,
@@ -395,15 +404,18 @@ class FlowCard extends StatefulWidget {
       required this.title,
       required this.description,
       required this.enable,
-      required this.id});
+      required this.id,
+      required this.onTap});
 
-  factory FlowCard.fromModel({required FlowModel model}) {
+  factory FlowCard.fromModel(
+      {required FlowModel model, required VoidCallback onTap}) {
     return FlowCard(
       memberId: model.memberId,
       title: model.title,
       description: model.description,
       enable: model.enable,
       id: model.id,
+      onTap: onTap,
     );
   }
 
@@ -414,62 +426,66 @@ class FlowCard extends StatefulWidget {
 class _FlowCardState extends State<FlowCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(18.r),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.r),
-        color: const Color(0xFF3F73FF),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  widget.title,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: SHFlowTextStyle.subTitle.copyWith(
-                    color: Colors.white,
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: Container(
+        padding: EdgeInsets.all(18.r),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.r),
+          color: const Color(0xFF3F73FF),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    widget.title,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: SHFlowTextStyle.subTitle.copyWith(
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                SizedBox(height: 12.h),
-                Text(
-                  widget.description,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: SHFlowTextStyle.labelSmall.copyWith(
-                    color: Colors.white,
+                  SizedBox(height: 12.h),
+                  Text(
+                    widget.description,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: SHFlowTextStyle.labelSmall.copyWith(
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: 24.w),
-          Consumer(
-            builder: (BuildContext context, WidgetRef ref, Widget? child) {
-              return Switch(
-                value: widget.enable,
-                onChanged: (v) async {
-                  final result = await ref
-                      .read(toggleFlowProvider(flowId: widget.id).future);
-                  if (result is ErrorModel) {
-                  } else {
-                    widget.enable = (result as ResponseModel<bool>).data!;
-                  }
-                  setState(() {});
-                },
-                activeColor: Colors.white,
-                activeTrackColor: const Color(0xFF0046FF),
-                inactiveTrackColor: const Color(0xFFCBCFD7),
-                inactiveThumbColor: Colors.white,
-                trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
-                thumbIcon: WidgetStateProperty.all(const Icon(null)),
-              );
-            },
-          ),
-        ],
+            SizedBox(width: 24.w),
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return Switch(
+                  value: widget.enable,
+                  onChanged: (v) async {
+                    final result = await ref
+                        .read(toggleFlowProvider(flowId: widget.id).future);
+                    if (result is ErrorModel) {
+                    } else {
+                      widget.enable = (result as ResponseModel<bool>).data!;
+                    }
+                    setState(() {});
+                  },
+                  activeColor: Colors.white,
+                  activeTrackColor: const Color(0xFF0046FF),
+                  inactiveTrackColor: const Color(0xFFCBCFD7),
+                  inactiveThumbColor: Colors.white,
+                  trackOutlineColor:
+                      WidgetStateProperty.all(Colors.transparent),
+                  thumbIcon: WidgetStateProperty.all(const Icon(null)),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

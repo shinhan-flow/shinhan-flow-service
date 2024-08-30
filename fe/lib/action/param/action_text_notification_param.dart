@@ -27,4 +27,7 @@ class AcTextNotificationParam extends ActionBaseParam {
       text: form.text,
     );
   }
+
+  factory AcTextNotificationParam.fromJson(Map<String, dynamic> json) =>
+      _$AcTextNotificationParamFromJson(json);
 }

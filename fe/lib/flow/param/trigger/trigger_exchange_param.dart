@@ -37,4 +37,8 @@ class TgExchangeParam extends TriggerBaseParam {
       currency: form.currency,
     );
   }
+
+
+  factory TgExchangeParam.fromJson(Map<String, dynamic> json) =>
+      _$TgExchangeParamFromJson(json);
 }

@@ -28,4 +28,8 @@ class AcBalanceNotificationParam extends ActionBaseParam {
       account: form.account,
     );
   }
+
+
+  factory AcBalanceNotificationParam.fromJson(Map<String, dynamic> json) =>
+      _$AcBalanceNotificationParamFromJson(json);
 }

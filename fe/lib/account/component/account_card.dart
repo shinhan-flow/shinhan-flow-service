@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:shinhan_flow/account/view/account_transfer_screen.dart';
 import 'package:shinhan_flow/action/view/action_exchange_screen.dart';
+import 'package:shinhan_flow/common/component/default_flashbar.dart';
 
 import '../../theme/text_theme.dart';
 import '../../util/util.dart';
@@ -106,11 +108,19 @@ class AccountCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      accountNo,
-                      style: SHFlowTextStyle.subTitle.copyWith(
-                        color: Colors.white,
+                    GestureDetector(
+                      child: Text(
+                        accountNo,
+                        style: SHFlowTextStyle.subTitle.copyWith(
+                            color: Colors.white,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.white),
                       ),
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(text: accountNo));
+                        FlashUtil.showFlash(context, '계좌번호가 복사되었습니다!',
+                            textColor: const Color(0xFF49B7FF));
+                      },
                     ),
                     if (onTap != null)
                       GestureDetector(

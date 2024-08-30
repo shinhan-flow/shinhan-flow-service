@@ -8,7 +8,6 @@ import 'package:shinhan_flow/common/model/base_form_model.dart';
 import 'package:shinhan_flow/flow/model/enum/action_category.dart';
 import 'package:shinhan_flow/flow/param/enum/flow_type.dart';
 
-import '../../../action/param/action_param.dart';
 import '../../../common/param/default_param.dart';
 import '../../model/enum/trigger_category.dart';
 import '../../model/enum/widget/flow_property.dart';

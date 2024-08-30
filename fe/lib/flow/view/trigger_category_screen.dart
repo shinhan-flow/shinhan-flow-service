@@ -39,7 +39,7 @@ class TriggerCategoryScreen extends ConsumerWidget {
               return DefaultTextButton(
                 onPressed: () => context.pushNamed(FlowInitScreen.routeName),
                 text: '다음',
-                able: valid,
+                able: true,
               );
             },
           ),
@@ -61,22 +61,22 @@ class TriggerCategoryScreen extends ConsumerWidget {
                   const SliverToBoxAdapter(
                     child: _FlowFormComponent(),
                   ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 24.h, top: 30.h),
-                      child: Text(
-                        '조건 카테고리를 선택해주세요!',
-                        style: SHFlowTextStyle.subTitle,
-                      ),
-                    ),
-                  ),
-                  SliverList.separated(
-                    itemBuilder: (_, idx) {
-                      return cards[idx];
-                    },
-                    separatorBuilder: (_, idx) => SizedBox(height: 21.h),
-                    itemCount: cards.length,
-                  ),
+                  // SliverToBoxAdapter(
+                  //   child: Padding(
+                  //     padding: EdgeInsets.only(bottom: 24.h, top: 30.h),
+                  //     child: Text(
+                  //       '조건 카테고리를 선택해주세요!',
+                  //       style: SHFlowTextStyle.subTitle,
+                  //     ),
+                  //   ),
+                  // ),
+                  // SliverList.separated(
+                  //   itemBuilder: (_, idx) {
+                  //     return cards[idx];
+                  //   },
+                  //   separatorBuilder: (_, idx) => SizedBox(height: 21.h),
+                  //   itemCount: cards.length,
+                  // ),
                   SliverToBoxAdapter(
                     child: SizedBox(height: 30.h),
                   ),
@@ -161,7 +161,7 @@ class _CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Container(
         width: double.infinity,

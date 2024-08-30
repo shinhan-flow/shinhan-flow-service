@@ -35,4 +35,7 @@ class TgAccountDepositParam extends TriggerBaseParam {
       type: form.type!,
     );
   }
+
+  factory TgAccountDepositParam.fromJson(Map<String, dynamic> json) =>
+      _$TgAccountDepositParamFromJson(json);
 }

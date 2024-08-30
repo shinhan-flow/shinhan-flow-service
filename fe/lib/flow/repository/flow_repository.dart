@@ -37,6 +37,11 @@ abstract class FlowRepository {
   @POST('/api/v1/flows')
   Future<ResponseModel<bool>> createFlow({@Body() required FlowParam param});
 
+  /// Flow 상세 조회
+  @Headers({'token': 'true'})
+  @GET('/api/v1/flows/{flowId}')
+  Future<ResponseModel<FlowDetailModel>> getFlow({@Path() required int flowId});
+
   /// Flow 상태 변경
   @Headers({'token': 'true'})
   @PATCH('/api/v1/flows/{flowId}')

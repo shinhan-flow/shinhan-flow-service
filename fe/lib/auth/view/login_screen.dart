@@ -199,7 +199,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    InkWell(
+                    GestureDetector(
                       child: Text(
                         "고객센터",
                         style: SHFlowTextStyle.label
@@ -211,7 +211,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       style: SHFlowTextStyle.label
                           .copyWith(color: const Color(0xFF8c8c8c)),
                     ),
-                    InkWell(
+                    GestureDetector(
                       child: Text(
                         "ID / PW 를 잊으셨나요?",
                         style: SHFlowTextStyle.label

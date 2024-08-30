@@ -7,9 +7,9 @@ import '../param/default_param.dart';
 import '../param/pagination_param.dart';
 import '../repository/base_pagination_repository.dart';
 
-class PaginationProvider<T extends Base,
-    S extends DefaultParam,
-    U extends IBasePaginationRepository<T, S>> extends StateNotifier<BaseModel> {
+class PaginationProvider<T extends Base, S extends DefaultParam,
+        U extends IBasePaginationRepository<T, S>>
+    extends StateNotifier<BaseModel> {
   final U repository;
   final PaginationParam pageParams;
   final S? param;
