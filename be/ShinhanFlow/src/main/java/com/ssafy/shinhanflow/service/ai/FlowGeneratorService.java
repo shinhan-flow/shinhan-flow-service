@@ -31,11 +31,14 @@ public class FlowGeneratorService {
 			.build();
 		String payload = objectMapper.writeValueAsString(flowGeneratorLambdaFunctionRequestBodyDto);
 		String responseBody = lambdaFunctionInvoker.invokeFunction(functionName, payload);
-		log.info("LambdaFunctionInvoker.generateFlow's responseBody: {}", responseBody);
+		log.info("====LambdaFunctionInvoker.generateFlow's responseBody====\n{}", responseBody);
+		log.info("{\"flow\": {\"title\": \"test\", \"description\": \"testing\", \"triggers\": [], \"actions\": []}}");
 
+		log.info("are they equal? {}", responseBody.equals(
+			"{\"flow\": {\"title\": \"test\", \"description\": \"testing\", \"triggers\": [], \"actions\": []}}"));
 		String json = "{\"flow\": {\"title\": \"test\", \"description\": \"testing\", \"triggers\": [], \"actions\": []}}";
-		ObjectMapper mapper = new ObjectMapper();
-		FlowGeneratorLambdaFunctionResponseBodyDto flowDto = mapper.readValue(json,
+		json.equals(responseBody);
+		FlowGeneratorLambdaFunctionResponseBodyDto flowDto = objectMapper.readValue(json,
 			FlowGeneratorLambdaFunctionResponseBodyDto.class);
 		log.info("=======================dto====================: {}", flowDto.toString());
 
