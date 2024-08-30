@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shinhan_flow/flow/model/flow_model.dart';
@@ -58,6 +60,25 @@ Future<BaseModel> toggleFlow(ToggleFlowRef ref, {required int flowId}) async {
       .toggleFlow(flowId: flowId)
       .then<BaseModel>((value) async {
     logger.i(value);
+    final provider = ref.read(flowProvider);
+    final models = provider as ResponseModel<PaginationModel<FlowModel>>;
+    final list = models.data!.pageContent;
+    // final flow = list.firstWhere((l) => l.id == flowId);
+    // final newFlow = flow.copyWith(enable: !flow.enable);
+    //
+    // int findIdx = list.indexWhere((l)=>l.id == flowId);
+
+    final newPageContent = list.map((l) {
+      if (l.id == flowId) {
+        return l.copyWith(enable: !l.enable);
+      }
+      return l;
+    }).toList();
+
+    final newProvider = provider.data!.copyWith(pageContent: newPageContent);
+    final contents = ResponseModel(code: '', message: '', data: newProvider);
+    ref.read(flowProvider.notifier).update(contents: contents);
+
     return value;
   }).catchError((e) {
     final error = ErrorModel.respToError(e);
@@ -86,4 +107,8 @@ class FlowStateNotifier
     super.param,
     super.path,
   });
+
+  void update({required ResponseModel<PaginationModel<FlowModel>> contents}) {
+    state = contents;
+  }
 }

@@ -20,6 +20,7 @@ Future<BaseModel> createAccount(CreateAccountRef ref,
       .watch(accountRepositoryProvider)
       .createAccount(param: param)
       .then<BaseModel>((value) async {
+    ref.read(accountListProvider.notifier).getList();
     return value;
   }).catchError((e) {
     final error = ErrorModel.respToError(e);
