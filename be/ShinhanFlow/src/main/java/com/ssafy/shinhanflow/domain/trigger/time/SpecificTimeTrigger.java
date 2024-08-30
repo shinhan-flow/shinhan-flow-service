@@ -16,6 +16,6 @@ public record SpecificTimeTrigger(
 	@Override
 	public boolean isTriggered(FinanceTriggerService financeTriggerService, Long userId) {
 		LocalTime now = LocalTime.now();
-		return this.time.getHour() == now.getHour();
+		return this.time.getHour() == now.getHour() && this.time.getMinute() == now.getMinute();
 	}
 }
