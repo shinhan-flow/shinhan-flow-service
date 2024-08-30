@@ -5,7 +5,6 @@ import 'default_param.dart';
 
 part 'pagination_param.g.dart';
 
-
 class PaginationStateParam<T extends DefaultParam> extends Equatable {
   final T? param;
   final int? path;
@@ -25,7 +24,7 @@ class PaginationStateParam<T extends DefaultParam> extends Equatable {
 @JsonSerializable()
 class PaginationParam extends Equatable {
   final int nowPage;
-  final int perPage ;
+  final int perPage;
 
   const PaginationParam({
     required this.nowPage,
@@ -37,7 +36,7 @@ class PaginationParam extends Equatable {
   }) {
     return PaginationParam(
       nowPage: page ?? nowPage,
-      perPage:  perPage,
+      perPage: perPage,
     );
   }
 

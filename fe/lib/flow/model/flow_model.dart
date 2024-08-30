@@ -27,6 +27,27 @@ class FlowModel extends IModelWithId {
     required this.deletedAt,
   });
 
+  FlowModel copyWith({
+    int? memberId,
+    String? title,
+    String? description,
+    bool? enable,
+    String? createdAt,
+    String? updatedAt,
+    String? deletedAt,
+  }) {
+    return FlowModel(
+      id: id,
+      memberId: memberId ?? this.memberId,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      enable: enable ?? this.enable,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+    );
+  }
+
   factory FlowModel.fromJson(Map<String, dynamic> json) =>
       _$FlowModelFromJson(json);
 }
