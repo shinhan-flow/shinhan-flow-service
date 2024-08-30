@@ -32,6 +32,19 @@ model1_system_prompt = [
     set_output_format,
 ]
 
+# 에러 검수 로드
+with open(f"{ROOT_DIR}/prompt/ver3/check_list.json", "r") as f:
+    check_list = json.load(f)
+with open(f"{ROOT_DIR}/prompt/ver3/check_trigger_value.json", "r") as f:
+    check_trigger_value = json.load(f)
+with open(f"{ROOT_DIR}/prompt/ver3/check_action_value.json", "r") as f:
+    check_action_value = json.load(f)
+with open(f"{ROOT_DIR}/prompt/ver3/error_rule.json", "r") as f:
+    error_rule = json.load(f)
+
+
+model3_error_prompt = [check_list, check_trigger_value, check_action_value, error_rule]
+
 
 def create_flow(MY_REQUEST, model_num):
     # 기본형
@@ -67,3 +80,29 @@ def create_flow(MY_REQUEST, model_num):
         return chat_completion.choices[0].message.content
 
     # 에러 검수
+    elif model_num == 3:
+        print("use model3")
+        system_prompt = model1_system_prompt
+        messages = [*system_prompt]
+        for rq, rp in zip(recent_requests, recent_response):
+            messages.append({"role": "user", "content": rq})
+            messages.append({"role": "assistant", "content": rp})
+        messages.append({"role": "user", "content": MY_REQUEST})
+
+        chat_completion = client.chat.completions.create(
+            messages=messages,
+            model="gpt-4o-mini",
+        )
+        gen_response = chat_completion.choices[0].message.content
+        system_prompt = model3_error_prompt
+        messages = [*system_prompt]
+        messages.append({"role": "user", "content": gen_response})
+        chat_completion = client.chat.completions.create(
+            messages=messages,
+            model="gpt-4o-mini",
+        )
+        error_response = chat_completion.choices[0].message.content
+        if "#$%" in error_response and "ERROR" in error_response:
+            return "error"
+        else:
+            return gen_response

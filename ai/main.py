@@ -15,14 +15,6 @@ def main():
     parser = argparse.ArgumentParser(description="Example script with arguments")
     # parser.add_argument('-n', '--name', type=str, help='Name of the user', required=True)
     parser.add_argument(
-        "-m",
-        "--model_num",
-        type=int,
-        help="choose model's number",
-        required=False,
-        default=2,
-    )
-    parser.add_argument(
         "-u", "--user_id", type=int, help="enter user's id", required=False, default=0
     )
     parser.add_argument(
@@ -31,7 +23,15 @@ def main():
         type=str,
         help="enter user's request",
         required=False,
-        default="매달 33일에 나에게 사랑해 라는 알림을 줘",
+        default="계좌의 잔액이 -1000보다 작다면, 사랑해 알림을 보내",
+    )
+    parser.add_argument(
+        "-m",
+        "--model_num",
+        type=int,
+        help="choose model's number",
+        required=False,
+        default=3,
     )
     args = parser.parse_args()
 
