@@ -2,8 +2,6 @@ package com.ssafy.shinhanflow.auth.jwt;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -60,23 +58,20 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
 
 		// 사용자 이름 , 사용자 ID, fcmToken 을 가져옵니다.
-		String username = userDetails.getUsername();
-		long userId = userDetails.getUserId();
+		Long userId = userDetails.getUserId();
 		String fcmToken = request.getParameter("fcmToken");
 
-		log.info("username: {}, useId: {}, fcmToken: {} login 요청 성공", username, userId, fcmToken);
+		// memberEntity 저장
+		MemberEntity memberEntity = memberRepository.findById(userId).orElseThrow();
+		memberEntity.setFcmToken(fcmToken);
+		memberRepository.save(memberEntity);
 
-		// fcmToken DB에 저장
-		Optional<MemberEntity> memberEntityOptional = memberRepository.findById(userId);
-		if (memberEntityOptional.isPresent()) {
-			MemberEntity memberEntity = memberEntityOptional.get();
-			memberEntity.setFcmToken(fcmToken);
-			memberRepository.save(memberEntity);
-		}
+		// role 가져오기
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-		Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-		GrantedAuthority auth = iterator.next();
-		String role = auth.getAuthority();
+		String role = authorities.stream()
+			.findFirst()
+			.map(GrantedAuthority::getAuthority)
+			.orElse(null);
 
 		//토큰 생성
 		String accessToken = jwtUtil.createJwt("access", userId, role, accessTokenExpireTime);
