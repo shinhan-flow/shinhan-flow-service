@@ -52,7 +52,7 @@ public class JWTFilter extends OncePerRequestFilter {
 		}
 
 		// 토큰 검증 완료 후 토큰에서 userId 추출
-		long userId = jwtUtil.getUserId(accessToken);
+		Long userId = jwtUtil.getUserId(accessToken);
 
 		log.info("userId: {}", userId);
 

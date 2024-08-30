@@ -7,13 +7,13 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.shinhanflow.auth.custom.CustomAuthenticationToken;
 import com.ssafy.shinhanflow.auth.custom.CustomUserDetails;
 import com.ssafy.shinhanflow.auth.dto.LoginSuccessResponseDto;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
@@ -38,6 +38,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	private final long refreshTokenExpireTime;
 	private final MemberRepository memberRepository;
 
+	// 로그인 요청시 실행되는 메소드
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
 		AuthenticationException {
@@ -46,15 +47,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		String username = obtainUsername(request);
 		String password = obtainPassword(request);
 
-		String fcmToken = request.getParameter("fcmToken");
-
-		log.info("fcmToken: {}", fcmToken);
-
 		// username 과 password 를 검증하기 위해 token 에 담아서 사용 (스프링 시큐리티에서)
-		//		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password,
-		//			null);
-		CustomAuthenticationToken authToken = new CustomAuthenticationToken(username, password, fcmToken);
-
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
 		return authenticationManager.authenticate(authToken);
 	}
 
