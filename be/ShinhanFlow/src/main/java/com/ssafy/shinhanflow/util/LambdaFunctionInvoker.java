@@ -1,6 +1,5 @@
 package com.ssafy.shinhanflow.util;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -14,12 +13,9 @@ import software.amazon.awssdk.services.lambda.model.InvokeResponse;
 @Component
 @RequiredArgsConstructor
 public class LambdaFunctionInvoker {
-	@Value("${aws.lambda.function-name}")
-	private String functionName;
-
 	private final LambdaClient lambdaClient;
 
-	public String invokeFunction(String payload) {
+	public String invokeFunction(String functionName, String payload) {
 		InvokeRequest invokeRequest = InvokeRequest.builder()
 			.functionName(functionName)
 			.payload(SdkBytes.fromUtf8String(payload))
