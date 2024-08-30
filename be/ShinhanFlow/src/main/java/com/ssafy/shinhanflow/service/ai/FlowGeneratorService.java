@@ -23,8 +23,9 @@ public class FlowGeneratorService {
 	private final ObjectMapper objectMapper;
 	private final LambdaFunctionInvoker lambdaFunctionInvoker;
 
-	public CreateFlowRequestDto generateFlow(String prompt) throws JsonProcessingException {
+	public CreateFlowRequestDto generateFlow(Long userId, String prompt) throws JsonProcessingException {
 		FlowGeneratorLambdaFunctionRequestBodyDto flowGeneratorLambdaFunctionRequestBodyDto = FlowGeneratorLambdaFunctionRequestBodyDto.builder()
+			.userId(userId)
 			.prompt(prompt)
 			.build();
 		String payload = objectMapper.writeValueAsString(flowGeneratorLambdaFunctionRequestBodyDto);

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ssafy.shinhanflow.auth.jwt.JWTUtil;
 import com.ssafy.shinhanflow.config.error.SuccessResponse;
 import com.ssafy.shinhanflow.dto.ai.FlowGeneratorRequestDto;
 import com.ssafy.shinhanflow.dto.ai.FlowGeneratorResponseDto;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class FlowGeneratorController {
 
+	private final JWTUtil jwtUtil;
 	private final FlowGeneratorService flowGeneratorService;
 
 	@PostMapping("/flow-generator")
@@ -29,7 +31,7 @@ public class FlowGeneratorController {
 		@RequestHeader("Authorization") String token,
 		@RequestBody FlowGeneratorRequestDto dto
 	) throws JsonProcessingException {
-		CreateFlowRequestDto flow = flowGeneratorService.generateFlow(dto.prompt());
+		CreateFlowRequestDto flow = flowGeneratorService.generateFlow(jwtUtil.getId(token), dto.prompt());
 		return SuccessResponse.of(
 			FlowGeneratorResponseDto.builder()
 				.flow(flow)
