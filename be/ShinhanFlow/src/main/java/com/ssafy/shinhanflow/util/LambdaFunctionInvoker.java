@@ -27,8 +27,12 @@ public class LambdaFunctionInvoker {
 			.build();
 
 		InvokeResponse invokeResponse = lambdaClient.invoke(invokeRequest);
+		log.info(invokeResponse.payload().asUtf8String());
 		try {
-			JsonNode jsonNode = objectMapper.readTree(invokeResponse.payload().asInputStream());
+			JsonNode jsonNode = objectMapper.readTree(
+				invokeResponse.payload().asUtf8String());
+			log.info(jsonNode.toString());
+			// {"statusCode":200,"body":"{\"userId\":1,\"prompt\":\"test\"}"}
 			return jsonNode.get("body");
 		} catch (Exception e) {
 			throw new RuntimeException("LambdaFunctionInvoker.invokeFunction - Failed to parse response body", e);
