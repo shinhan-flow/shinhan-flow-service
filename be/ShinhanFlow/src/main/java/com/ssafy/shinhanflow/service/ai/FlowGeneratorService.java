@@ -24,12 +24,15 @@ public class FlowGeneratorService {
 	private final LambdaFunctionInvoker lambdaFunctionInvoker;
 
 	public CreateFlowRequestDto generateFlow(Long userId, String prompt) throws JsonProcessingException {
+		log.info("FlowGeneratorService.generateFlow - userId: {}, prompt: {}", userId, prompt);
 		FlowGeneratorLambdaFunctionRequestBodyDto flowGeneratorLambdaFunctionRequestBodyDto = FlowGeneratorLambdaFunctionRequestBodyDto.builder()
 			.userId(userId)
 			.prompt(prompt)
 			.build();
 		String payload = objectMapper.writeValueAsString(flowGeneratorLambdaFunctionRequestBodyDto);
 		String responseBody = lambdaFunctionInvoker.invokeFunction(functionName, payload);
+		log.info("LambdaFunctionInvoker.generateFlow's responseBody: {}", responseBody);
+
 		FlowGeneratorLambdaFunctionResponseBodyDto flowGeneratorLambdaFunctionResponseBodyDto = objectMapper.readValue(
 			responseBody, FlowGeneratorLambdaFunctionResponseBodyDto.class);
 		return flowGeneratorLambdaFunctionResponseBodyDto.flow();

@@ -31,6 +31,7 @@ public class FlowGeneratorController {
 		@RequestHeader("Authorization") String token,
 		@RequestBody FlowGeneratorRequestDto dto
 	) throws JsonProcessingException {
+		log.info("FlowGeneratorController.generateFlow");
 		CreateFlowRequestDto flow = flowGeneratorService.generateFlow(jwtUtil.getId(token), dto.prompt());
 		return SuccessResponse.of(
 			FlowGeneratorResponseDto.builder()

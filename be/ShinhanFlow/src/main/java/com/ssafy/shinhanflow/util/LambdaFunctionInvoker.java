@@ -16,6 +16,7 @@ public class LambdaFunctionInvoker {
 	private final LambdaClient lambdaClient;
 
 	public String invokeFunction(String functionName, String payload) {
+		log.info("LambdaFunctionInvoker.invokeFunction - functionName: {}, payload: {}", functionName, payload);
 		InvokeRequest invokeRequest = InvokeRequest.builder()
 			.functionName(functionName)
 			.payload(SdkBytes.fromUtf8String(payload))
