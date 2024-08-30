@@ -1,0 +1,24 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:43.929506",
+    "request": "환율이 1100원 이상일 때 환전해 주세요.\n",
+    "output": {
+        "title": "환율 조건에 따른 환전",
+        "description": "환율이 1100원 이상일 때 자동으로 환전합니다.",
+        "triggers": [
+            {
+                "type": "exchangeRateTrigger",
+                "currency": "USD",
+                "rate": 1100
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

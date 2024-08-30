@@ -1,0 +1,24 @@
+{
+    "test_code": "model_ver1.py",
+    "date": "2024-08-29 12:11:12.571498",
+    "output": {
+        "title": "매월 25일 자동 송금",
+        "description": "매월 25일에 5만원을 특정 계좌에서 송금하는 자동화 작업입니다.",
+        "triggers": [
+            {
+                "type": "dayOfMonthTrigger",
+                "days": [
+                    25
+                ]
+            }
+        ],
+        "actions": [
+            {
+                "type": "transferAction",
+                "fromAccount": "111113111111",
+                "toAccount": "123456123123",
+                "amount": 50000
+            }
+        ]
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:29:02.808679",
+    "request": "잔액이 500달러 이상이고 환율이 1100원 이상일 때 환전해 주세요.\n",
+    "output": {
+        "title": "환전 요청",
+        "description": "잔액이 500달러 이상이고 환율이 1100원 이상일 때 환전을 진행합니다.",
+        "triggers": [
+            {
+                "type": "balanceTrigger",
+                "account": "123123123456",
+                "balance": 500,
+                "condition": "GT"
+            },
+            {
+                "type": "exchangeRateTrigger",
+                "currency": "USD",
+                "rate": 1100
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

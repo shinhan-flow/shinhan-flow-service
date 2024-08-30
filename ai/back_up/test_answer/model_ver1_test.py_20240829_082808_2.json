@@ -1,0 +1,16 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:08.125485",
+    "request": "text 알림을 보내 주세요.\n",
+    "output": {
+        "title": "Text Notification",
+        "description": "Sending a text notification to the user.",
+        "triggers": [],
+        "actions": [
+            {
+                "type": "textNotificationAction",
+                "text": "얼른 운동가자"
+            }
+        ]
+    }
+}

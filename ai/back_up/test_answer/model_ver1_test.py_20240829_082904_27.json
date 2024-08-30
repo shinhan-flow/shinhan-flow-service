@@ -1,0 +1,28 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:29:04.888290",
+    "request": "잔액이 충분하면 환율이 변동될 때마다 환율 알림을 보내 주세요.\n",
+    "output": {
+        "title": "환율 변동 알림 설정",
+        "description": "잔액이 충분할 경우 환율 변동 시 알림을 받는 설정입니다.",
+        "triggers": [
+            {
+                "type": "balanceTrigger",
+                "account": "123123123456",
+                "balance": 0,
+                "condition": "GT"
+            },
+            {
+                "type": "exchangeRateTrigger",
+                "currency": "USD",
+                "rate": 0
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeRateNotificationAction",
+                "currency": "USD"
+            }
+        ]
+    }
+}

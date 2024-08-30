@@ -1,0 +1,23 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:14.329545",
+    "request": "잔액 상태에 따라 환율 알림을 보내 주세요.\n",
+    "output": {
+        "title": "잔액 상태에 따른 환율 알림",
+        "description": "사용자의 잔액 상태에 따라 환율 알림을 전송합니다.",
+        "triggers": [
+            {
+                "type": "balanceTrigger",
+                "account": "123123123456",
+                "balance": 0,
+                "condition": "LT"
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeRateNotificationAction",
+                "currency": "USD"
+            }
+        ]
+    }
+}

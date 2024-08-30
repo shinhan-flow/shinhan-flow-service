@@ -1,0 +1,22 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:47.196116",
+    "request": "환율이 1200원 이하일 때 환율 알림을 보내 주세요.\n",
+    "output": {
+        "title": "환율 알림 설정",
+        "description": "환율이 1200원 이하일 경우 환율 알림을 전달합니다.",
+        "triggers": [
+            {
+                "type": "exchangeRateTrigger",
+                "currency": "USD",
+                "rate": 1200
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeRateNotificationAction",
+                "currency": "USD"
+            }
+        ]
+    }
+}

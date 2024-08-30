@@ -1,19 +1,46 @@
-import os
-from openai import OpenAI
-from dotenv import load_dotenv
+from utils import *
+from chat import *
+import argparse
+import os, sys
+import pickle
+import asyncio
 
-load_dotenv()
+# with open(f'{ROOT_DIR}/thread.pickle','wb') as f:
+#     pickle.dump({}, f)
+# 루트 경로 찾기
+ROOT_DIR = find_root_dir()
 
-client = OpenAI(
-    api_key=os.getenv("API_KEY")
-)
 
-chat_completion = client.chat.completions.create(
-    messages=[
-        {
-            "role": "user",
-            "content": "Hello world",
-        }
-    ],
-    model="gpt-4o-mini",
-)
+def main():
+    parser = argparse.ArgumentParser(description="Example script with arguments")
+    # parser.add_argument('-n', '--name', type=str, help='Name of the user', required=True)
+    parser.add_argument(
+        "-m",
+        "--model_num",
+        type=int,
+        help="choose model's number",
+        required=False,
+        default=1,
+    )
+    parser.add_argument(
+        "-u", "--user_id", type=int, help="enter user's id", required=False, default=0
+    )
+    parser.add_argument(
+        "-r",
+        "--request",
+        type=str,
+        help="enter user's request",
+        required=False,
+        default="매달 25일에 나에게 사랑해 라는 알림을 줘",
+    )
+    args = parser.parse_args()
+
+    # 플로우 생성 요청하기
+    my_flow = create_flow(args.request, args.model_num)
+    print(my_flow)
+    print(json.loads("```" + my_flow + "```"))
+    print(type(my_flow))
+
+
+if __name__ == "__main__":
+    main()

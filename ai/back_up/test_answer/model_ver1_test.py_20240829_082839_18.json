@@ -1,0 +1,23 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:39.952643",
+    "request": "10월 10일에 환전해 주세요.\n",
+    "output": {
+        "title": "환전 요청",
+        "description": "사용자가 10월 10일에 환전을 요청했습니다.",
+        "triggers": [
+            {
+                "type": "specificDateTrigger",
+                "localDate": "2024-10-10"
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:09.496199",
+    "request": "이 금액을 송금해 주세요.\n",
+    "output": {
+        "title": "송금 요청",
+        "description": "사용자가 요청한 금액을 송금합니다.",
+        "triggers": [],
+        "actions": [
+            {
+                "type": "transferAction",
+                "fromAccount": "123123123456",
+                "toAccount": "456456456789",
+                "amount": 0
+            }
+        ]
+    }
+}

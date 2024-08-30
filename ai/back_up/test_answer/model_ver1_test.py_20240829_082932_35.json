@@ -1,0 +1,23 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:29:32.280195",
+    "request": "다음 달 동안 매주 월요일에 환율 알림을 보내 주세요.\n",
+    "output": {
+        "title": "환율 알림 설정",
+        "description": "다음 달 동안 매주 월요일에 환율 알림을 받습니다.",
+        "triggers": [
+            {
+                "type": "daysOfWeekTrigger",
+                "daysOfWeek": [
+                    "MONDAY"
+                ]
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeRateNotificationAction",
+                "currency": "USD"
+            }
+        ]
+    }
+}

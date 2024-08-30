@@ -1,0 +1,25 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:34.267168",
+    "request": "매달 1일에 환전해 주세요.\n",
+    "output": {
+        "title": "매달 1일 환전",
+        "description": "매달 1일에 자동으로 환전을 수행합니다.",
+        "triggers": [
+            {
+                "type": "dayOfMonthTrigger",
+                "days": [
+                    1
+                ]
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "1234567890",
+                "amount": 0
+            }
+        ]
+    }
+}

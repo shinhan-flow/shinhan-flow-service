@@ -1,0 +1,28 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:29:34.588309",
+    "request": "이자율이 3% 이상이면 12월 25일에 환전해 주세요.\n",
+    "output": {
+        "title": "환전 요청",
+        "description": "이자율이 3% 이상인 경우 12월 25일에 환전하는 요청입니다.",
+        "triggers": [
+            {
+                "type": "interestRateTrigger",
+                "accountProduct": "CURRENT_ACCOUNT",
+                "rate": 3
+            },
+            {
+                "type": "specificDateTrigger",
+                "localDate": "2024-12-25"
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

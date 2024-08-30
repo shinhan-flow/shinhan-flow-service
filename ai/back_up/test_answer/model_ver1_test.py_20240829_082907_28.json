@@ -1,0 +1,29 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:29:07.018452",
+    "request": "10월 10일에 송금한 뒤 환전해 주세요.\n",
+    "output": {
+        "title": "10월 10일 송금 및 환전",
+        "description": "10월 10일에 특정 금액을 송금한 뒤 환전하는 작업을 설정합니다.",
+        "triggers": [
+            {
+                "type": "specificDateTrigger",
+                "localDate": "2024-10-10"
+            }
+        ],
+        "actions": [
+            {
+                "type": "transferAction",
+                "fromAccount": "123123123456",
+                "toAccount": "456456456789",
+                "amount": 0
+            },
+            {
+                "type": "exchangeAction",
+                "currency": "USD",
+                "fromAccount": "123123123456",
+                "amount": 0
+            }
+        ]
+    }
+}

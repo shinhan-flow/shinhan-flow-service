@@ -1,0 +1,26 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:29:00.505170",
+    "request": "매일 아침 9시에 환율 알림을 보내 주세요.\n",
+    "output": {
+        "title": "매일 아침 9시 환율 알림",
+        "description": "매일 아침 9시에 환율에 대한 알림을 받습니다.",
+        "triggers": [
+            {
+                "type": "specificTimeTrigger",
+                "time": {
+                    "hour": 9,
+                    "minute": 0,
+                    "second": 0,
+                    "nano": 0
+                }
+            }
+        ],
+        "actions": [
+            {
+                "type": "exchangeRateNotificationAction",
+                "currency": "USD"
+            }
+        ]
+    }
+}

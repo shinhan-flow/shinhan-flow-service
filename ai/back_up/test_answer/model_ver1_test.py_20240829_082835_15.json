@@ -1,0 +1,25 @@
+{
+    "test_code": "model_ver1_test.py",
+    "date": "2024-08-29 08:28:35.717482",
+    "request": "매달 15일에 송금해 주세요.\n",
+    "output": {
+        "title": "매달 15일 송금",
+        "description": "매달 15일에 자동으로 송금하는 설정입니다.",
+        "triggers": [
+            {
+                "type": "dayOfMonthTrigger",
+                "days": [
+                    15
+                ]
+            }
+        ],
+        "actions": [
+            {
+                "type": "transferAction",
+                "fromAccount": "123123123456",
+                "toAccount": "456456456789",
+                "amount": 0
+            }
+        ]
+    }
+}
