@@ -107,7 +107,7 @@ public class FlowService {
 
 	public GetFlowListResponseDto getFlowList(Long memberId, Integer nowPage, Integer perPage) {
 		Pageable pageable = PageRequest.of(nowPage, perPage);
-		Page<FlowEntity> res = flowRepository.findAll(pageable);
+		Page<FlowEntity> res = flowRepository.findByMemberId(memberId, pageable);
 
 		return GetFlowListResponseDto
 			.builder()
