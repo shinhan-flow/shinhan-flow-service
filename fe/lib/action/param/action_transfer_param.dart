@@ -45,4 +45,7 @@ class AcTransferParam extends ActionBaseParam {
       holder: form.holder,
     );
   }
+
+  factory AcTransferParam.fromJson(Map<String, dynamic> json) =>
+      _$AcTransferParamFromJson(json);
 }

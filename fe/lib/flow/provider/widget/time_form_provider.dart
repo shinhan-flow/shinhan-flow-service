@@ -23,7 +23,7 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
     super.endDate,
     super.date,
     super.specificTime,
-    super.dayOfWeek,
+    super.daysOfWeek,
     super.dayOfMonth,
     super.dates,
     // this.flowType,
@@ -62,8 +62,8 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
           return dayOfWeek != null && dayOfWeek.isNotEmpty;
         case TriggerType.DayOfMonthTrigger:
           return dayOfMonth != null && dayOfMonth.isNotEmpty;
-        case TriggerType.multiDate:
-          return dates != null && dates.isNotEmpty;
+        // case TriggerType.multiDate:
+        //   return dates != null && dates.isNotEmpty;
         default:
           return false;
       }
@@ -93,7 +93,7 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
     }
 
     final validSpecificTime = specificTime ?? this.specificTime;
-    final validDayOfWeek = dayOfWeek ?? this.dayOfWeek;
+    final validDayOfWeek = dayOfWeek ?? this.daysOfWeek;
     final validDayOfMonth = dayOfMonth ?? this.dayOfMonth;
     final validDates = dates ?? this.dates;
     final valid = validation(
@@ -110,7 +110,7 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
       endDate: validEndDate,
       date: validDate,
       specificTime: validSpecificTime,
-      dayOfWeek: validDayOfWeek,
+      daysOfWeek: validDayOfWeek,
       dayOfMonth: validDayOfMonth,
       dates: validDates,
       valid: valid,
@@ -128,7 +128,7 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
       endDate: null,
       date: date,
       specificTime: specificTime,
-      dayOfWeek: dayOfWeek,
+      daysOfWeek: daysOfWeek,
       dayOfMonth: dayOfMonth,
       dates: dates,
       valid: valid,

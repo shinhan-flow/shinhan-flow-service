@@ -11,13 +11,14 @@ enum TimeCategory {
 }
 
 enum DayOfWeek {
-  MON('월'),
-  TUE('화'),
-  WEN('수'),
-  THU('목'),
-  FRI('금'),
-  SAT('토'),
-  SUN('일');
+
+  MONDAY('월'),
+  TUESDAY('화'),
+  WEDNESDAY('수'),
+  THURSDAY('목'),
+  FRIDAY('금'),
+  SATURDAY('토'),
+  SUNDAY('일');
 
   final String name;
 

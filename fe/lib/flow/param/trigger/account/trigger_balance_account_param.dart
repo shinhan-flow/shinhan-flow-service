@@ -39,4 +39,8 @@ class TgAccountBalanceParam extends TriggerBaseParam {
       condition: form.condition!,
     );
   }
+
+
+  factory TgAccountBalanceParam.fromJson(Map<String, dynamic> json) =>
+      _$TgAccountBalanceParamFromJson(json);
 }

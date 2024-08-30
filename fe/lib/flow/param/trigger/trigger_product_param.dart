@@ -34,4 +34,8 @@ class TgProductParam extends TriggerBaseParam {
       rate: form.rate,
     );
   }
+
+
+  factory TgProductParam.fromJson(Map<String, dynamic> json) =>
+      _$TgProductParamFromJson(json);
 }

@@ -28,4 +28,8 @@ class AcExchangeRateNotificationParam extends ActionBaseParam {
       currency: form.currency,
     );
   }
+
+
+  factory AcExchangeRateNotificationParam.fromJson(Map<String, dynamic> json) =>
+      _$AcExchangeRateNotificationParamFromJson(json);
 }

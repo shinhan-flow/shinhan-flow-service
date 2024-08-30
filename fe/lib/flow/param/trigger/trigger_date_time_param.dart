@@ -22,7 +22,7 @@ class TgDateTimeParam extends TriggerBaseParam {
 
   /// 여러 요일
   // @JsonKey(name: 'day_of_week')
-  final List<DayOfWeek>? dayOfWeek;
+  final List<DayOfWeek>? daysOfWeek;
 
   // @JsonKey(name: 'day_of_month')
   final List<int>? dayOfMonth;
@@ -36,7 +36,7 @@ class TgDateTimeParam extends TriggerBaseParam {
     this.endDate,
     this.date,
     this.specificTime,
-    this.dayOfWeek,
+    this.daysOfWeek,
     this.dayOfMonth,
     this.dates,
     required super.type,
@@ -49,7 +49,7 @@ class TgDateTimeParam extends TriggerBaseParam {
         endDate,
         date,
         specificTime,
-        dayOfWeek,
+        daysOfWeek,
         dayOfMonth,
         dates,
       ];
@@ -68,7 +68,7 @@ class TgDateTimeParam extends TriggerBaseParam {
               endDate: form.endDate,
               type: form.type!);
         case TriggerType.DayOfWeekTrigger:
-          return TgDateTimeParam(dayOfWeek: form.dayOfWeek, type: form.type!);
+          return TgDateTimeParam(daysOfWeek: form.daysOfWeek, type: form.type!);
         case TriggerType.DayOfMonthTrigger:
           return TgDateTimeParam(dayOfMonth: form.dayOfMonth, type: form.type!);
         default:
@@ -104,6 +104,9 @@ class TgSpecificDateParam extends TriggerBaseParam {
     return TgSpecificDateParam(type: form.type, localDate: form.date!);
   }
 
+  factory TgSpecificDateParam.fromJson(Map<String, dynamic> json) =>
+      _$TgSpecificDateParamFromJson(json);
+
   @override
   Map<String, dynamic> toJson() => _$TgSpecificDateParamToJson(this);
 }
@@ -131,6 +134,9 @@ class TgPeriodDateParam extends TriggerBaseParam {
         type: form.type, startDate: form.startDate!, endDate: form.endDate!);
   }
 
+  factory TgPeriodDateParam.fromJson(Map<String, dynamic> json) =>
+      _$TgPeriodDateParamFromJson(json);
+
   @override
   Map<String, dynamic> toJson() => _$TgPeriodDateParamToJson(this);
 }
@@ -138,29 +144,34 @@ class TgPeriodDateParam extends TriggerBaseParam {
 @JsonSerializable()
 class TgDayOfWeekParam extends TriggerBaseParam {
   /// 요일을 설정하는 트리거 생성
-  final List<DayOfWeek>? dayOfWeek;
+  final List<DayOfWeek>? daysOfWeek;
 
   TgDayOfWeekParam({
-    this.dayOfWeek,
+    this.daysOfWeek,
     super.type = TriggerType.DayOfWeekTrigger,
   });
 
   @override
   List<Object?> get props => [
         type,
-        dayOfWeek,
+        daysOfWeek,
       ];
 
   @override
   bool? get stringify => true;
 
   factory TgDayOfWeekParam.fromForm({required TgDateTimeFormModel form}) {
-    // form.dayOfWeek!.sort();
+    form.daysOfWeek!.sort((a, b) {
+      return a.index - b.index;
+    });
     return TgDayOfWeekParam(
       type: form.type,
-      dayOfWeek: form.dayOfWeek!,
+      daysOfWeek: form.daysOfWeek!,
     );
   }
+
+  factory TgDayOfWeekParam.fromJson(Map<String, dynamic> json) =>
+      _$TgDayOfWeekParamFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$TgDayOfWeekParamToJson(this);
@@ -193,6 +204,9 @@ class TgDayOfMonthParam extends TriggerBaseParam {
     );
   }
 
+  factory TgDayOfMonthParam.fromJson(Map<String, dynamic> json) =>
+      _$TgDayOfMonthParamFromJson(json);
+
   @override
   Map<String, dynamic> toJson() => _$TgDayOfMonthParamToJson(this);
 }
@@ -216,13 +230,8 @@ class TgTimeParam extends TriggerBaseParam {
   @override
   bool? get stringify => true;
 
-  // factory TgTimeParam.fromForm({required TgDateTimeFormModel form}) {
-  //   // form.dayOfWeek!.sort();
-  //   return TgTimeParam(
-  //     type: form.type,
-  //     time: form.time!,
-  //   );
-  // }
+  factory TgTimeParam.fromJson(Map<String, dynamic> json) =>
+      _$TgTimeParamFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$TgTimeParamToJson(this);

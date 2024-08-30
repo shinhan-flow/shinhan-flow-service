@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:shinhan_flow/account/view/account_transaction_history_screen.dart';
 import 'package:shinhan_flow/action/view/action_notification_screen.dart';
+import 'package:shinhan_flow/flow/view/flow_detail_screen.dart';
 import 'package:shinhan_flow/permission_screen.dart';
 import 'package:shinhan_flow/product/view/product_account_screen.dart';
 import 'package:shinhan_flow/splash_screen.dart';
@@ -201,6 +202,18 @@ final routerProvider = Provider<GoRouter>((ref) {
                               routes: []),
                         ]),
                   ]),
+              GoRoute(
+                path: ':flowId',
+                parentNavigatorKey: rootNavKey,
+                name: FlowDetailScreen.routeName,
+                builder: (context, state) {
+                  final pathParameters = state.pathParameters;
+                  final String flowId = pathParameters['flowId'] as String;
+                  return FlowDetailScreen(
+                    flowId: int.parse(flowId),
+                  );
+                },
+              ),
             ]),
       ]);
 });

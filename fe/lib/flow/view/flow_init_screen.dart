@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:shinhan_flow/action/param/action_balance_notification_param.dart';
 import 'package:shinhan_flow/action/param/action_exchange_param.dart';
 import 'package:shinhan_flow/action/param/action_exchange_rate_notification_param.dart';
@@ -48,6 +50,13 @@ class FlowInitScreen extends StatelessWidget {
 
   const FlowInitScreen({super.key});
 
+  bool validDate(String date) {
+    final now = DateTime.now();
+
+    log('now  = $now date = $date');
+    return now.compareTo(DateTime.parse(date)) == -1;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,20 +71,52 @@ class FlowInitScreen extends StatelessWidget {
                   .triggers
                   .where((t) => t.type.isTimeType() || t.type.isDateType())
                   .toList();
+              String date = '';
+              String time = '00:00:00';
+              bool timeValid = true;
               for (var t in dateTimeTriggers) {
-                if (t.type == TriggerType.SpecificTimeTrigger) {
-
-                } else {}
+                // 1. 날짜 검증, 2. 시간 검증
+                // 날짜 fail => fail
+                // 날짜 pass => 시간 fail => fail
+                // 날짜 pass => 시간 pass => pass
+                /// 시간 먼저 검증
+                DateTime now = DateTime.now();
+                final df = DateFormat('yyyy-MM-dd');
+                if (t.type != TriggerType.SpecificTimeTrigger) {
+                  if (t is TgSpecificDateParam) {
+                    date = t.localDate!;
+                  } else if (t is TgPeriodDateParam) {
+                    date = t.startDate!;
+                  } else if (t is TgDayOfWeekParam) {
+                    date = '9999-01-01';
+                  } else if (t is TgDayOfMonthParam) {
+                    date = '9999-01-01';
+                  }
+                } else {
+                  final param = t as TgTimeParam;
+                  time = param.time;
+                }
+              }
+              if (date.isNotEmpty) {
+                timeValid = validDate("$date $time");
               }
 
-              final result = await ref.read(createFlowProvider.future);
-              if (result is ErrorModel) {
-              } else {
-                if (context.mounted) {
-                  context.goNamed(HomeScreen.routeName);
-                  FlashUtil.showFlash(context, '플로우 생성 성공!',
-                      textColor: const Color(0xFF49B7FF));
+              if (timeValid) {
+                final result = await ref.read(createFlowProvider.future);
+                if (result is ErrorModel) {
+                } else {
+                  if (context.mounted) {
+                    context.goNamed(HomeScreen.routeName);
+                    FlashUtil.showFlash(context, '플로우 생성 성공!',
+                        textColor: const Color(0xFF49B7FF));
+                  }
                 }
+              } else {
+                FlashUtil.showFlash(
+                  context,
+                  '날짜 및 시간이 현재 이후 여야 합니다!',
+                  textColor: const Color(0xFFe21a1a),
+                );
               }
             },
             text: '생성하기',
@@ -98,13 +139,13 @@ class FlowInitScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 28.h),
                 sliver: SliverMainAxisGroup(slivers: [
                   SliverToBoxAdapter(
-                    child: _TriggerComponent(
+                    child: _FlowInitComponent(
                       property: FlowProperty.trigger,
                     ),
                   ),
                   SliverToBoxAdapter(child: SizedBox(height: 40.h)),
                   SliverToBoxAdapter(
-                    child: _TriggerComponent(
+                    child: _FlowInitComponent(
                       property: FlowProperty.action,
                     ),
                   ),
@@ -116,10 +157,10 @@ class FlowInitScreen extends StatelessWidget {
   }
 }
 
-class _TriggerComponent extends ConsumerWidget {
+class _FlowInitComponent extends ConsumerWidget {
   final FlowProperty property;
 
-  const _TriggerComponent({
+  const _FlowInitComponent({
     super.key,
     required this.property,
   });
@@ -246,7 +287,7 @@ class _TriggerComponent extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        "추가로 선택하실 조건은 무엇인가요?",
+                        "추가로 선택하실 행동은 무엇인가요?",
                         style: SHFlowTextStyle.subTitle,
                       ),
                       SizedBox(height: 20.h),
@@ -357,7 +398,7 @@ class _TriggerComponent extends ConsumerWidget {
               property == FlowProperty.trigger ? '조건' : '행동',
               style: SHFlowTextStyle.subTitle,
             ),
-            InkWell(
+            GestureDetector(
               onTap: () {
                 ref
                     .read(showFlowDeleteProvider(property).notifier)
@@ -424,7 +465,7 @@ class _FlowInitCard extends ConsumerWidget {
             break;
           case TriggerType.DayOfWeekTrigger:
             final param = (findTrigger as TgDayOfWeekParam);
-            final dayOfWeek = param.dayOfWeek
+            final dayOfWeek = param.daysOfWeek
                 ?.map((d) => d.name)
                 .reduce((v, e) => "$v, ${e}");
             content = "매주 $dayOfWeek 반복";
@@ -550,7 +591,7 @@ class _FlowInitCard extends ConsumerWidget {
             right: 0,
             left: 0,
             bottom: 0,
-            child: InkWell(
+            child: GestureDetector(
               onTap: onTap,
               child: Align(
                 child: Container(
@@ -581,7 +622,7 @@ class _FlowInitCard extends ConsumerWidget {
               right: 0,
               child: Consumer(
                 builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                  return InkWell(
+                  return GestureDetector(
                     onTap: () {
                       if (triggerType != null) {
                         final triggers = ref.read(triggerCategoryProvider);

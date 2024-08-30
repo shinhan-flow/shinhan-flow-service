@@ -29,6 +29,29 @@ Future<BaseModel> createFlow(CreateFlowRef ref) async {
 }
 
 @riverpod
+class FlowDetail extends _$FlowDetail {
+  @override
+  BaseModel build({required int id}) {
+    get(flowId: id);
+    return LoadingModel();
+  }
+
+  void get({required int flowId}) async {
+    await ref
+        .read(flowRepositoryProvider)
+        .getFlow(flowId: flowId)
+        .then((value) async {
+      logger.i(value);
+      state = value;
+    }).catchError((e) {
+      final error = ErrorModel.respToError(e);
+      logger.e('code ${error.code}\nmessage = ${error.message}');
+      state = error;
+    });
+  }
+}
+
+@riverpod
 Future<BaseModel> toggleFlow(ToggleFlowRef ref, {required int flowId}) async {
   final repository = ref.read(flowRepositoryProvider);
   return await repository

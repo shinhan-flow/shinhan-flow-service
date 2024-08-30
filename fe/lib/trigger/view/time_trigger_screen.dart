@@ -208,8 +208,8 @@ class _IterateComponentState extends ConsumerState<_IterateComponent>
                         tabController.animateTo(idx);
                       },
                       tabs: const [
-                        Tab(child: Text('날짜 선택')),
                         Tab(child: Text('요일 선택')),
+                        Tab(child: Text('날짜 선택')),
                       ],
                     )),
                     pinned: true,
@@ -240,7 +240,7 @@ class _IteratorDayOfWeekComponent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedDays =
-        ref.watch(tgDateTimeFormProvider.select((p) => p.dayOfWeek));
+        ref.watch(tgDateTimeFormProvider.select((p) => p.daysOfWeek));
 
     final dayOfWeeks = DayOfWeek.values
         .map((d) => _DayOfWeekComponent(
@@ -345,7 +345,7 @@ class _DayChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(12.r),
@@ -375,7 +375,7 @@ class _DayOfWeekComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(12.r),
@@ -481,7 +481,7 @@ class _DateTimeTriggerChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(

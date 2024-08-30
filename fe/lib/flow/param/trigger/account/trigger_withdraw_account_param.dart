@@ -35,4 +35,7 @@ class TgAccountWithdrawParam extends TriggerBaseParam {
       type: form.type!,
     );
   }
+
+  factory TgAccountWithdrawParam.fromJson(Map<String, dynamic> json) =>
+      _$TgAccountWithdrawParamFromJson(json);
 }

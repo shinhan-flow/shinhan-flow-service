@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shinhan_flow/account/model/account_model.dart';
 import 'package:shinhan_flow/common/model/default_model.dart';
+import 'package:shinhan_flow/trigger/model/enum/time_category.dart';
 
 import '../../trigger/model/enum/foreign_currency_category.dart';
 

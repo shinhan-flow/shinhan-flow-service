@@ -288,7 +288,7 @@ class _AccountDropDownState extends ConsumerState<AccountDropDown> {
               style: SHFlowTextStyle.subTitle,
             ),
             SizedBox(height: 20.h),
-            InkWell(
+            GestureDetector(
               onTap: () {
                 context.goNamed(ProductAccountScreen.routeName);
               },

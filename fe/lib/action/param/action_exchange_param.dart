@@ -40,4 +40,7 @@ class AcExchangeParam extends ActionBaseParam {
       amount: form.amount,
     );
   }
+
+  factory AcExchangeParam.fromJson(Map<String, dynamic> json) =>
+      _$AcExchangeParamFromJson(json);
 }

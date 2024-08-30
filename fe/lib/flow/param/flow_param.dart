@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shinhan_flow/flow/param/trigger/trigger_param.dart';
 
-import '../../action/param/action_param.dart';
 import '../../common/param/default_param.dart';
 
 part 'flow_param.g.dart';

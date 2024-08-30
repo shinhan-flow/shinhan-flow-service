@@ -18,7 +18,6 @@ import '../../flow/param/trigger/trigger_param.dart';
 import '../../flow/provider/widget/flow_form_provider.dart';
 import '../../trigger/model/enum/foreign_currency_category.dart';
 import '../model/enum/action_type.dart';
-import '../param/action_param.dart';
 
 class ActionNotificationScreen extends ConsumerWidget {
   static String get routeName => 'notification';
@@ -160,7 +159,7 @@ class _NotificationFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Container(
         width: 85.w,
