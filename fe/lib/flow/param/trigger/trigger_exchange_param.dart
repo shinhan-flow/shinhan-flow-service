@@ -12,7 +12,6 @@ part 'trigger_exchange_param.g.dart';
 @JsonSerializable()
 class TgExchangeParam extends TriggerBaseParam {
   final CurrencyType? currency;
-  // @JsonKey(name: 'ex_rate')
   final double? rate;
 
    TgExchangeParam({

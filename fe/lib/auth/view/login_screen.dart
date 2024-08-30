@@ -196,30 +196,30 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
                 const Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      child: Text(
-                        "고객센터",
-                        style: SHFlowTextStyle.label
-                            .copyWith(color: const Color(0xFF8c8c8c)),
-                      ),
-                    ),
-                    Text(
-                      " | ",
-                      style: SHFlowTextStyle.label
-                          .copyWith(color: const Color(0xFF8c8c8c)),
-                    ),
-                    GestureDetector(
-                      child: Text(
-                        "ID / PW 를 잊으셨나요?",
-                        style: SHFlowTextStyle.label
-                            .copyWith(color: const Color(0xFF8c8c8c)),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     GestureDetector(
+                //       child: Text(
+                //         "고객센터",
+                //         style: SHFlowTextStyle.label
+                //             .copyWith(color: const Color(0xFF8c8c8c)),
+                //       ),
+                //     ),
+                //     Text(
+                //       " | ",
+                //       style: SHFlowTextStyle.label
+                //           .copyWith(color: const Color(0xFF8c8c8c)),
+                //     ),
+                //     GestureDetector(
+                //       child: Text(
+                //         "ID / PW 를 잊으셨나요?",
+                //         style: SHFlowTextStyle.label
+                //             .copyWith(color: const Color(0xFF8c8c8c)),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 SizedBox(height: 64.h),
               ],
             ),

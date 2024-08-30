@@ -67,7 +67,7 @@ class _PaginationListViewState<T extends Base>
         widget.controller.position.maxScrollExtent) {
       // log("scroll end");
       ref.read(widget.provider.notifier).paginate(
-        paginationParams:  const PaginationParam(nowPage: 0, perPage: 2),
+        paginationParams:  const PaginationParam(nowPage: 0, perPage: 5),
         param: widget.param,
         fetchMore: true,
         // path: family.path,

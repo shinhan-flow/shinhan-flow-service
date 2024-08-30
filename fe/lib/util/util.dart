@@ -13,6 +13,9 @@ class FormatUtil{
   static String formatNumber(int num){
     return NumberFormat('#,###').format(num);
   }
+  static String formatDouble(double num){
+    return NumberFormat('#,###').format(num);
+  }
   static String formatTime(String time) {
     // "010539"을 "01:05:39"로 포맷팅
     return '${time.substring(0, 2)}:${time.substring(2, 4)}:${time.substring(4, 6)}';
