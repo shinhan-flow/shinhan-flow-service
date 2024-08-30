@@ -20,7 +20,7 @@ def main():
         type=int,
         help="choose model's number",
         required=False,
-        default=1,
+        default=2,
     )
     parser.add_argument(
         "-u", "--user_id", type=int, help="enter user's id", required=False, default=0
@@ -38,8 +38,6 @@ def main():
     # 플로우 생성 요청하기
     my_flow = create_flow(args.request, args.model_num)
     print(my_flow)
-    print(json.loads("```" + my_flow + "```"))
-    print(type(my_flow))
 
 
 if __name__ == "__main__":
