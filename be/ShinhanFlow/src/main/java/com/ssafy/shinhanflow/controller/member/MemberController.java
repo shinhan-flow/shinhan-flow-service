@@ -25,9 +25,14 @@ public class MemberController {
 		return SuccessResponse.of(memberService.createMember(signUpRequestDto));
 	}
 
-	@GetMapping("/credit-score")
+	// @GetMapping("/credit-score")
 	public SuccessResponse<CreditScoreResponseDto> getCreditScore(@RequestHeader("Authorization") String token) {
 		return SuccessResponse.of(memberService.getCreditScore(token));
+	}
+
+	@GetMapping("/credit-score")
+	public SuccessResponse<CreditScoreResponseDto> getCreditScoreFromDB(@RequestHeader("Authorization") String token) {
+		return SuccessResponse.of(memberService.getCreditScoreFromDB(token));
 	}
 }
 

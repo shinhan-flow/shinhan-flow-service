@@ -4,6 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.shinhanflow.dto.finance.FinanceApiResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
+
+@EqualsAndHashCode(callSuper = true)
+@Value
+@Builder
 public class CreditScoreResponseDto extends FinanceApiResponseDto {
 	@JsonProperty("Header")
 	RequestHeaderDto requestHeader;
@@ -11,7 +18,7 @@ public class CreditScoreResponseDto extends FinanceApiResponseDto {
 	@JsonProperty("REC")
 	Rec rec;
 
-	private record Rec(String ratingName, Long demandDepositAssetValue, Long depositSavingsAssetValue,
-					   Long totalAssetValue) {
+	public record Rec(String ratingName, Long demandDepositAssetValue, Long depositSavingsAssetValue,
+					  Long totalAssetValue) {
 	}
 }
