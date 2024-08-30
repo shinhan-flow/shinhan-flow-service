@@ -33,10 +33,11 @@ public class FlowGeneratorService {
 		String responseBody = lambdaFunctionInvoker.invokeFunction(functionName, payload);
 		log.info("LambdaFunctionInvoker.generateFlow's responseBody: {}", responseBody);
 
-		String json = "{\"title\": \"test\", \"description\": \"testing\", \"triggers\": [], \"actions\": []}";
+		String json = "{\"flow\": {\"title\": \"test\", \"description\": \"testing\", \"triggers\": [], \"actions\": []}}";
 		ObjectMapper mapper = new ObjectMapper();
-		CreateFlowRequestDto dto = mapper.readValue(json, CreateFlowRequestDto.class);
-		log.info("=======================dto====================: {}", dto.toString());
+		FlowGeneratorLambdaFunctionResponseBodyDto flowDto = mapper.readValue(json,
+			FlowGeneratorLambdaFunctionResponseBodyDto.class);
+		log.info("=======================dto====================: {}", flowDto.toString());
 
 		FlowGeneratorLambdaFunctionResponseBodyDto flowGeneratorLambdaFunctionResponseBodyDto = objectMapper.readValue(
 			responseBody, FlowGeneratorLambdaFunctionResponseBodyDto.class);
