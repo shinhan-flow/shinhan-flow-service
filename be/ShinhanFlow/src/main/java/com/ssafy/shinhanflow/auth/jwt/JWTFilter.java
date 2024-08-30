@@ -1,5 +1,7 @@
 package com.ssafy.shinhanflow.auth.jwt;
 
+import static com.ssafy.shinhanflow.auth.jwt.JWTResponse.*;
+
 import java.io.IOException;
 import java.util.Optional;
 
@@ -9,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ssafy.shinhanflow.auth.custom.CustomUserDetails;
+import com.ssafy.shinhanflow.config.error.ErrorCode;
+import com.ssafy.shinhanflow.config.error.ErrorResponse;
 import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 import com.ssafy.shinhanflow.repository.MemberRepository;
 
@@ -61,10 +65,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
 		// 회원 정보가 없을 경우
 		if (memberOptional.isEmpty()) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write("{\"error\": \"no user\"}");
+			respondWithError(response, ErrorResponse.of(ErrorCode.NOT_FOUND));
 			return;
 		}
 
@@ -106,8 +107,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
 	private void setAuthentication(MemberEntity memberEntity) {
 		CustomUserDetails customUserDetails = new CustomUserDetails(memberEntity);
-		Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null,
-			customUserDetails.getAuthorities());
+		Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, null);
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
 }

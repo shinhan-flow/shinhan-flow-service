@@ -1,9 +1,9 @@
 package com.ssafy.shinhanflow.auth.jwt;
 
-import java.io.IOException;
+import static com.ssafy.shinhanflow.auth.jwt.JWTResponse.*;
+
 import java.util.Collection;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,7 +11,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.shinhanflow.auth.custom.CustomUserDetails;
 import com.ssafy.shinhanflow.auth.dto.LoginSuccessResponseDto;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
@@ -91,39 +90,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	@Override
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 		AuthenticationException failed) {
-
-		log.error("login 요청 실패");
+		
 		respondWithError(response, ErrorResponse.of(ErrorCode.INVALID_CREDENTIALS));
 
-	}
-
-	private static <LoginSuccessResponseDto> void respondWithSuccess(HttpServletResponse response,
-		SuccessResponse<LoginSuccessResponseDto> successResponse) {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-
-		try {
-			String jsonResponse = new ObjectMapper().writeValueAsString(successResponse);
-			response.setStatus(successResponse.getCode().value());
-			response.getWriter().write(jsonResponse);
-		} catch (IOException e) {
-			log.error("Error writing JSON response", e);
-			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		}
-	}
-
-	private static void respondWithError(HttpServletResponse response, ErrorResponse errorResponse) {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-
-		try {
-			String jsonResponse = new ObjectMapper().writeValueAsString(errorResponse);
-			response.setStatus(HttpStatus.BAD_REQUEST.value());
-			response.getWriter().write(jsonResponse);
-		} catch (IOException e) {
-			log.error("Error writing JSON response", e);
-			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		}
 	}
 
 }
