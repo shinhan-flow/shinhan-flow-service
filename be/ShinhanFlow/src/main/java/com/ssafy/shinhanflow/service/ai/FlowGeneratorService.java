@@ -35,6 +35,11 @@ public class FlowGeneratorService {
 
 		FlowGeneratorLambdaFunctionResponseBodyDto flowGeneratorLambdaFunctionResponseBodyDto = objectMapper.readValue(
 			responseBody, FlowGeneratorLambdaFunctionResponseBodyDto.class);
+
+		log.info("flowGeneratorLambdaFunctionResponseBodyDto: {}",
+			flowGeneratorLambdaFunctionResponseBodyDto.toString());
+		log.info("flowGeneratorLambdaFunctionResponseBodyDto.flow(): {}",
+			flowGeneratorLambdaFunctionResponseBodyDto.flow().toString());
 		return flowGeneratorLambdaFunctionResponseBodyDto.flow();
 	}
 }
