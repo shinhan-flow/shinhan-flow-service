@@ -40,6 +40,10 @@ public class MemberService {
 	private final CreditScoreRepository creditScoreRepository;
 
 	public Boolean createMember(SignUpRequestDto signUpRequestDto) {
+		Optional<MemberEntity> member = memberRepository.findByEmail(signUpRequestDto.email());
+		if (member.isPresent()) {
+			throw new BadRequestException(ErrorCode.ALREADY_EXIST_EMAIL);
+		}
 		// communicate with finance api
 		MemberRequestDto memberRequestDto = new MemberRequestDto(apiKey, signUpRequestDto.email());
 		MemberResponseDto memberResponseDto = financeApiFetcher.createMember(memberRequestDto);
