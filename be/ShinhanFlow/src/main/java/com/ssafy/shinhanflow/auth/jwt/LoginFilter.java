@@ -1,19 +1,16 @@
 package com.ssafy.shinhanflow.auth.jwt;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Optional;
+import static com.ssafy.shinhanflow.auth.jwt.JWTResponse.*;
 
-import org.springframework.http.HttpStatus;
+import java.util.Collection;
+
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.shinhanflow.auth.custom.CustomAuthenticationToken;
 import com.ssafy.shinhanflow.auth.custom.CustomUserDetails;
 import com.ssafy.shinhanflow.auth.dto.LoginSuccessResponseDto;
 import com.ssafy.shinhanflow.config.error.ErrorCode;
@@ -38,6 +35,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	private final long refreshTokenExpireTime;
 	private final MemberRepository memberRepository;
 
+	// 로그인 요청시 실행되는 메소드
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
 		AuthenticationException {
@@ -46,15 +44,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		String username = obtainUsername(request);
 		String password = obtainPassword(request);
 
-		String fcmToken = request.getParameter("fcmToken");
-
-		log.info("fcmToken: {}", fcmToken);
-
 		// username 과 password 를 검증하기 위해 token 에 담아서 사용 (스프링 시큐리티에서)
-		//		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password,
-		//			null);
-		CustomAuthenticationToken authToken = new CustomAuthenticationToken(username, password, fcmToken);
-
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
 		return authenticationManager.authenticate(authToken);
 	}
 
@@ -66,23 +57,20 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
 
 		// 사용자 이름 , 사용자 ID, fcmToken 을 가져옵니다.
-		String username = userDetails.getUsername();
-		long userId = userDetails.getUserId();
+		Long userId = userDetails.getUserId();
 		String fcmToken = request.getParameter("fcmToken");
 
-		log.info("username: {}, useId: {}, fcmToken: {} login 요청 성공", username, userId, fcmToken);
+		// memberEntity 저장
+		MemberEntity memberEntity = memberRepository.findById(userId).orElseThrow();
+		memberEntity.setFcmToken(fcmToken);
+		memberRepository.save(memberEntity);
 
-		// fcmToken DB에 저장
-		Optional<MemberEntity> memberEntityOptional = memberRepository.findById(userId);
-		if (memberEntityOptional.isPresent()) {
-			MemberEntity memberEntity = memberEntityOptional.get();
-			memberEntity.setFcmToken(fcmToken);
-			memberRepository.save(memberEntity);
-		}
+		// role 가져오기
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-		Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-		GrantedAuthority auth = iterator.next();
-		String role = auth.getAuthority();
+		String role = authorities.stream()
+			.findFirst()
+			.map(GrantedAuthority::getAuthority)
+			.orElse(null);
 
 		//토큰 생성
 		String accessToken = jwtUtil.createJwt("access", userId, role, accessTokenExpireTime);
@@ -102,39 +90,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	@Override
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 		AuthenticationException failed) {
-
-		log.error("login 요청 실패");
+		
 		respondWithError(response, ErrorResponse.of(ErrorCode.INVALID_CREDENTIALS));
 
-	}
-
-	private static <LoginSuccessResponseDto> void respondWithSuccess(HttpServletResponse response,
-		SuccessResponse<LoginSuccessResponseDto> successResponse) {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-
-		try {
-			String jsonResponse = new ObjectMapper().writeValueAsString(successResponse);
-			response.setStatus(successResponse.getCode().value());
-			response.getWriter().write(jsonResponse);
-		} catch (IOException e) {
-			log.error("Error writing JSON response", e);
-			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		}
-	}
-
-	private static void respondWithError(HttpServletResponse response, ErrorResponse errorResponse) {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-
-		try {
-			String jsonResponse = new ObjectMapper().writeValueAsString(errorResponse);
-			response.setStatus(HttpStatus.BAD_REQUEST.value());
-			response.getWriter().write(jsonResponse);
-		} catch (IOException e) {
-			log.error("Error writing JSON response", e);
-			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		}
 	}
 
 }

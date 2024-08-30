@@ -26,6 +26,7 @@ public enum ErrorCode {
 	INVALID_ACCOUNT_TYPE(HttpStatus.BAD_REQUEST, "4008", "올바르지 않은 계좌 유형입니다."),
 	INVALID_ACCOUNT_NUMBER(HttpStatus.BAD_REQUEST, "4009", "올바르지 않은 계좌 번호입니다."),
 	INVALID_TRIGGER_CONDITION(HttpStatus.BAD_REQUEST, "4010", "올바르지 않은 트리거 조건입니다."),
+	NO_TOKEN(HttpStatus.BAD_REQUEST, "4012", "토큰이 존재하지 않습니다."),
 
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "5001", "서버 에러가 발생했습니다."),
 	;

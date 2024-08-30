@@ -16,8 +16,8 @@ public class JWTUtil {
 
 	private final SecretKey secretKey;
 
+	// 생성자로 토큰 생성
 	public JWTUtil(@Value("${jwt.secret}") String secret) {
-
 		secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
 			Jwts.SIG.HS256.key().build().getAlgorithm());
 	}
@@ -25,7 +25,7 @@ public class JWTUtil {
 	/**
 	 * Bearer 있는 토큰에서 userId 추출
 	 */
-	public long getId(String token) {
+	public Long getId(String token) {
 		token = token.substring(7);
 		return Jwts.parser()
 			.verifyWith(secretKey)
@@ -35,7 +35,7 @@ public class JWTUtil {
 			.get("userId", Long.class);
 	}
 
-	public long getUserId(String token) {
+	public Long getUserId(String token) {
 
 		return Jwts.parser()
 			.verifyWith(secretKey)

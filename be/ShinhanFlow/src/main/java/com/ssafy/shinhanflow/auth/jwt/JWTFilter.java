@@ -1,5 +1,7 @@
 package com.ssafy.shinhanflow.auth.jwt;
 
+import static com.ssafy.shinhanflow.auth.jwt.JWTResponse.respondWithError;
+
 import java.io.IOException;
 import java.util.Optional;
 
@@ -9,6 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ssafy.shinhanflow.auth.custom.CustomUserDetails;
+import com.ssafy.shinhanflow.config.error.ErrorCode;
+import com.ssafy.shinhanflow.config.error.ErrorResponse;
+import com.ssafy.shinhanflow.config.error.exception.BadRequestException;
 import com.ssafy.shinhanflow.domain.entity.MemberEntity;
 import com.ssafy.shinhanflow.repository.MemberRepository;
 
@@ -44,15 +49,15 @@ public class JWTFilter extends OncePerRequestFilter {
 		try {
 			validateToken(accessToken);
 		} catch (ExpiredJwtException e) { //토큰 만료
-			handleException(response, HttpServletResponse.SC_UNAUTHORIZED, "Token has expired.");
+			respondWithError(response, ErrorResponse.of(ErrorCode.EXPIRED_TOKEN));
 			return;
 		} catch (JwtException e) { // 잘못된 토큰
-			handleException(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid token.");
+			respondWithError(response, ErrorResponse.of(ErrorCode.INVALID_TOKEN));
 			return;
 		}
 
 		// 토큰 검증 완료 후 토큰에서 userId 추출
-		long userId = jwtUtil.getUserId(accessToken);
+		Long userId = jwtUtil.getUserId(accessToken);
 
 		log.info("userId: {}", userId);
 
@@ -61,10 +66,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
 		// 회원 정보가 없을 경우
 		if (memberOptional.isEmpty()) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write("{\"error\": \"no user\"}");
+			respondWithError(response, ErrorResponse.of(ErrorCode.NOT_FOUND));
 			return;
 		}
 
@@ -88,26 +90,17 @@ public class JWTFilter extends OncePerRequestFilter {
 		try {
 			jwtUtil.isExpired(token);
 		} catch (ExpiredJwtException e) {
-			throw new JwtException("Refresh token expired");
+			throw new BadRequestException(ErrorCode.EXPIRED_TOKEN);
 		}
 		String category = jwtUtil.getCategory(token);
 		if (!"access".equals(category)) {
-			throw new JwtException("Invalid token category.");
+			throw new BadRequestException(ErrorCode.INVALID_TOKEN);
 		}
-	}
-
-	private void handleException(HttpServletResponse response, int status, String message) throws IOException {
-		log.error("error: {}", message);
-		response.setStatus(status);
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write("{\"error\": \"" + message + "\"}");
 	}
 
 	private void setAuthentication(MemberEntity memberEntity) {
 		CustomUserDetails customUserDetails = new CustomUserDetails(memberEntity);
-		Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null,
-			customUserDetails.getAuthorities());
+		Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, null);
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
 }

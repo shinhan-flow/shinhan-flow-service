@@ -1,6 +1,5 @@
 package com.ssafy.shinhanflow.scheduler;
 
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.ssafy.shinhanflow.repository.TriggerRepository;
@@ -17,7 +16,7 @@ public class DateScheduler {
 	private final TriggerRepository triggerRepository;
 	private final ExchangeRateService exchangeRateService;
 
-	@Scheduled(cron = "*/5 * * * * *")
+	// @Scheduled(cron = "*/5 * * * * *")
 	public void checkDateTrigger() {
 		triggerChecker.run();
 	}
