@@ -28,6 +28,7 @@ public enum ErrorCode {
 	INVALID_TRIGGER_CONDITION(HttpStatus.BAD_REQUEST, "4010", "올바르지 않은 트리거 조건입니다."),
 	ALREADY_EXIST_EMAIL(HttpStatus.BAD_REQUEST, "4011", "이미 존재하는 이메일입니다."),
 	NO_TOKEN(HttpStatus.BAD_REQUEST, "4012", "토큰이 존재하지 않습니다."),
+	NO_AUTHORITY(HttpStatus.BAD_REQUEST, "4013", "권한이 없습니다."),
 
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "5001", "서버 에러가 발생했습니다."),
 	;

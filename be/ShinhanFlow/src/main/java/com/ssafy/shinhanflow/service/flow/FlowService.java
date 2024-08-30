@@ -156,6 +156,10 @@ public class FlowService {
 		// 플로우삭제
 		FlowEntity flowEntity = flowRepository.findById(flowId)
 			.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
+
+		if (!flowEntity.getMemberId().equals(memberId)) {
+			throw new NotFoundException(ErrorCode.NO_AUTHORITY);
+		}
 		flowRepository.delete(flowEntity);
 
 		// 트리거 삭제
