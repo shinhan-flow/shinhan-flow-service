@@ -109,9 +109,6 @@ public class FinanceActionService {
 				.transactionBalance(amount)
 				.build());
 
-		// sendBalanceNotification(userId, fromAccount);
-		// sendBalanceNotification(userId, toAccount);
-
 		return response;
 	}
 

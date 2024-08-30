@@ -72,10 +72,4 @@ public class FlowController {
 		return SuccessResponse.of(flowService.toggleFlow(jwtUtil.getId(token), flowId));
 	}
 
-	@GetMapping("/test")
-	public String test() throws JsonProcessingException {
-		flowService.testFlowTrigger();
-		return "test";
-	}
-
 }
