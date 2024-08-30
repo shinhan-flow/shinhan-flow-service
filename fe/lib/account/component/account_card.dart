@@ -7,6 +7,7 @@ import 'package:shinhan_flow/account/view/account_transfer_screen.dart';
 import 'package:shinhan_flow/action/view/action_exchange_screen.dart';
 import 'package:shinhan_flow/common/component/default_flashbar.dart';
 
+import '../../common/model/entity_enum.dart';
 import '../../theme/text_theme.dart';
 import '../../util/util.dart';
 import '../model/account_model.dart';
@@ -73,14 +74,28 @@ class AccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final path = BankType.values.firstWhere((t) => t.bankName == bankName).img;
+
     return Container(
-      height: 150.h,
-      padding: EdgeInsets.all(18.r),
+      height: 112.h,
+      padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.r),
           color: const Color(0xFF3F73FF)),
       child: Row(
         children: [
+          Align(
+            alignment: const Alignment(0, -0.6),
+            child: Image.asset(
+              AssetUtil.getAssetPath(
+                name: path,
+                extension: 'png',
+              ),
+              height: 27.5.r,
+              width: 27.5.r,
+            ),
+          ),
+          SizedBox(width: 15.w),
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -92,53 +107,33 @@ class AccountCard extends StatelessWidget {
                   children: [
                     Text(
                       accountTypeName,
-                      style: SHFlowTextStyle.subTitle.copyWith(
+                      style: SHFlowTextStyle.body.copyWith(
                         color: Colors.white,
                       ),
                     ),
-                    Text(
-                      bankName,
-                      style: SHFlowTextStyle.subTitle.copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
+                    //
+                    // Text(
+                    //   bankName,
+                    //   style: SHFlowTextStyle.subTitle.copyWith(
+                    //     color: Colors.white,
+                    //   ),
+                    // ),
                   ],
                 ),
-                SizedBox(height: 8.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      child: Text(
-                        accountNo,
-                        style: SHFlowTextStyle.subTitle.copyWith(
-                            color: Colors.white,
-                            decoration: TextDecoration.underline,
-                            decorationColor: Colors.white),
-                      ),
-                      onTap: () {
-                        Clipboard.setData(ClipboardData(text: accountNo));
-                        FlashUtil.showFlash(context, '계좌번호가 복사되었습니다!',
-                            textColor: const Color(0xFF49B7FF));
-                      },
-                    ),
-                    if (onTap != null)
-                      GestureDetector(
-                        onTap: onTap,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(8.r)),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 12.w, vertical: 4.h),
-                          child: Text(
-                            "이체",
-                            style: SHFlowTextStyle.labelBold
-                                .copyWith(color: Colors.white),
-                          ),
-                        ),
-                      )
-                  ],
+                SizedBox(height: 2.h),
+                GestureDetector(
+                  child: Text(
+                    accountNo,
+                    style: SHFlowTextStyle.labelSmall.copyWith(
+                        color: Colors.white,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.white),
+                  ),
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(text: accountNo));
+                    FlashUtil.showFlash(context, '계좌번호가 복사되었습니다!',
+                        textColor: const Color(0xFF49B7FF));
+                  },
                 ),
                 const Spacer(),
                 Text(
@@ -146,11 +141,25 @@ class AccountCard extends StatelessWidget {
                   style: SHFlowTextStyle.subTitle.copyWith(
                     color: Colors.white,
                   ),
-                  textAlign: TextAlign.end,
                 ),
               ],
             ),
           ),
+          if (onTap != null)
+            GestureDetector(
+              onTap: onTap,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.25),
+                    borderRadius: BorderRadius.circular(8.r)),
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                child: Text(
+                  "이체",
+                  style:
+                      SHFlowTextStyle.labelBold.copyWith(color: Colors.white),
+                ),
+              ),
+            )
         ],
       ),
     );

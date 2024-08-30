@@ -38,3 +38,47 @@ class ProductAccount extends _$ProductAccount {
     });
   }
 }
+
+@riverpod
+class ProductLoan extends _$ProductLoan {
+  @override
+  BaseModel build() {
+    get();
+    return LoadingModel();
+  }
+
+  Future<void> get() async {
+    final repository = ref.watch(productRepositoryProvider);
+    await repository.getProductLoan().then((value) {
+      state = value;
+      logger.i(value);
+    }).catchError((e) {
+      final error = ErrorModel.respToError(e);
+      logger.e('code ${error.code}\nmessage = ${error.message}');
+      state = error;
+    });
+  }
+}
+
+
+
+@riverpod
+class ProductSaving extends _$ProductSaving {
+  @override
+  BaseModel build() {
+    get();
+    return LoadingModel();
+  }
+
+  Future<void> get() async {
+    final repository = ref.watch(productRepositoryProvider);
+    await repository.getProductSaving().then((value) {
+      state = value;
+      logger.i(value);
+    }).catchError((e) {
+      final error = ErrorModel.respToError(e);
+      logger.e('code ${error.code}\nmessage = ${error.message}');
+      state = error;
+    });
+  }
+}

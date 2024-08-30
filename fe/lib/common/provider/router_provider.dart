@@ -8,6 +8,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:shinhan_flow/account/view/account_transaction_history_screen.dart';
 import 'package:shinhan_flow/action/view/action_notification_screen.dart';
 import 'package:shinhan_flow/flow/view/flow_detail_screen.dart';
+import 'package:shinhan_flow/member/view/member_info_screen.dart';
 import 'package:shinhan_flow/permission_screen.dart';
 import 'package:shinhan_flow/product/view/product_account_screen.dart';
 import 'package:shinhan_flow/splash_screen.dart';
@@ -100,6 +101,14 @@ final routerProvider = Provider<GoRouter>((ref) {
               return const HomeScreen();
             },
             routes: [
+              GoRoute(
+                path: 'memberInfo',
+                parentNavigatorKey: rootNavKey,
+                name: MemberInfoScreen.routeName,
+                builder: (context, state) {
+                  return const MemberInfoScreen();
+                },
+              ),
               GoRoute(
                   path: 'transactionHistory',
                   parentNavigatorKey: rootNavKey,
