@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.shinhanflow.dto.ai.FlowGeneratorLambdaFunctionRequestBodyDto;
 import com.ssafy.shinhanflow.dto.ai.FlowGeneratorLambdaFunctionResponseBodyDto;
@@ -30,19 +31,10 @@ public class FlowGeneratorService {
 			.prompt(prompt)
 			.build();
 		String payload = objectMapper.writeValueAsString(flowGeneratorLambdaFunctionRequestBodyDto);
-		String responseBody = lambdaFunctionInvoker.invokeFunction(functionName, payload);
-		log.info("====LambdaFunctionInvoker.generateFlow's responseBody====\n{}", responseBody);
-		log.info("{\"flow\": {\"title\": \"test\", \"description\": \"testing\", \"triggers\": [], \"actions\": []}}");
+		JsonNode responseBody = lambdaFunctionInvoker.invokeFunction(functionName, payload);
+		log.info("====LambdaFunctionInvoker.generateFlow's responseBody====\n{}", responseBody.toString());
 
-		log.info("are they equal? {}", responseBody.equals(
-			"{\"flow\": {\"title\": \"test\", \"description\": \"testing\", \"triggers\": [], \"actions\": []}}"));
-		String json = "{\"flow\": {\"title\": \"test\", \"description\": \"testing\", \"triggers\": [], \"actions\": []}}";
-		json.equals(responseBody);
-		FlowGeneratorLambdaFunctionResponseBodyDto flowDto = objectMapper.readValue(json,
-			FlowGeneratorLambdaFunctionResponseBodyDto.class);
-		log.info("=======================dto====================: {}", flowDto.toString());
-
-		FlowGeneratorLambdaFunctionResponseBodyDto flowGeneratorLambdaFunctionResponseBodyDto = objectMapper.readValue(
+		FlowGeneratorLambdaFunctionResponseBodyDto flowGeneratorLambdaFunctionResponseBodyDto = objectMapper.treeToValue(
 			responseBody, FlowGeneratorLambdaFunctionResponseBodyDto.class);
 
 		log.info("flowGeneratorLambdaFunctionResponseBodyDto: {}",
