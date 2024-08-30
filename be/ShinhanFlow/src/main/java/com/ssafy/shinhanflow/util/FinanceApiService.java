@@ -36,6 +36,8 @@ import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsRequest
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
 import com.ssafy.shinhanflow.dto.finance.product.LoanProductsRequestDto;
 import com.ssafy.shinhanflow.dto.finance.product.LoanProductsResponseDto;
+import com.ssafy.shinhanflow.dto.member.CreditScoreRequestDto;
+import com.ssafy.shinhanflow.dto.member.CreditScoreResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -188,5 +190,9 @@ public class FinanceApiService {
 	public CurrentAccountDeleteResponseDto deleteCurrentAccount(CurrentAccountDeleteRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/demandDeposit/deleteDemandDepositAccount", dto,
 			CurrentAccountDeleteResponseDto.class);
+	}
+
+	public CreditScoreResponseDto getCreditScore(CreditScoreRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/loan/inquireMyCreditRating", dto, CreditScoreResponseDto.class);
 	}
 }
