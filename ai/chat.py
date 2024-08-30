@@ -102,5 +102,7 @@ def create_flow(MY_REQUEST, model_num):
             model="gpt-4o-mini",
         )
         error_response = chat_completion.choices[0].message.content
-        print(gen_response)
-        print("error", error_response)
+        if "#$%" in error_response and "ERROR" in error_response:
+            return "error"
+        else:
+            return gen_response
