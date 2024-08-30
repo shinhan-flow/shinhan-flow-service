@@ -79,7 +79,8 @@ public class FinanceActionService {
 		String userKey = memberEntity.getUserKey();
 		String institutionCode = memberEntity.getInstitutionCode();
 
-		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("exchange", userKey, institutionCode);
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("updateDemandDepositAccountWithdrawal",
+			userKey, institutionCode);
 		ExchangeRequestDto dto = ExchangeRequestDto.builder()
 			.header(header)
 			.accountNo(accountNo)
@@ -98,7 +99,8 @@ public class FinanceActionService {
 		String userKey = memberEntity.getUserKey();
 		String institutionCode = memberEntity.getInstitutionCode();
 
-		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("transfer", userKey, institutionCode);
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("updateDemandDepositAccountTransfer", userKey,
+			institutionCode);
 		CurrentAccountTransferResponseDto response = financeApiService.transferCurrentAccount(
 			CurrentAccountTransferRequestDto.builder()
 				.header(header)
@@ -106,7 +108,7 @@ public class FinanceActionService {
 				.depositAccountNo(toAccount)
 				.transactionBalance(amount)
 				.build());
-		
+
 		// sendBalanceNotification(userId, fromAccount);
 		// sendBalanceNotification(userId, toAccount);
 
