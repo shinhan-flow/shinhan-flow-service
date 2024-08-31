@@ -33,9 +33,8 @@ public record BalanceTrigger(
 		Long accountBalance = dto.getRec().accountBalance();
 
 		return switch (condition.name()) {
-			case "LT" -> accountBalance.compareTo(balance) <= 0;
-			case "GT" -> accountBalance.compareTo(balance) >= 0;
-			case "EQ" -> accountBalance.compareTo(balance) == 0;
+			case "LE" -> accountBalance.compareTo(balance) <= 0;
+			case "GE" -> accountBalance.compareTo(balance) >= 0;
 			default -> throw new BadRequestException(ErrorCode.INVALID_TRIGGER_CONDITION);
 		};
 	}
