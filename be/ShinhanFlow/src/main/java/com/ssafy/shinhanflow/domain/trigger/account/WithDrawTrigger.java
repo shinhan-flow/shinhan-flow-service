@@ -1,6 +1,7 @@
 package com.ssafy.shinhanflow.domain.trigger.account;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -28,7 +29,9 @@ public record WithDrawTrigger(
 		List<CurrentAccountTransactionHistoryResponseDto.Transaction> list = financeTriggerService.currentAccountTransactionHistory(
 			userId, account, currDay, currDay, "D", "DESC").getRec().list();
 		for (CurrentAccountTransactionHistoryResponseDto.Transaction transaction : list) {
-			if (Long.compare(transaction.transactionBalance(), this.amount) >= 0) {
+			if (!LocalTime.parse(transaction.transactionTime(), DateTimeFormatter.ofPattern("HHmmss"))
+				.isBefore(LocalTime.now().minusSeconds(7))
+				&& Long.compare(transaction.transactionBalance(), this.amount) >= 0) {
 				return true;
 			}
 		}
