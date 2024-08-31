@@ -42,31 +42,28 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
     List<int>? dayOfMonth,
     List<String>? dates,
   ) {
-    if (type != null) {
-      switch (type) {
-        case TriggerType.SpecificDateTrigger:
-          return date != null && date.isNotEmpty;
-        case TriggerType.SpecificTimeTrigger:
-          return specificTime != null && specificTime.isNotEmpty;
-        case TriggerType.PeriodDateTrigger:
-          if (startDate != null && endDate != null) {
-            // 기간이 start ~ end
-            // 동일하거나 start 가 end 보다 이후일 경우 false
-            return DateTime.parse(startDate)
-                    .compareTo(DateTime.parse(endDate)) ==
-                -1;
-          }
-          return false;
-        case TriggerType.DayOfWeekTrigger:
-          // log("valid dayOfWeek = $dayOfWeek");
-          return dayOfWeek != null && dayOfWeek.isNotEmpty;
-        case TriggerType.DayOfMonthTrigger:
-          return dayOfMonth != null && dayOfMonth.isNotEmpty;
-        // case TriggerType.multiDate:
-        //   return dates != null && dates.isNotEmpty;
-        default:
-          return false;
-      }
+    switch (type) {
+      case TriggerType.SpecificDateTrigger:
+        return date != null && date.isNotEmpty;
+      case TriggerType.SpecificTimeTrigger:
+        return specificTime != null && specificTime.isNotEmpty;
+      case TriggerType.PeriodDateTrigger:
+        if (startDate != null && endDate != null) {
+          // 기간이 start ~ end
+          // 동일하거나 start 가 end 보다 이후일 경우 false
+          return DateTime.parse(startDate).compareTo(DateTime.parse(endDate)) ==
+              -1;
+        }
+        return false;
+      case TriggerType.DayOfWeekTrigger:
+        // log("valid dayOfWeek = $dayOfWeek");
+        return dayOfWeek != null && dayOfWeek.isNotEmpty;
+      case TriggerType.DayOfMonthTrigger:
+        return dayOfMonth != null && dayOfMonth.isNotEmpty;
+      // case TriggerType.multiDate:
+      //   return dates != null && dates.isNotEmpty;
+      default:
+        return false;
     }
 
     return false;
@@ -105,6 +102,8 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
       validDayOfMonth,
       validDates,
     );
+
+    log("month $valid , type $flowType");
     return TgDateTimeFormModel(
       startDate: validStartDate,
       endDate: validEndDate,
@@ -140,6 +139,8 @@ class TgDateTimeFormModel extends TgDateTimeParam with BaseFormModel {
     switch (type) {
       case TriggerType.SpecificDateTrigger:
         return TgSpecificDateParam.fromForm(form: this);
+      case TriggerType.SpecificTimeTrigger:
+        return TgTimeParam.fromForm(form: this);
       case TriggerType.PeriodDateTrigger:
         return TgPeriodDateParam.fromForm(form: this);
       case TriggerType.DayOfWeekTrigger:

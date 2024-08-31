@@ -213,7 +213,7 @@ class TgDayOfMonthParam extends TriggerBaseParam {
 
 @JsonSerializable()
 class TgTimeParam extends TriggerBaseParam {
-  /// 요일을 설정하는 트리거 생성
+  /// 시간을 설정하는 트리거 생성
   final String time;
 
   TgTimeParam({
@@ -226,6 +226,13 @@ class TgTimeParam extends TriggerBaseParam {
         type,
         time,
       ];
+
+  factory TgTimeParam.fromForm({required TgDateTimeFormModel form}) {
+    return TgTimeParam(
+      type: form.type,
+      time: form.specificTime!,
+    );
+  }
 
   @override
   bool? get stringify => true;

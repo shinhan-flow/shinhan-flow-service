@@ -1,5 +1,5 @@
 enum TimeCategory {
-  normal('단일'),
+  normal('하루'),
   period('기간'),
   iterate('반복'),
   // multi('다중')
@@ -11,7 +11,6 @@ enum TimeCategory {
 }
 
 enum DayOfWeek {
-
   MONDAY('월'),
   TUESDAY('화'),
   WEDNESDAY('수'),

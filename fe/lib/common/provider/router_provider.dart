@@ -15,7 +15,7 @@ import 'package:shinhan_flow/splash_screen.dart';
 import 'package:shinhan_flow/trigger/model/enum/product_property.dart';
 import 'package:shinhan_flow/trigger/view/account_trigger_screen.dart';
 import 'package:shinhan_flow/trigger/view/product_trigger_screen.dart';
-import 'package:shinhan_flow/trigger/view/time_trigger_screen.dart';
+import 'package:shinhan_flow/trigger/view/date_trigger_screen.dart';
 import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
 import 'package:shinhan_flow/flow/view/flow_init_screen.dart';
 import 'package:shinhan_flow/home_screen.dart';
@@ -28,6 +28,7 @@ import '../../auth/provider/auth_provider.dart';
 import '../../auth/view/login_screen.dart';
 import '../../auth/view/sign_up_screen.dart';
 import '../../trigger/view/exchange_trigger_screen.dart';
+import '../../trigger/view/time_trigger_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> shellNavKey = GlobalKey<NavigatorState>();
@@ -159,6 +160,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                               name: TimeTriggerScreen.routeName,
                               builder: (context, state) {
                                 return const TimeTriggerScreen();
+                              },
+                              routes: []),
+                          GoRoute(
+                              path: 'dateTrigger',
+                              parentNavigatorKey: rootNavKey,
+                              name: DateTriggerScreen.routeName,
+                              builder: (context, state) {
+                                return const DateTriggerScreen();
                               },
                               routes: []),
                           GoRoute(

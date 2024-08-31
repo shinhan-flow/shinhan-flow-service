@@ -27,7 +27,7 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 @RestApi(baseUrl: serverURL)
 abstract class AuthRepository {
   factory AuthRepository(Dio dio, {ParseErrorLogger errorLogger}) =
-      _AuthRepository;
+  _AuthRepository;
 
   @POST('/login')
   @FormUrlEncoded()

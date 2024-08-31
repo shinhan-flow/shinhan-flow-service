@@ -66,7 +66,7 @@ class _CustomTimePickerState extends ConsumerState<CustomTimePicker> {
       children: <Widget>[
         Flexible(
           child: CupertinoPicker(
-              itemExtent: 32.h,
+              itemExtent: 40.h,
               diameterRatio: 10,
               squeeze: 1.0,
               onSelectedItemChanged: (int index) {
@@ -84,7 +84,7 @@ class _CustomTimePickerState extends ConsumerState<CustomTimePicker> {
               children: ['오전', '오후']
                   .mapIndexed((index, e) => Center(
                       child: Text(e,
-                          style: SHFlowTextStyle.labelBold.copyWith(
+                          style: SHFlowTextStyle.subTitle.copyWith(
                             color: isAfternoon && index == 1 ||
                                     !isAfternoon && index == 0
                                 ? const Color(0xFF0057FF)
@@ -96,7 +96,7 @@ class _CustomTimePickerState extends ConsumerState<CustomTimePicker> {
         SizedBox(width: 7.w),
         Flexible(
           child: CupertinoPicker(
-            itemExtent: 32.h,
+            itemExtent: 40.h,
             diameterRatio: 10,
             squeeze: 1.0,
             onSelectedItemChanged: (int index) {
@@ -111,7 +111,7 @@ class _CustomTimePickerState extends ConsumerState<CustomTimePicker> {
             children: List<Widget>.generate(12, (int index) {
               return Center(
                   child: Text(index == 0 ? '12' : oneDigitFormat(index),
-                      style: SHFlowTextStyle.labelBold.copyWith(
+                      style: SHFlowTextStyle.subTitle.copyWith(
                         color: selectedHour == index
                             ? const Color(0xFF0057FF)
                             : Colors.grey,
@@ -122,7 +122,7 @@ class _CustomTimePickerState extends ConsumerState<CustomTimePicker> {
         SizedBox(width: 7.w),
         Flexible(
           child: CupertinoPicker(
-            itemExtent: 32.h,
+            itemExtent: 40.h,
             diameterRatio: 10,
             squeeze: 1.0,
             onSelectedItemChanged: (int index) {
@@ -138,7 +138,7 @@ class _CustomTimePickerState extends ConsumerState<CustomTimePicker> {
               return Center(
                   child: Text(
                 oneDigitFormat(index * 10),
-                style: SHFlowTextStyle.labelBold.copyWith(
+                style: SHFlowTextStyle.subTitle.copyWith(
                   color: selectedMinute ~/ 10 == index
                       ? const Color(0xFF0057FF)
                       : Colors.grey,

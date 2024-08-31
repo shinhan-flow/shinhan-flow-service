@@ -22,39 +22,32 @@ import '../../flow/param/enum/flow_type.dart';
 import '../../flow/param/trigger/trigger_param.dart';
 import '../model/enum/time_category.dart';
 
-class TimeTriggerScreen extends StatelessWidget {
-  static String get routeName => 'timeTrigger';
+class DateTriggerScreen extends StatelessWidget {
+  static String get routeName => 'dateTrigger';
 
-  const TimeTriggerScreen({super.key});
+  const DateTriggerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          ref.listen(timeProvider, (prev, after) {
-            ref
-                .read(tgDateTimeFormProvider.notifier)
-                .update(specificTime: after);
-          });
-
-          final time =
-              ref.watch(tgDateTimeFormProvider.select((tg) => tg.specificTime));
-          final valid = time != null && time.isNotEmpty;
+          final valid =
+              ref.watch(tgDateTimeFormProvider.select((tg) => tg.valid));
           return BottomNavButton(
             child: DefaultTextButton(
               onPressed: valid
                   ? () {
-                      // final trigger = ref.read(tgDateTimeFormProvider);
-                      // ref.read(flowFormProvider.notifier).addTrigger(
-                      //     trigger: trigger.toParam() as TriggerBaseParam);
+                      final trigger = ref.read(tgDateTimeFormProvider);
 
-                      final time = ref.read(timeProvider);
-                      final timeTrigger = TgTimeParam(
-                          type: TriggerType.SpecificTimeTrigger, time: time);
-                      ref
-                          .read(flowFormProvider.notifier)
-                          .addTrigger(trigger: timeTrigger as TriggerBaseParam);
+                      ref.read(flowFormProvider.notifier).addTrigger(
+                          trigger: trigger.toParam() as TriggerBaseParam);
+                      // final time = ref.read(timeProvider);
+                      // final timeTrigger = TgTimeParam(
+                      //     type: TriggerType.SpecificTimeTrigger, time: time);
+                      // ref
+                      //     .read(flowFormProvider.notifier)
+                      //     .addTrigger(trigger: timeTrigger as TriggerBaseParam);
 
                       context.pop();
                     }
@@ -70,7 +63,7 @@ class TimeTriggerScreen extends StatelessWidget {
           headerSliverBuilder: (_, __) {
             return [
               DefaultAppBar(
-                title: '시간 조건 설정',
+                title: '날짜 조건 설정',
                 isSliver: true,
               )
             ];
@@ -79,28 +72,31 @@ class TimeTriggerScreen extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(),
             slivers: [
               SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 24.w, vertical: 12.h),
-                      child: Text(
-                        "언제 실행할까요?.",
-                        style: SHFlowTextStyle.form.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 120.h,
-                      child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.w),
-                          child: const CustomTimePicker()),
-                    ),
-                  ],
-                ),
+                child: _TimeCategoryComponent(),
               ),
+              // SliverToBoxAdapter(
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.stretch,
+              //     children: [
+              //       Padding(
+              //         padding: EdgeInsets.symmetric(
+              //             horizontal: 24.w, vertical: 12.h),
+              //         child: Text(
+              //           "시간을 설정해 주세요.",
+              //           style: SHFlowTextStyle.form.copyWith(
+              //             fontWeight: FontWeight.w600,
+              //           ),
+              //         ),
+              //       ),
+              //       SizedBox(
+              //         height: 96.h,
+              //         child: Padding(
+              //             padding: EdgeInsets.symmetric(horizontal: 8.w),
+              //             child: const CustomTimePicker()),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               SliverFillRemaining(
                 child: Consumer(
                   builder:
@@ -171,6 +167,16 @@ class _IterateComponentState extends ConsumerState<_IterateComponent>
               selected: type == i,
               type: i,
               onTap: () {
+                if (i == IterateType.week) {
+                  ref
+                      .read(tgDateTimeFormProvider.notifier)
+                      .update(flowType: TriggerType.DayOfWeekTrigger);
+                } else {
+                  ref
+                      .read(tgDateTimeFormProvider.notifier)
+                      .update(flowType: TriggerType.DayOfMonthTrigger);
+                }
+
                 ref.read(selectIterateTypeProvider.notifier).update((s) => i);
               },
             ))

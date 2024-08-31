@@ -35,7 +35,6 @@ class TgProductParam extends TriggerBaseParam {
     );
   }
 
-
   factory TgProductParam.fromJson(Map<String, dynamic> json) =>
       _$TgProductParamFromJson(json);
 }

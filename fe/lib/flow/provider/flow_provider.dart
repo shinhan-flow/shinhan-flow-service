@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shinhan_flow/flow/model/flow_model.dart';
 import 'package:shinhan_flow/flow/provider/widget/flow_form_provider.dart';
 import 'package:shinhan_flow/flow/repository/flow_repository.dart';
+import 'package:shinhan_flow/flow/view/flow_init_screen.dart';
 
 import '../../common/logger/custom_logger.dart';
 import '../../common/model/default_model.dart';
@@ -22,6 +23,12 @@ Future<BaseModel> createFlow(CreateFlowRef ref) async {
       .createFlow(param: param)
       .then<BaseModel>((value) async {
     logger.i(value);
+    final flowId = ref.read(flowIdProvider);
+    if (flowId != null) {
+      ref.read(deleteFlowProvider(flowId: flowId));
+    }
+    ref.invalidate(flowProvider);
+
     return value;
   }).catchError((e) {
     final error = ErrorModel.respToError(e);

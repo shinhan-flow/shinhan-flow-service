@@ -94,11 +94,7 @@ class _ExchangeForm extends ConsumerWidget {
     if (result is LoadingModel) {
       return CircularProgressIndicator();
     } else if (result is ErrorModel) {}
-    final model =
-        (result as ResponseModel<BankListBaseModel<ExchangeRateModel>>)
-            .data!
-            .rec;
-
+    final model = (result as ResponseListModel<ExchangeRateModel>).data!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -130,6 +126,7 @@ class _ExchangeForm extends ConsumerWidget {
             NumberFormatter(),
           ],
           onChanged: (v) {
+            log("AAA $v");
             if (v.isNotEmpty) {
               ref
                   .read(acExchangeFormProvider.notifier)
