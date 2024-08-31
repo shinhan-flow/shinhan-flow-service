@@ -34,7 +34,7 @@ public class ExchangeRateController {
 	/**
 	 * 환율 조회
 	 */
-	// @GetMapping()
+	@GetMapping("/api")
 	public SuccessResponse<ExchangeRatesResponseDto> exchangeRates() {
 		return SuccessResponse.of(exchangeRateService.getExchangeRates());
 	}
