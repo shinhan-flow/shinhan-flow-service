@@ -30,6 +30,24 @@
 - [Git Issue, 커밋, 브랜치, PR 라벨 및 컨벤션](https://github.com/shinhan-flow/shinhan-flow-service/wiki/%EC%BB%A4%EB%B0%8B-%EC%BB%A8%EB%B2%A4%EC%85%98)
 - [코드 컨벤션](https://github.com/shinhan-flow/shinhan-flow-service/wiki/%EC%BD%94%EB%93%9C-%EC%BB%A8%EB%B2%A4%EC%85%98)
 
+## **2. 빌드 및 실행 방법**
+
+### BE
+
+Spring Boot + gradle을 사용한 프로젝트로 다음의 명령어를 통해 빌드가 가능하다:
+
+```bash
+cd be/ShinhanFlow
+./gradlew build
+```
+
+이후 빌드 결과물을 다음과 같이 실행하면 된다:
+
+```bash
+cd build/libs
+java -jar shinhanflow-0.0.1-SNAPSHOT.jar
+```
+
 ## **2. 채택한 개발 기술과 브랜치 전략**
 
 ### Spring Boot
