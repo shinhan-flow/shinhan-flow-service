@@ -82,6 +82,24 @@ aws:
     function-name: shFlowAI
 ```
 
+`resources/fcm-sdk.json` 파일은 다음과 같이 작성합니다:
+
+```json
+{
+  "type": "service_account",
+  "project_id": "shinhan-flow-d68b9",
+  "private_key_id": "ec0815ccaddd5b4afda24d47d94722c990c9ab84",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCwlGel293wTS7h\nFMrOZSf2NqXoaIMeKyE8T3DZRylQ4oiPB4+eiYCv/Oc6zqyFjjEz3jeBdPHgJEOs\nVq6cL9+nMPVuHvkyHUXfClCHqovIB6fd10/uyYGuDzUB9wTMSlp1HxjkRnqTEIHp\nhSd2DcJ3T55CpPKBCRGWe2MgmwaKDIkZ56iER9YQO3DsUSevp8NOvOsV+xbpj72b\nUqU+CJVnkStuIx/PDQypJ6VJRXakczTn1HVX28cFMaK0PAoimGnSVs0B8dUuTZTn\n5B0W/ZqNT1HpN2TYO8QbwAWAo9qwETmaeX+PiHCBETMhs96aGDMCJH/BgPqvg8hf\nLR3SFqL7AgMBAAECggEABrPDUVzMijvrvRhUcEwPnb1KQ81/uIvriYX8Ywrb6xmG\nFGO1lE9kxolDX4yLqNASVwUmty+wpJDLzsVFgGEizI5DqofbbocE6WfTUarr/k4o\nFXgALTCRzwD9wpLVKEnkMBDbmYKBUYatX6cxrb3s9Slc+OuY1sP42mzZgNnRgDjU\nQQEDe+VlRprwT+qWa6/I8wHvGT1KAEck1WIqJaPH83rdk5ixqXjQMLCxvPuG2xor\nf5vYVPNa+XjuLCQPGsVhTl0JDlv1r8ATauJNkbpWIDwrFt+jrPN8LRIr4aqOJpJ/\nOMhjkotiSrFNw8z94wKY8Zd4UxbghcW8YS3gwkiVyQKBgQD3yQvX8JsGOEpSYfF3\nwXRcEmDO1/x2P+UHMZuQucO18hVsPUxct01g0ycdz5srwwgloSNGF784NuoYXzk1\nHDl1m4X511GMtUbaikpqGYdwdv3CaQ5eZzICFdrp1ynIBn6kQmDpsrZpw/R8VWMa\nDiSSJm6aLy2z20sDRJvJafUAkwKBgQC2bwlbDsX08bMsWJLNFBqJEIe8NHyR/ZQp\nrKlJVPy4bWxoIQOA2aRvA1kLCIjp0Z4/0rk30DlhsgoItC7n4DDxdjo3uZKkZ8LW\nq9gfJm5ozmcJS7OlYkDbBoc0EcmKsvldYZqvL7j7xTuKleYT15hzZulPq58c+pUR\nk/r6VwMc+QKBgQC+4EPcW/+/4dr27XYqr37ockva6y0TFpNiYEebTE7EOTFhiTLq\n9VWJMf+fCk9Zfcsn2aKnmyF1t2/LyIb0L8Lfoyeo18J9ZyOmtAMxCmt4KmG+wlkM\nReiTDKzvmA0ahk5GUNABFudIQGh04v4Nkzl+0FZBNfi55UM6yD5OAO54OwKBgCCV\n8LvdBarcyT4wi/gpkRvOYhBR57ZD7wUKnCpHDeT7VpO64d9QALj7hhocaigpkvSf\ndQntHXK/1F79oCs2tkdK8NcnRHQtPHYPt8jImowJ4gmdBfeSdzcoEVpRmwg1M6lk\nV7bW9VmzPxFf+PquVcK3LRFX/FG2yI2dOwUgKaQxAoGBAOKX6fvov2R9zT4BQnEN\nAyIiR7hSTJba14jviWuOx5h2piCmsDZnC+kTuLuAHsiQF+L2Hkjzp+/LrD3UaVF1\n1vIqJXWXPKmGeagfqQkJPHgE6OWmJAfunlRfGjPc84S7oVxjJZsAGKYcS3iVhid2\nfZBCWMIBhW1hMja9ithY63Dp\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-ixuo3@shinhan-flow-d68b9.iam.gserviceaccount.com",
+  "client_id": "114839839126540424934",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-ixuo3%40shinhan-flow-d68b9.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+```
+
 ### FE
 
 1. android studio 에서 프로젝트를 열고 프로젝트 위치에서 `flutter pub get` 명령어를 통해 라이브러리를 받은 후 `dart run build_runner watch` 를 실행하여 generator 파일을 생성합니다.
