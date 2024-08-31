@@ -1,4 +1,5 @@
 # 금융 활동 자동화 서비스 신한플로우
+![Frame 1094310](https://github.com/user-attachments/assets/3ba0f5f2-89f8-420e-a28a-0bfc32e51a84)
 
 ## 프로젝트 소개
 
