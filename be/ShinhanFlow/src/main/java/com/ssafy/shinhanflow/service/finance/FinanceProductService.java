@@ -5,8 +5,12 @@ import org.springframework.stereotype.Service;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountProductRequestDto;
 import com.ssafy.shinhanflow.dto.finance.current.CurrentAccountProductResponseDto;
 import com.ssafy.shinhanflow.dto.finance.header.RequestHeaderDto;
+import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductCreateRequestDto;
+import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductCreateResponseDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsRequestDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
+import com.ssafy.shinhanflow.dto.finance.product.LoanProductCreateRequestDto;
+import com.ssafy.shinhanflow.dto.finance.product.LoanProductCreateResponseDto;
 import com.ssafy.shinhanflow.dto.finance.product.LoanProductsRequestDto;
 import com.ssafy.shinhanflow.dto.finance.product.LoanProductsResponseDto;
 import com.ssafy.shinhanflow.util.FinanceApiHeaderGenerator;
@@ -61,5 +65,61 @@ public class FinanceProductService {
 			.build();
 
 		return financeApiFetcher.currentAccountProducts(dto);
+	}
+
+	public DepositAndSavingProductCreateResponseDto depositProductRegister(
+		DepositAndSavingProductCreateRequestDto dto) {
+		log.info("depositProductRegister - 등록 요청");
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("createDeposit", null,
+			"00100");
+		DepositAndSavingProductCreateRequestDto requestDto = DepositAndSavingProductCreateRequestDto.builder()
+			.header(header)
+			.bankCode(dto.getBankCode())
+			.accountName(dto.getAccountName())
+			.accountDescription(dto.getAccountDescription())
+			.subscriptionPeriod(dto.getSubscriptionPeriod())
+			.minSubscriptionBalance(dto.getMinSubscriptionBalance())
+			.maxSubscriptionBalance(dto.getMaxSubscriptionBalance())
+			.interestRate(dto.getInterestRate())
+			.rateDescription(dto.getRateDescription())
+			.build();
+		return financeApiFetcher.depositProductRegister(requestDto);
+	}
+
+	public DepositAndSavingProductCreateResponseDto savingProductRegister(DepositAndSavingProductCreateRequestDto dto) {
+		log.info("loansProductRegister - 등록 요청");
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("createProduct", null,
+			"00100");
+		DepositAndSavingProductCreateRequestDto requestDto = DepositAndSavingProductCreateRequestDto.builder()
+			.header(header)
+			.bankCode(dto.getBankCode())
+			.accountName(dto.getAccountName())
+			.accountDescription(dto.getAccountDescription())
+			.subscriptionPeriod(dto.getSubscriptionPeriod())
+			.minSubscriptionBalance(dto.getMinSubscriptionBalance())
+			.maxSubscriptionBalance(dto.getMaxSubscriptionBalance())
+			.interestRate(dto.getInterestRate())
+			.rateDescription(dto.getRateDescription())
+			.build();
+		return financeApiFetcher.savingProductRegister(requestDto);
+	}
+
+	public LoanProductCreateResponseDto loansProductRegister(LoanProductCreateRequestDto dto) {
+		log.info("loansProductRegister - 등록 요청");
+		RequestHeaderDto header = financeApiHeaderGenerator.createHeader("createLoanProduct", null,
+			"00100");
+		LoanProductCreateRequestDto requestDto = LoanProductCreateRequestDto.builder()
+			.header(header)
+			.bankCode(dto.getBankCode())
+			.accountName(dto.getAccountName())
+			.accountDescription(dto.getAccountDescription())
+			.ratingUniqueNo(dto.getRatingUniqueNo())
+			.loanPeriod(dto.getLoanPeriod())
+			.minLoanBalance(dto.getMinLoanBalance())
+			.maxLoanBalance(dto.getMaxLoanBalance())
+			.interestRate(dto.getInterestRate())
+			.build();
+
+		return financeApiFetcher.loansProductRegister(requestDto);
 	}
 }
