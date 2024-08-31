@@ -1,10 +1,10 @@
-from flask import Flask, request, jsonify
 from utils import *
 from chat import *
 import argparse
 
-app = Flask(__name__)
-
+# with open(f'{ROOT_DIR}/thread.pickle','wb') as f:
+#     pickle.dump({}, f)
+# 루트 경로 찾기
 ROOT_DIR = find_root_dir()
 
 
@@ -28,7 +28,7 @@ def set_flow(user_id="", prompt=""):
         type=int,
         help="choose model's number",
         required=False,
-        default=2,
+        default=3,
     )
     args = parser.parse_args()
 
@@ -37,26 +37,8 @@ def set_flow(user_id="", prompt=""):
         my_flow = create_flow(prompt, args.model_num)
     else:
         my_flow = create_flow(args.request, args.model_num)
-    return my_flow
-
-
-# 홈 경로
-@app.route("/")
-def home():
-    return "Flask 서버가 실행 중입니다!"
-
-
-# 문자열 데이터를 주고받는 경로
-@app.route("/process", methods=["POST"])
-def process_string():
-    data = request.json
-    input_string = data.get("input_string", "")
-
-    processed_string = set_flow(prompt=input_string)
-
-    # 처리된 문자열을 JSON 형식으로 반환
-    return jsonify({"processed_string": processed_string})
+    print(my_flow)
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    set_flow()
