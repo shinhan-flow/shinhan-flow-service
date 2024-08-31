@@ -19,6 +19,8 @@ import 'package:shinhan_flow/common/model/default_model.dart';
 import 'package:shinhan_flow/flow/model/flow_model.dart';
 import 'package:shinhan_flow/flow/param/trigger/trigger_param.dart';
 import 'package:shinhan_flow/flow/provider/flow_provider.dart';
+import 'package:shinhan_flow/flow/provider/widget/flow_form_provider.dart';
+import 'package:shinhan_flow/flow/view/flow_init_screen.dart';
 import 'package:shinhan_flow/home_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 
@@ -35,7 +37,7 @@ import '../param/trigger/trigger_date_time_param.dart';
 import '../param/trigger/trigger_exchange_param.dart';
 import '../param/trigger/trigger_product_param.dart';
 
-class FlowDetailScreen extends ConsumerWidget {
+class FlowDetailScreen extends ConsumerStatefulWidget {
   static String get routeName => 'flowDetail';
   final int flowId;
 
@@ -45,8 +47,22 @@ class FlowDetailScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final result = ref.watch(flowDetailProvider(id: flowId));
+  ConsumerState<FlowDetailScreen> createState() => _FlowDetailScreenState();
+}
+
+class _FlowDetailScreenState extends ConsumerState<FlowDetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((t) {
+      ref.read(flowIdProvider.notifier).update((t) => widget.flowId);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.watch(flowIdProvider);
+    final result = ref.watch(flowDetailProvider(id: widget.flowId));
     if (result is LoadingModel) {
       return Scaffold(
         body: CircularProgressIndicator(),
@@ -61,31 +77,51 @@ class FlowDetailScreen extends ConsumerWidget {
     log('model = $model');
     return Scaffold(
       bottomNavigationBar: BottomNavButton(
-          child: DefaultTextButton(
-        fillColor: const Color(0xFFF3595B),
-        // textColor: Colors.black,
-        onPressed: () async {
-          final result =
-              await ref.read(deleteFlowProvider(flowId: flowId).future);
-          if (result is ErrorModel) {
-            FlashUtil.showFlash(
-              context,
-              '플로우 실패 성공!',
-              textColor: const Color(0xFFE21A1A),
-            );
-          } else {
-            if (context.mounted) {
-              FlashUtil.showFlash(
-                context,
-                '플로우 삭제 성공!',
-                textColor: const Color(0xFF49B7FF),
-              );
-              context.goNamed(HomeScreen.routeName);
-            }
-          }
-        },
-        text: '삭제하기',
-        able: true,
+          child: Row(
+        children: [
+          Expanded(
+            child: DefaultTextButton(
+              fillColor: const Color(0xFFF3595B),
+              // textColor: Colors.black,
+              onPressed: () async {
+                final result = await ref
+                    .read(deleteFlowProvider(flowId: widget.flowId).future);
+                if (result is ErrorModel) {
+                  FlashUtil.showFlash(
+                    context,
+                    '플로우 실패 성공!',
+                    textColor: const Color(0xFFE21A1A),
+                  );
+                } else {
+                  if (context.mounted) {
+                    FlashUtil.showFlash(
+                      context,
+                      '플로우 삭제 성공!',
+                      textColor: const Color(0xFF49B7FF),
+                    );
+                    context.goNamed(HomeScreen.routeName);
+                  }
+                }
+              },
+              text: '삭제하기',
+              able: true,
+            ),
+          ),
+          SizedBox(width: 8.w),
+          Expanded(
+              child: DefaultTextButton(
+                  onPressed: () {
+                    context.pushNamed(FlowInitScreen.routeName);
+                    // ref.read(flowFormProvider.notifier).update(
+                    //   title: model.title,
+                    //   description: model.description,
+                    //   triggers: model.triggers,
+                    //   actions: model.actions,
+                    // );
+                  },
+                  text: '수정하기',
+                  able: true)),
+        ],
       )),
       body: NestedScrollView(
         headerSliverBuilder: (_, __) {
@@ -112,7 +148,7 @@ class FlowDetailScreen extends ConsumerWidget {
                 ),
                 SliverList.builder(
                   itemBuilder: (_, idx) {
-                    return _TriggerCard(trigger: model.triggers[idx]);
+                    return TriggerCard(trigger: model.triggers[idx]);
                   },
                   itemCount: model.triggers.length,
                 ),
@@ -134,7 +170,7 @@ class FlowDetailScreen extends ConsumerWidget {
                 ),
                 SliverList.builder(
                   itemBuilder: (_, idx) {
-                    return _ActionCard(
+                    return ActionCard(
                       action: model.actions[idx],
                     );
                   },
@@ -185,10 +221,15 @@ class _FlowDetailComponent extends StatelessWidget {
   }
 }
 
-class _TriggerCard extends ConsumerWidget {
+class TriggerCard extends ConsumerWidget {
+  final bool visibleDelete;
   final TriggerBaseParam trigger;
 
-  const _TriggerCard({super.key, required this.trigger});
+  const TriggerCard({
+    super.key,
+    required this.trigger,
+    this.visibleDelete = false,
+  });
 
   Future<String> getContent(WidgetRef ref) async {
     switch (trigger.type) {
@@ -329,8 +370,51 @@ class _TriggerCard extends ConsumerWidget {
           );
         } else {
           final content = snapshot.data as String;
-          return _FlowCard(
-            content: content,
+          return ConstrainedBox(
+            constraints: BoxConstraints.tight(Size(double.infinity, 100.h)),
+            child: Stack(
+              children: [
+                Positioned(
+                  right: 0,
+                  left: 0,
+                  bottom: 0,
+                  child: _FlowCard(
+                    content: content,
+                  ),
+                ),
+                Visibility(
+                  visible: visibleDelete,
+                  child: Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Consumer(
+                      builder:
+                          (BuildContext context, WidgetRef ref, Widget? child) {
+                        return GestureDetector(
+                          onTap: () {
+                            ref
+                                .read(flowFormProvider.notifier)
+                                .removeTrigger(trigger: trigger);
+                          },
+                          child: child!,
+                        );
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.25),
+                                  offset: Offset(2.r, 2.r),
+                                )
+                              ]),
+                          child: const Icon(Icons.close)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         }
       },
@@ -338,10 +422,15 @@ class _TriggerCard extends ConsumerWidget {
   }
 }
 
-class _ActionCard extends ConsumerWidget {
+class ActionCard extends ConsumerWidget {
+  final bool visibleDelete;
   final ActionBaseParam action;
 
-  const _ActionCard({super.key, required this.action});
+  const ActionCard({
+    super.key,
+    required this.action,
+    this.visibleDelete = false,
+  });
 
   Future<String> getContent(WidgetRef ref) async {
     switch (action.type) {
@@ -416,8 +505,51 @@ class _ActionCard extends ConsumerWidget {
           );
         } else {
           final content = snapshot.data as String;
-          return _FlowCard(
-            content: content,
+          return ConstrainedBox(
+            constraints: BoxConstraints.tight(Size(double.infinity, 100.h)),
+            child: Stack(
+              children: [
+                Positioned(
+                  right: 0,
+                  left: 0,
+                  bottom: 0,
+                  child: _FlowCard(
+                    content: content,
+                  ),
+                ),
+                Visibility(
+                  visible: visibleDelete,
+                  child: Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Consumer(
+                      builder:
+                          (BuildContext context, WidgetRef ref, Widget? child) {
+                        return GestureDetector(
+                          onTap: () {
+                            ref
+                                .read(flowFormProvider.notifier)
+                                .removeAction(action: action);
+                          },
+                          child: child!,
+                        );
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.25),
+                                  offset: Offset(2.r, 2.r),
+                                )
+                              ]),
+                          child: const Icon(Icons.close)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         }
       },

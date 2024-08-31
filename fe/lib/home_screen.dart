@@ -230,16 +230,16 @@ class _AccountCardComponent extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextButton(
-              onPressed: () {
-                ref.read(authProvider.notifier).logout();
-              },
-              child: Text("임시 로그아웃")),
-          TextButton(
-              onPressed: () {
-                context.pushNamed(ProductAccountScreen.routeName);
-              },
-              child: Text("수시 입출금 상품")),
+          // TextButton(
+          //     onPressed: () {
+          //       ref.read(authProvider.notifier).logout();
+          //     },
+          //     child: Text("임시 로그아웃")),
+          // TextButton(
+          //     onPressed: () {
+          //       context.pushNamed(ProductAccountScreen.routeName);
+          //     },
+          //     child: Text("수시 입출금 상품")),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

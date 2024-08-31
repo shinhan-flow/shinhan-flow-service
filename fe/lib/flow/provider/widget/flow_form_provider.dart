@@ -118,32 +118,36 @@ class FlowForm extends _$FlowForm {
     state = state.copyWith(actions: newActions);
   }
 
-  void removeTrigger({required TriggerCategoryType trigger}) {
-    final triggers = state.triggers.toList();
-    if (trigger == TriggerCategoryType.time) {
-      triggers.removeWhere((a) => a.type.isDateType());
-      triggers.removeWhere((t) => t.type.isTimeType());
-    } else if (trigger == TriggerCategoryType.transfer) {
-      triggers.removeWhere((a) => a.type.isAccountType());
-    } else if (trigger == TriggerCategoryType.exchange) {
-      triggers.removeWhere((a) => a.type.isExchangeType());
-    } else if (trigger == TriggerCategoryType.product) {
-      triggers.removeWhere((a) => a.type.isProductType());
-    }
+  void removeTrigger({required TriggerBaseParam trigger}) {
+    final triggers = state.triggers
+      ..removeWhere((t) => t.type == trigger.type)
+      ..toList();
+    // if (trigger == TriggerCategoryType.time) {
+    //   triggers.removeWhere((a) => a.type.isDateType());
+    //   triggers.removeWhere((t) => t.type.isTimeType());
+    // } else if (trigger == TriggerCategoryType.transfer) {
+    //   triggers.removeWhere((a) => a.type.isAccountType());
+    // } else if (trigger == TriggerCategoryType.exchange) {
+    //   triggers.removeWhere((a) => a.type.isExchangeType());
+    // } else if (trigger == TriggerCategoryType.product) {
+    //   triggers.removeWhere((a) => a.type.isProductType());
+    // }
 
     final newTriggers = triggers.toList();
     state = state.copyWith(triggers: newTriggers);
   }
 
-  void removeAction({required ActionCategoryType action}) {
-    final actions = state.actions.toList();
-    if (action == ActionCategoryType.notification) {
-      actions.removeWhere((a) => a.type.isNotificationType());
-    } else if (action == ActionCategoryType.transfer) {
-      actions.removeWhere((a) => a.type.isTransferType());
-    } else if (action == ActionCategoryType.exchange) {
-      actions.removeWhere((a) => a.type.isExchangeType());
-    }
+  void removeAction({required ActionBaseParam action}) {
+    final actions = state.actions
+      ..removeWhere((t) => t.type == action.type)
+      ..toList();
+    // if (action == ActionCategoryType.notification) {
+    //   actions.removeWhere((a) => a.type.isNotificationType());
+    // } else if (action == ActionCategoryType.transfer) {
+    //   actions.removeWhere((a) => a.type.isTransferType());
+    // } else if (action == ActionCategoryType.exchange) {
+    //   actions.removeWhere((a) => a.type.isExchangeType());
+    // }
 
     final newActions = actions.toList();
     state = state.copyWith(actions: newActions);
