@@ -32,5 +32,5 @@ abstract class ExchangeRateRepository {
   /// 환율 조회 (전체)
   @Headers({'token': 'true'})
   @GET('')
-  Future<ResponseModel<BankListBaseModel<ExchangeRateModel>>> getExchangeRates();
+  Future<ResponseListModel<ExchangeRateModel>> getExchangeRates();
 }

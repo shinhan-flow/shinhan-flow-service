@@ -75,12 +75,11 @@ class _ExchangeForm extends ConsumerWidget {
     if (result is LoadingModel) {
       return const CircularProgressIndicator();
     }
-    if (result is ResponseModel<BankListBaseModel<ExchangeRateModel>>) {
+    if (result is ResponseListModel<ExchangeRateModel>) {
       final model =
-          result.data!.rec.firstWhere((e) => e.currency == form.currency);
+          result.data!.firstWhere((e) => e.currency == form.currency);
       exchangeRate = model.exchangeRate;
     }
-
 
     return Padding(
       padding: EdgeInsets.symmetric(

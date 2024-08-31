@@ -10,16 +10,15 @@ import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/common/component/text_input_form.dart';
 import 'package:shinhan_flow/flow/model/enum/widget/trigger_enum.dart';
 import 'package:shinhan_flow/flow/provider/widget/account_trigger_form_provider.dart';
-import 'package:shinhan_flow/flow/provider/widget/trigger_category_provider.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 import 'package:shinhan_flow/trigger/model/enum/widget/account_property.dart';
 
+import '../../action/view/action_transfer_screen.dart';
 import '../../common/component/default_appbar.dart';
 import '../../flow/param/enum/flow_type.dart';
 import '../../flow/param/trigger/trigger_param.dart';
 import '../../flow/provider/widget/flow_form_provider.dart';
 import '../../util/text_form_formatter.dart';
-import '../component/trigger_history_component.dart';
 
 class AccountTriggerScreen extends StatelessWidget {
   static String get routeName => 'account';
@@ -68,15 +67,6 @@ class AccountTriggerScreen extends StatelessWidget {
                     child: _AccountFormComponent(),
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 8.h,
-                    color: const Color(0xFFdae4ff),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: TriggerHistoryComponent(),
-                )
               ],
             )),
       ),
@@ -99,8 +89,6 @@ class _AccountFormComponent extends ConsumerWidget {
                 late TriggerType type;
                 if (a == AccountProperty.deposit) {
                   type = TriggerType.DepositTrigger;
-                } else if (a == AccountProperty.transfer) {
-                  type = TriggerType.TransferTrigger;
                 } else if (a == AccountProperty.balance) {
                   type = TriggerType.BalanceTrigger;
                 } else if (a == AccountProperty.withdrawal) {
@@ -130,7 +118,7 @@ class _AccountFormComponent extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          '계좌 조건',
+          '어떤 조건을 확인할까요?',
           style: SHFlowTextStyle.subTitle,
         ),
         SizedBox(height: 12.h),
@@ -141,7 +129,6 @@ class _AccountFormComponent extends ConsumerWidget {
         SizedBox(height: 24.h),
         if (form.property == AccountProperty.deposit) _DepositForm(),
         if (form.property == AccountProperty.withdrawal) _WithdrawForm(),
-        if (form.property == AccountProperty.transfer) _TransferForm(),
         if (form.property == AccountProperty.balance) _BalanceForm(),
         if (form.property == AccountProperty.balance) SizedBox(height: 24.h),
         Visibility(
@@ -150,7 +137,8 @@ class _AccountFormComponent extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: conditionChips,
           ),
-        )
+        ),
+        // if()
       ],
     );
   }
@@ -164,17 +152,18 @@ class _DepositForm extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('계좌 번호', style: SHFlowTextStyle.subTitle),
+        Text('내 계좌 선택', style: SHFlowTextStyle.subTitle),
         SizedBox(height: 8.h),
-        CustomTextFormField(
-          hintText: '입금 계좌번호를 입력해주세요.',
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-          ],
-          onChanged: (v) {
-            ref.read(tgAccountFormProvider.notifier).update(account: v);
-          },
-        ),
+        AccountDropDownV2(),
+        // CustomTextFormField(
+        //   hintText: '입금 계좌번호를 입력해주세요.',
+        //   inputFormatters: [
+        //     FilteringTextInputFormatter.digitsOnly,
+        //   ],
+        //   onChanged: (v) {
+        //     ref.read(tgAccountFormProvider.notifier).update(account: v);
+        //   },
+        // ),
         SizedBox(height: 16.h),
         Text('입금 금액', style: SHFlowTextStyle.subTitle),
         SizedBox(height: 8.h),
@@ -202,17 +191,18 @@ class _WithdrawForm extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('계좌 번호', style: SHFlowTextStyle.subTitle),
+        Text('내 계좌 선택', style: SHFlowTextStyle.subTitle),
         SizedBox(height: 8.h),
-        CustomTextFormField(
-          hintText: '출금 계좌번호를 입력해주세요.',
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-          ],
-          onChanged: (v) {
-            ref.read(tgAccountFormProvider.notifier).update(account: v);
-          },
-        ),
+        AccountDropDownV2(),
+        // CustomTextFormField(
+        //   hintText: '출금 계좌번호를 입력해주세요.',
+        //   inputFormatters: [
+        //     FilteringTextInputFormatter.digitsOnly,
+        //   ],
+        //   onChanged: (v) {
+        //     ref.read(tgAccountFormProvider.notifier).update(account: v);
+        //   },
+        // ),
         SizedBox(height: 16.h),
         Text('출금 금액', style: SHFlowTextStyle.subTitle),
         SizedBox(height: 8.h),
@@ -290,17 +280,9 @@ class _BalanceForm extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('계좌 번호', style: SHFlowTextStyle.subTitle),
+        Text('내 계좌 선택', style: SHFlowTextStyle.subTitle),
         SizedBox(height: 8.h),
-        CustomTextFormField(
-          hintText: '조건에 등록할 계좌번호를 입력해주세요.',
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-          ],
-          onChanged: (v) {
-            ref.read(tgAccountFormProvider.notifier).update(account: v);
-          },
-        ),
+        AccountDropDownV2(),
         SizedBox(height: 16.h),
         Text('계좌 금액', style: SHFlowTextStyle.subTitle),
         SizedBox(height: 8.h),
@@ -369,11 +351,13 @@ class _AccountTriggerFilter extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 85.w,
-        height: 50.h,
+        height: 35.h,
+        padding: EdgeInsets.symmetric(horizontal: 35.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.r),
-          color: isSelected ? const Color(0xFFA3C9FF) : const Color(0xFFE4ECF9),
+          borderRadius: BorderRadius.circular(15.r),
+          color: isSelected
+              ? const Color(0xFF3F73FF).withOpacity(.5)
+              : const Color(0xFFD9D9D9),
         ),
         alignment: Alignment.center,
         child: Text(

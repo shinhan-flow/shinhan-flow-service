@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shinhan_flow/account/component/account_card.dart';
+import 'package:shinhan_flow/account/view/account_transaction_history_screen.dart';
+import 'package:shinhan_flow/auth/provider/auth_provider.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/member/provider/member_provider.dart';
 import 'package:shinhan_flow/product/view/product_account_screen.dart';
@@ -178,24 +180,26 @@ class _CreditCard extends ConsumerWidget {
   }
 }
 
-class InfoListComponent extends StatelessWidget {
+class InfoListComponent extends ConsumerWidget {
   InfoListComponent({super.key});
 
   Map<String, String> list = {
-    '내 계좌 목록': '',
+    '내 계좌 목록': AccountTransactionHistoryScreen.routeName,
     '금융 상품 조회': ProductAccountScreen.routeName,
     '로그아웃': '',
   };
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final cards = list.entries.map((e) {
       return GestureDetector(
         onTap: e.value.isNotEmpty
             ? () {
                 context.pushNamed(e.value);
               }
-            : null,
+            : () {
+                ref.read(authProvider.notifier).logout();
+              },
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
           decoration: BoxDecoration(

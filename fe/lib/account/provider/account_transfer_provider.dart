@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shinhan_flow/account/provider/account_provider.dart';
 import 'package:shinhan_flow/account/provider/account_transaction_history_provider.dart';
+import 'package:shinhan_flow/member/provider/member_provider.dart';
 
 import '../../common/logger/custom_logger.dart';
 import '../../common/model/default_model.dart';
@@ -19,6 +20,7 @@ Future<BaseModel> transferAccount(TransferAccountRef ref,
       .then<BaseModel>((value) async {
     ref.invalidate(accountListProvider);
     ref.invalidate(accountTransactionHistoryProvider);
+    ref.read(memberCreditScoreProvider.notifier).get();
     return value;
   }).catchError((e) {
     final error = ErrorModel.respToError(e);

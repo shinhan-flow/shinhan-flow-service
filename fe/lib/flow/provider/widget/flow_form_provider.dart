@@ -90,6 +90,7 @@ class FlowForm extends _$FlowForm {
     final triggers = state.triggers.toList();
     if (trigger.type.isDateType()) {
       triggers.removeWhere((t) => t.type.isDateType());
+    } else if (trigger.type.isTimeType()) {
       triggers.removeWhere((t) => t.type.isTimeType());
     } else if (trigger.type.isProductType()) {
       triggers.removeWhere((t) => t.type.isProductType());
@@ -122,16 +123,6 @@ class FlowForm extends _$FlowForm {
     final triggers = state.triggers
       ..removeWhere((t) => t.type == trigger.type)
       ..toList();
-    // if (trigger == TriggerCategoryType.time) {
-    //   triggers.removeWhere((a) => a.type.isDateType());
-    //   triggers.removeWhere((t) => t.type.isTimeType());
-    // } else if (trigger == TriggerCategoryType.transfer) {
-    //   triggers.removeWhere((a) => a.type.isAccountType());
-    // } else if (trigger == TriggerCategoryType.exchange) {
-    //   triggers.removeWhere((a) => a.type.isExchangeType());
-    // } else if (trigger == TriggerCategoryType.product) {
-    //   triggers.removeWhere((a) => a.type.isProductType());
-    // }
 
     final newTriggers = triggers.toList();
     state = state.copyWith(triggers: newTriggers);
@@ -141,13 +132,6 @@ class FlowForm extends _$FlowForm {
     final actions = state.actions
       ..removeWhere((t) => t.type == action.type)
       ..toList();
-    // if (action == ActionCategoryType.notification) {
-    //   actions.removeWhere((a) => a.type.isNotificationType());
-    // } else if (action == ActionCategoryType.transfer) {
-    //   actions.removeWhere((a) => a.type.isTransferType());
-    // } else if (action == ActionCategoryType.exchange) {
-    //   actions.removeWhere((a) => a.type.isExchangeType());
-    // }
 
     final newActions = actions.toList();
     state = state.copyWith(actions: newActions);

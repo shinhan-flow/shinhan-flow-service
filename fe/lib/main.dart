@@ -146,28 +146,28 @@ class _MyAppState extends ConsumerState<MyApp> {
 
       RemoteNotification? notification = message.notification;
 
-      if (notification != null) {
-        final flutterLocalNotificationsPlugin =
-            ref.read(notificationProvider.notifier).getNotification;
-
-        await flutterLocalNotificationsPlugin?.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            const NotificationDetails(
-              android: AndroidNotificationDetails(
-                'high_importance_channel',
-                'high_importance_notification',
-                importance: Importance.max,
-              ),
-              // iOS: DarwinNotificationDetails(),
-            ),
-            payload: message.data['test_paremeter1']);
-
-        log('notification.title = ${notification.title}');
-        log('notification.body = ${notification.body}');
-        // log("수신자 측 메시지 수신");
-      }
+      // if (notification != null) {
+      //   final flutterLocalNotificationsPlugin =
+      //       ref.read(notificationProvider.notifier).getNotification;
+      //
+      //   await flutterLocalNotificationsPlugin?.show(
+      //       notification.hashCode,
+      //       notification.title,
+      //       notification.body,
+      //       const NotificationDetails(
+      //         android: AndroidNotificationDetails(
+      //           'high_importance_channel',
+      //           'high_importance_notification',
+      //           importance: Importance.max,
+      //         ),
+      //         // iOS: DarwinNotificationDetails(),
+      //       ),
+      //       payload: message.data['test_paremeter1']);
+      //
+      //   log('notification.title = ${notification.title}');
+      //   log('notification.body = ${notification.body}');
+      //   // log("수신자 측 메시지 수신");
+      // }
     });
   }
 

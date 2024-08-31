@@ -8,7 +8,9 @@ import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shinhan_flow/account/provider/account_holder_provider.dart';
 import 'package:shinhan_flow/account/provider/account_provider.dart';
+import 'package:shinhan_flow/account/provider/account_transaction_history_provider.dart';
 import 'package:shinhan_flow/account/view/account_transaction_history_screen.dart';
 import 'package:shinhan_flow/auth/provider/auth_provider.dart';
 import 'package:shinhan_flow/auth/view/login_screen.dart';
@@ -16,6 +18,8 @@ import 'package:shinhan_flow/common/component/bottom_nav_button.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/common/component/default_text_button.dart';
 import 'package:shinhan_flow/common/component/sliver_pagination_list_view.dart';
+import 'package:shinhan_flow/common/component/text_input_form.dart';
+import 'package:shinhan_flow/common/param/pagination_param.dart';
 import 'package:shinhan_flow/exchange/provider/exchange_provider.dart';
 import 'package:shinhan_flow/flow/view/flow_detail_screen.dart';
 import 'package:shinhan_flow/flow/view/trigger_category_screen.dart';
@@ -25,6 +29,7 @@ import 'package:shinhan_flow/product/model/product_loan_model.dart';
 import 'package:shinhan_flow/product/model/product_saving_model.dart';
 import 'package:shinhan_flow/product/provider/product_provider.dart';
 import 'package:shinhan_flow/product/view/product_account_screen.dart';
+import 'package:shinhan_flow/prompt/provider/prompt_provider.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 import 'package:shinhan_flow/trigger/model/enum/foreign_currency_category.dart';
 import 'package:shinhan_flow/util/util.dart';
@@ -39,16 +44,16 @@ import 'flow/model/flow_model.dart';
 import 'flow/provider/flow_provider.dart';
 import 'member/model/member_model.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   static String get routeName => 'home';
 
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   late final ScrollController _scrollController;
 
   @override
@@ -60,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: ExpandableFab.location,
       bottomNavigationBar: BottomNavButton(
           child: DefaultTextButton(
               onPressed: () {
@@ -68,41 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               text: '플로우 만들기',
               able: true)),
-
-      // Container(
-      //   constraints: BoxConstraints.tight(Size(
-      //     double.infinity,
-      //     90.h,
-      //   )),
-      //   decoration: const BoxDecoration(
-      //     border: Border(
-      //       top: BorderSide(color: Color(0xFFDFDFDF)),
-      //     ),
-      //   ),
-      //   child: Align(
-      //     child: Container(
-      //       constraints: BoxConstraints.tight(Size(110.w, 60.h)),
-      //       decoration: BoxDecoration(
-      //         borderRadius: BorderRadius.circular(30.r),
-      //         gradient: const LinearGradient(
-      //             colors: [Color(0xFF0046FF), Color(0xFFAFB9D3)]),
-      //       ),
-      //       child: ElevatedButton(
-      //           onPressed: () {
-      //             context.pushNamed(TriggerCategoryScreen.routeName);
-      //           },
-      //           style: ElevatedButton.styleFrom(
-      //               backgroundColor: Colors.transparent,
-      //               shadowColor: Colors.transparent),
-      //           child: Text(
-      //             "NEW",
-      //             style: SHFlowTextStyle.button.copyWith(
-      //               color: Colors.white,
-      //             ),
-      //           )),
-      //     ),
-      //   ),
-      // ),
       body: NestedScrollView(
           controller: _scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -163,59 +132,108 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ];
           },
-          body: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    _AccountCardComponent(),
-                    _FinanceInfoComponent(),
-                    _FlowComponent(),
-                  ],
+          body: RefreshIndicator(
+            onRefresh: () async {
+              ref
+                  .read(accountTransactionHistoryProvider.notifier)
+                  .getHistories();
+              ref.read(accountListProvider.notifier).getList();
+              ref.read(flowProvider.notifier).paginate(
+                  paginationParams:
+                      const PaginationParam(nowPage: 0, perPage: 5),
+                  forceRefetch: true);
+              ref.read(exchangeRateProvider.notifier).getExchangeRates();
+              ref.read(productSavingProvider.notifier).get();
+            },
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      _AccountCardComponent(),
+                      _FinanceInfoComponent(),
+                      _FlowComponent(),
+                      PromptComponent(),
+                    ],
+                  ),
                 ),
-              ),
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  left: 28.w,
-                  right: 28.w,
-                  bottom: 12.h,
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                    left: 28.w,
+                    right: 28.w,
+                    bottom: 12.h,
+                  ),
+                  sliver: DisposeSliverPaginationListView(
+                    provider: flowProvider,
+                    itemBuilder: (BuildContext _, int idx, Base pModel) {
+                      final model = pModel as FlowModel;
+                      return FlowCard.fromModel(
+                        model: model,
+                        onTap: () {
+                          Map<String, String> path = {
+                            'flowId': model.id.toString()
+                          };
+                          context.pushNamed(FlowDetailScreen.routeName,
+                              pathParameters: path);
+                        },
+                      );
+                    },
+                    skeleton: Container(),
+                    controller: _scrollController,
+                    emptyWidget: Container(),
+                  ),
                 ),
-                sliver: DisposeSliverPaginationListView(
-                  provider: flowProvider,
-                  itemBuilder: (BuildContext _, int idx, Base pModel) {
-                    final model = pModel as FlowModel;
-                    return FlowCard.fromModel(
-                      model: model,
-                      onTap: () {
-                        Map<String, String> path = {
-                          'flowId': model.id.toString()
-                        };
-                        context.pushNamed(FlowDetailScreen.routeName,
-                            pathParameters: path);
-                      },
-                    );
-                  },
-                  skeleton: Container(),
-                  controller: _scrollController,
-                  emptyWidget: Container(),
-                ),
-              ),
-              // SliverPadding(
-              //   padding: EdgeInsets.only(
-              //     left: 28.w,
-              //     right: 28.w,
-              //     bottom: 12.h,
-              //   ),
-              //   sliver: SliverList.separated(
-              //     itemBuilder: (_, idx) => FlowCard(),
-              //     separatorBuilder: (_, idx) => SizedBox(
-              //       height: 12.h,
-              //     ),
-              //     itemCount: 10,
-              //   ),
-              // ),
-            ],
+                // SliverPadding(
+                //   padding: EdgeInsets.only(
+                //     left: 28.w,
+                //     right: 28.w,
+                //     bottom: 12.h,
+                //   ),
+                //   sliver: SliverList.separated(
+                //     itemBuilder: (_, idx) => FlowCard(),
+                //     separatorBuilder: (_, idx) => SizedBox(
+                //       height: 12.h,
+                //     ),
+                //     itemCount: 10,
+                //   ),
+                // ),
+              ],
+            ),
           )),
+    );
+  }
+}
+
+final promptInputProvider = StateProvider.autoDispose((p) => '');
+
+class PromptComponent extends ConsumerWidget {
+  const PromptComponent({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(promptInputProvider);
+    return Column(
+      children: [
+        Container(
+          child: CustomTextFormField(
+            hintText: '프롬프트를 입력해주세요',
+            onChanged: (v) {
+              ref.read(promptInputProvider.notifier).update((p) => v);
+            },
+          ),
+        ),
+        DefaultTextButton(
+            onPressed: () {
+              final result = ref.read(promptProvider.future);
+              if (result is ResponseModel<FlowDetailModel>) {
+                log('result = ${result.toString()}');
+              } else {
+                log('result = ${result.toString()}');
+              }
+            },
+            text: '입력',
+            able: true),
+      ],
     );
   }
 }
@@ -244,7 +262,9 @@ class _AccountCardComponent extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  context.pushNamed(AccountTransactionHistoryScreen.routeName);
+                },
                 child: Row(
                   children: [
                     Text(
@@ -260,7 +280,9 @@ class _AccountCardComponent extends ConsumerWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  context.pushNamed(AccountTransactionHistoryScreen.routeName);
+                },
                 child: Row(
                   children: [
                     Text(
@@ -338,7 +360,6 @@ class _FinanceInfoComponent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<int> quicks = [1, 2, 3, 4, 5, 6, 7];
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.h),
       child: Column(
@@ -374,11 +395,10 @@ class _FinanceInfoComponent extends ConsumerWidget {
                   .rec
                   .totalAssetValue;
               final asset = '${FormatUtil.formatNumber(assetValue)} 원';
-              final currency = (exchangeResult
-                      as ResponseModel<BankListBaseModel<ExchangeRateModel>>)
-                  .data!
-                  .rec
-                  .firstWhere((e) => e.currency == CurrencyType.USD);
+              final currency =
+                  (exchangeResult as ResponseListModel<ExchangeRateModel>)
+                      .data!
+                      .firstWhere((e) => e.currency == CurrencyType.USD);
               final loanList = (loanResult
                       as ResponseModel<BankListBaseModel<ProductLoanModel>>)
                   .data!

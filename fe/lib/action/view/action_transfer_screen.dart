@@ -11,17 +11,21 @@ import 'package:shinhan_flow/account/provider/account_provider.dart';
 import 'package:shinhan_flow/common/component/bottom_nav_button.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
 import 'package:shinhan_flow/common/model/default_model.dart';
+import 'package:shinhan_flow/flow/provider/widget/account_trigger_form_provider.dart';
 
 import '../../account/model/account_holder_model.dart';
 import '../../account/model/account_model.dart';
 import '../../common/component/default_text_button.dart';
 import '../../common/component/text_input_form.dart';
 import '../../common/model/bank_model.dart';
+import '../../common/model/entity_enum.dart';
+import '../../flow/param/enum/flow_type.dart';
 import '../../flow/param/trigger/trigger_param.dart';
 import '../../flow/provider/widget/flow_form_provider.dart';
 import '../../product/view/product_account_screen.dart';
 import '../../theme/text_theme.dart';
 import '../../util/text_form_formatter.dart';
+import '../../util/util.dart';
 import '../provider/widget/exchange_action_form_provider.dart';
 import '../provider/widget/transfer_action_form_provider.dart';
 
@@ -333,7 +337,7 @@ class _AccountDropDownState extends ConsumerState<AccountDropDown> {
             padding: EdgeInsets.only(left: 16.w, right: 4.w),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.r),
-              color: const Color(0xFF0057ff),
+              color: const Color(0xFF0046FF),
             ),
             height: 100.h,
             width: 120.w,
@@ -360,7 +364,7 @@ class _AccountDropDownState extends ConsumerState<AccountDropDown> {
               // EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12.r),
-                color: const Color(0xFF0057ff),
+                color: const Color(0xFF0046FF),
               )),
           menuItemStyleData: MenuItemStyleData(
             // overlayColor: WidgetStateProperty.all(const Color(0xFF404040)),
@@ -396,6 +400,182 @@ class _AccountDropDownState extends ConsumerState<AccountDropDown> {
         ),
         Text(
           '${model.accountBalance} 원',
+          textAlign: TextAlign.end,
+          style: SHFlowTextStyle.body
+              .copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+        )
+      ],
+    );
+  }
+}
+
+class AccountDropDownV2 extends ConsumerStatefulWidget {
+  const AccountDropDownV2({super.key});
+
+  @override
+  ConsumerState<AccountDropDownV2> createState() => _AccountDropDownV2State();
+}
+
+class _AccountDropDownV2State extends ConsumerState<AccountDropDownV2> {
+  AccountDetailModel? select;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((v) {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final form = ref.watch(tgAccountFormProvider);
+
+    final result = ref.watch(accountListProvider);
+    if (result is LoadingModel) {
+      return const CircularProgressIndicator();
+    } else if (result is ErrorModel) {
+      return const Text("error");
+    }
+    final model =
+        (result as ResponseModel<BankListBaseModel<AccountDetailModel>>)
+            .data!
+            .rec;
+    final items = model
+        .map((m) => DropdownMenuItem<AccountDetailModel>(
+              value: m,
+              child: getAccounts(m),
+            ))
+        .toList();
+    if (model.isEmpty) {
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              "보유하신 계좌가 없습니다.",
+              style: SHFlowTextStyle.subTitle,
+            ),
+            SizedBox(height: 20.h),
+            GestureDetector(
+              onTap: () {
+                context.goNamed(ProductAccountScreen.routeName);
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
+                decoration: BoxDecoration(
+                    color: Colors.blueGrey,
+                    borderRadius: BorderRadius.circular(12.r)),
+                child: Text(
+                  '입출금 계좌 만들러가기',
+                  style: SHFlowTextStyle.subTitle.copyWith(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2<AccountDetailModel>(
+        isExpanded: true,
+        style: SHFlowTextStyle.labelSmall.copyWith(color: Colors.black),
+        items: items,
+        onChanged: (AccountDetailModel? v) {
+          setState(() {
+            select = v;
+            ref
+                .read(tgAccountFormProvider.notifier)
+                .update(account: v!.accountNo);
+            log("value = $v");
+          });
+        },
+        value: select ?? model[0],
+        buttonStyleData: ButtonStyleData(
+          padding:
+              EdgeInsets.only(left: 16.w, right: 4.w, top: 12.h, bottom: 12.h),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.r),
+            color: const Color(0xFF0046FF),
+          ),
+          height: 72.h,
+          width: 120.w,
+        ),
+        iconStyleData: const IconStyleData(
+          openMenuIcon: Icon(
+            Icons.keyboard_arrow_up,
+            color: Colors.white,
+          ),
+          icon: Icon(
+            Icons.keyboard_arrow_down,
+            color: Colors.white,
+          ),
+        ),
+        dropdownStyleData: DropdownStyleData(
+            // scrollPadding: EdgeInsets.only(top: 4.h),
+            // width: 85.w,
+            offset: Offset(0, -4.h),
+            elevation: 0,
+            maxHeight: MediaQuery.of(context).size.height < 600.h
+                ? MediaQuery.of(context).size.height - 200.h
+                : 216.h,
+            padding: EdgeInsets.zero,
+            // EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.r),
+              color: const Color(0xFF0046FF),
+            )),
+        menuItemStyleData: MenuItemStyleData(
+          // overlayColor: WidgetStateProperty.all(const Color(0xFF404040)),
+          height: 72.h,
+          // padding: EdgeInsets.zero
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+        ),
+      ),
+    );
+  }
+
+  Row getAccounts(AccountDetailModel model) {
+    final path =
+        BankType.values.firstWhere((t) => t.bankName == model.bankName).img;
+    final balance = FormatUtil.formatNumber(int.parse(model.accountBalance));
+
+    return Row(
+      children: [
+        Align(
+          alignment: const Alignment(0, 0),
+          child: Image.asset(
+            AssetUtil.getAssetPath(
+              name: path,
+              extension: 'png',
+            ),
+            height: 27.5.r,
+            width: 27.5.r,
+          ),
+        ),
+        SizedBox(
+          width: 12.w,
+        ),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                model.accountTypeName,
+                style: SHFlowTextStyle.body.copyWith(color: Colors.white),
+              ),
+              SizedBox(height: 4.h),
+              Text(
+                model.accountNo,
+                style: SHFlowTextStyle.labelSmall
+                    .copyWith(color: Colors.white.withOpacity(.7)),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          '$balance 원',
           textAlign: TextAlign.end,
           style: SHFlowTextStyle.body
               .copyWith(color: Colors.white, fontWeight: FontWeight.w600),

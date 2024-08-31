@@ -32,7 +32,7 @@ import 'package:shinhan_flow/flow/provider/widget/flow_form_provider.dart';
 import 'package:shinhan_flow/home_screen.dart';
 import 'package:shinhan_flow/trigger/model/enum/product_property.dart';
 import 'package:shinhan_flow/trigger/view/account_trigger_screen.dart';
-import 'package:shinhan_flow/trigger/view/time_trigger_screen.dart';
+import 'package:shinhan_flow/trigger/view/date_trigger_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 
 import '../../action/model/enum/action_type.dart';
@@ -43,6 +43,7 @@ import '../../action/view/action_transfer_screen.dart';
 import '../../common/component/bottom_nav_button.dart';
 import '../../trigger/view/exchange_trigger_screen.dart';
 import '../../trigger/view/product_trigger_screen.dart';
+import '../../trigger/view/time_trigger_screen.dart';
 import '../model/flow_model.dart';
 import '../param/trigger/trigger_date_time_param.dart';
 import '../param/trigger/trigger_exchange_param.dart';
@@ -263,7 +264,7 @@ class _FlowInitComponent extends ConsumerWidget {
                                 if (unSelected[idx] ==
                                     TriggerCategoryType.date) {
                                   context
-                                      .pushNamed(TimeTriggerScreen.routeName);
+                                      .pushNamed(DateTriggerScreen.routeName);
                                 } else if (unSelected[idx] ==
                                     TriggerCategoryType.time) {
                                   context
@@ -289,23 +290,23 @@ class _FlowInitComponent extends ConsumerWidget {
                           separatorBuilder: (_, idx) => SizedBox(height: 12.h),
                           itemCount: unSelected.length),
                       SizedBox(height: 20.h),
-                      Align(
-                        child: DefaultTextButton(
-                          onPressed: tempSelected.isNotEmpty
-                              ? () {
-                                  // triggers.addAll(tempSelected);
-                                  // final newTriggers = triggers.toSet();
-                                  //
-                                  // ref
-                                  //     .read(triggerCategoryProvider.notifier)
-                                  //     .update((t) => newTriggers);
-                                  context.pop();
-                                }
-                              : null,
-                          text: "선택 완료",
-                          able: tempSelected.isNotEmpty,
-                        ),
-                      ),
+                      // Align(
+                      //   child: DefaultTextButton(
+                      //     onPressed: tempSelected.isNotEmpty
+                      //         ? () {
+                      //             // triggers.addAll(tempSelected);
+                      //             // final newTriggers = triggers.toSet();
+                      //             //
+                      //             // ref
+                      //             //     .read(triggerCategoryProvider.notifier)
+                      //             //     .update((t) => newTriggers);
+                      //             context.pop();
+                      //           }
+                      //         : null,
+                      //     text: "선택 완료",
+                      //     able: tempSelected.isNotEmpty,
+                      //   ),
+                      // ),
                       SizedBox(height: 20.h),
                     ],
                   ),
@@ -369,7 +370,7 @@ class _FlowInitComponent extends ConsumerWidget {
                               onTap: () {
                                 context.pop();
                                 if (unSelected[idx] ==
-                                    ActionCategoryType.transfer) {
+                                    ActionCategoryType.exchange) {
                                   context.pushNamed(
                                       ActionExchangeScreen.routeName);
                                 } else if (unSelected[idx] ==
@@ -377,7 +378,7 @@ class _FlowInitComponent extends ConsumerWidget {
                                   context.pushNamed(
                                       ActionNotificationScreen.routeName);
                                 } else if (unSelected[idx] ==
-                                    ActionCategoryType.exchange) {
+                                    ActionCategoryType.transfer) {
                                   context.pushNamed(
                                       ActionTransferScreen.routeName);
                                 }
@@ -389,23 +390,23 @@ class _FlowInitComponent extends ConsumerWidget {
                           separatorBuilder: (_, idx) => SizedBox(height: 12.h),
                           itemCount: unSelected.length),
                       SizedBox(height: 20.h),
-                      Align(
-                        child: DefaultTextButton(
-                          onPressed: tempSelected.isNotEmpty
-                              ? () {
-                                  // triggers.addAll(tempSelected);
-                                  // final newTriggers = triggers.toSet();
-                                  //
-                                  // ref
-                                  //     .read(triggerCategoryProvider.notifier)
-                                  //     .update((t) => newTriggers);
-                                  context.pop();
-                                }
-                              : null,
-                          text: "선택 완료",
-                          able: tempSelected.isNotEmpty,
-                        ),
-                      ),
+                      // Align(
+                      //   child: DefaultTextButton(
+                      //     onPressed: tempSelected.isNotEmpty
+                      //         ? () {
+                      //             // triggers.addAll(tempSelected);
+                      //             // final newTriggers = triggers.toSet();
+                      //             //
+                      //             // ref
+                      //             //     .read(triggerCategoryProvider.notifier)
+                      //             //     .update((t) => newTriggers);
+                      //             context.pop();
+                      //           }
+                      //         : null,
+                      //     text: "선택 완료",
+                      //     able: tempSelected.isNotEmpty,
+                      //   ),
+                      // ),
                       SizedBox(height: 20.h),
                     ],
                   ),
@@ -469,7 +470,7 @@ class _FlowInitComponent extends ConsumerWidget {
           .map((t) => GestureDetector(
                 onTap: () {
                   if (t.type.isTimeType() || t.type.isDateType()) {
-                    context.pushNamed(TimeTriggerScreen.routeName);
+                    context.pushNamed(DateTriggerScreen.routeName);
                   } else if (t.type.isAccountType()) {
                     context.pushNamed(AccountTriggerScreen.routeName);
                   } else if (t.type.isExchangeType()) {
@@ -484,31 +485,13 @@ class _FlowInitComponent extends ConsumerWidget {
                 ),
               ))
           .toList();
-
-      triggers as Set<TriggerCategoryType>;
-      cards = triggers
-          .map((t) => _FlowInitCard(
-                triggerType: t,
-                onTap: () {
-                  if (TriggerCategoryType.time == t) {
-                    context.pushNamed(TimeTriggerScreen.routeName);
-                  } else if (TriggerCategoryType.transfer == t) {
-                    context.pushNamed(AccountTriggerScreen.routeName);
-                  } else if (TriggerCategoryType.exchange == t) {
-                    context.pushNamed(ExchangeTriggerScreen.routeName);
-                  } else {
-                    context.pushNamed(ProductTriggerScreen.routeName);
-                  }
-                },
-                visibleDelete: visibleDelete,
-              ))
-          .toList();
     } else {
       // 액션 카드 주입
       aCards = formActions
           .where((t) => t != null)
           .map((t) => GestureDetector(
                 onTap: () {
+                  log('t.type = ${t.type}');
                   if (t.type.isNotificationType()) {
                     context.pushNamed(ActionNotificationScreen.routeName);
                   } else if (t.type.isExchangeType()) {
@@ -522,25 +505,6 @@ class _FlowInitComponent extends ConsumerWidget {
                   visibleDelete: visibleDelete,
                 ),
               ))
-          .toList();
-
-      triggers as Set<ActionCategoryType>;
-      cards = triggers
-          .map(
-            (t) => _FlowInitCard(
-              actionType: t,
-              onTap: () {
-                if (ActionCategoryType.notification == t) {
-                  context.pushNamed(ActionNotificationScreen.routeName);
-                } else if (ActionCategoryType.exchange == t) {
-                  context.pushNamed(ActionExchangeScreen.routeName);
-                } else {
-                  context.pushNamed(ActionTransferScreen.routeName);
-                }
-              },
-              visibleDelete: visibleDelete,
-            ),
-          )
           .toList();
     }
 

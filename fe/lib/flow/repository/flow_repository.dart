@@ -53,6 +53,11 @@ abstract class FlowRepository {
   @Headers({'token': 'true'})
   @DELETE('/api/v1/flows/{flowId}')
   Future<ResponseModel<bool>> deleteFlow({@Path() required int flowId});
+
+  /// Flow 프롬프트 생성
+  @Headers({'token': 'true'})
+  @DELETE('/api/v1/ai/flow-generator')
+  Future<ResponseModel<FlowDetailModel>> prompt({@Path() required int flowId});
 }
 
 final flowPRepositoryProvider = Provider<FlowPRepository>((ref) {

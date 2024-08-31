@@ -27,6 +27,7 @@ import 'package:shinhan_flow/theme/text_theme.dart';
 import '../../account/model/account_holder_model.dart';
 import '../../action/model/enum/action_type.dart';
 import '../../common/model/bank_model.dart';
+import '../../trigger/model/enum/product_property.dart';
 import '../../util/util.dart';
 import '../param/enum/flow_type.dart';
 import '../param/trigger/account/trigger_balance_account_param.dart';
@@ -241,19 +242,9 @@ class TriggerCard extends ConsumerWidget {
       case TriggerType.BalanceTrigger:
         final model = trigger as TgAccountBalanceParam;
         final balance = FormatUtil.formatNumber(model.balance);
-// log("AAA");
-        final result = await ref
-            .read(accountHolderProvider(accountNo: model.account).future);
-        if (result is ErrorModel) {
-          return 'balance error';
-        } else {
-          final userName =
-              (result as ResponseModel<BankBaseModel<AccountHolderModel>>)
-                  .data!
-                  .rec
-                  .userName;
-          return '$userName에게$balance${model.condition.name}';
-        }
+
+        return '내 계좌 잔액이 $balance원 ${model.condition.name}일 때 ';
+
       case TriggerType.DayOfMonthTrigger:
         final model = trigger as TgDayOfMonthParam;
         final dayOfWeek =
@@ -268,18 +259,7 @@ class TriggerCard extends ConsumerWidget {
         final model = trigger as TgAccountDepositParam;
         final balance = FormatUtil.formatNumber(model.amount);
 
-        final result = await ref
-            .read(accountHolderProvider(accountNo: model.account).future);
-        if (result is ErrorModel) {
-          return 'error';
-        } else {
-          final userName =
-              (result as ResponseModel<BankBaseModel<AccountHolderModel>>)
-                  .data!
-                  .rec
-                  .userName;
-          return '$userName에게 $balance원이 입금 되면';
-        }
+        return '내 계좌에서 $balance원 이상이 입금 되면';
 
       case TriggerType.ExchangeRateTrigger:
         final model = trigger as TgExchangeParam;
@@ -287,7 +267,16 @@ class TriggerCard extends ConsumerWidget {
         return '${model.currency!.displayName}이 환율 $rate원 이하일 때';
       case TriggerType.InterestRateTrigger:
         final model = trigger as TgProductParam;
-        return '수시 입출금 이자율이 ${model.rate}% 이하일 때';
+        if (model.accountProduct == AccountProductType.CURRENT_ACCOUNT) {
+          return '수시 입출금 이자율이 ${model.rate}% 이상일 때';
+        } else if (model.accountProduct == AccountProductType.DEPOSIT_ACCOUNT) {
+          return '예금 이자율이 ${model.rate}% 이상일 때';
+        } else if (model.accountProduct == AccountProductType.LOAN_ACCOUNT) {
+          return '대출 이자율이 ${model.rate}% 이상일 때';
+        } else {
+          return '적금 이자율이 ${model.rate}% 이상일 때';
+        }
+
       case TriggerType.PeriodDateTrigger:
         final model = trigger as TgPeriodDateParam;
         final startDate = DateTime.parse(model.startDate!);
@@ -300,7 +289,7 @@ class TriggerCard extends ConsumerWidget {
         final model = trigger as TgSpecificDateParam;
         final date = DateTime.parse(model.localDate!);
         final content = DateFormat('yyyy년 MM월 dd일').format(date);
-        return '$content';
+        return '$content에';
       case TriggerType.TransferTrigger:
         final model = trigger as TgAccountTransferParam;
         final amount = FormatUtil.formatNumber(model.amount);
@@ -331,20 +320,10 @@ class TriggerCard extends ConsumerWidget {
         return '$from이 $to에게 $amount원 이체 되면';
       case TriggerType.WithDrawTrigger:
         final model = trigger as TgAccountWithdrawParam;
-        final result = await ref
-            .read(accountHolderProvider(accountNo: model.account).future);
         final amount = FormatUtil.formatNumber(model.amount);
 
-        if (result is ErrorModel) {
-          return 'error';
-        } else {
-          final userName =
-              (result as ResponseModel<BankBaseModel<AccountHolderModel>>)
-                  .data!
-                  .rec
-                  .userName;
-          return '$userName에게 $amount원이 출금 되면';
-        }
+        return '내 계좌에서 $amount원 이상이  출금 되면';
+
       // 다른 TriggerType에 대한 처리 추가
       default:
         throw Exception("Unknown TriggerType: ");

@@ -9,17 +9,18 @@ part 'exchange_rate_model.g.dart';
 
 @JsonSerializable()
 class ExchangeRateModel extends BaseModel {
-  final int id;
+  // final int id;
   final CurrencyType currency;
   final double exchangeRate;
-  final int exchangeMin;
+  final double exchangeMin;
   final String created;
 
   ExchangeRateModel({
-    required this.id,
+    // required this.id,
     required this.currency,
     required this.exchangeRate,
     required this.exchangeMin,
+
     required this.created,
   });
 
