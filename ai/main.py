@@ -11,7 +11,7 @@ import asyncio
 ROOT_DIR = find_root_dir()
 
 
-def main():
+def main(user_id="", prompt=""):
     parser = argparse.ArgumentParser(description="Example script with arguments")
     # parser.add_argument('-n', '--name', type=str, help='Name of the user', required=True)
     parser.add_argument(
@@ -23,7 +23,7 @@ def main():
         type=str,
         help="enter user's request",
         required=False,
-        default="계좌의 잔액이 -1000보다 작다면, 사랑해 알림을 보내",
+        default="계좌의 잔액이 1000보다 작다면, 사랑해 알림을 보내",
     )
     parser.add_argument(
         "-m",
@@ -36,7 +36,10 @@ def main():
     args = parser.parse_args()
 
     # 플로우 생성 요청하기
-    my_flow = create_flow(args.request, args.model_num)
+    if user_id and prompt:
+        my_flow = create_flow(prompt, args.model_num)
+    else:
+        my_flow = create_flow(args.request, args.model_num)
     print(my_flow)
 
 
