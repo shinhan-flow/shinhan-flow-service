@@ -32,8 +32,12 @@ import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRatesRequestDto;
 import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRatesResponseDto;
 import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeRequestDto;
 import com.ssafy.shinhanflow.dto.finance.exchange.ExchangeResponseDto;
+import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductCreateRequestDto;
+import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductCreateResponseDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsRequestDto;
 import com.ssafy.shinhanflow.dto.finance.product.DepositAndSavingProductsResponseDto;
+import com.ssafy.shinhanflow.dto.finance.product.LoanProductCreateRequestDto;
+import com.ssafy.shinhanflow.dto.finance.product.LoanProductCreateResponseDto;
 import com.ssafy.shinhanflow.dto.finance.product.LoanProductsRequestDto;
 import com.ssafy.shinhanflow.dto.finance.product.LoanProductsResponseDto;
 import com.ssafy.shinhanflow.dto.member.CreditScoreRequestDto;
@@ -194,5 +198,20 @@ public class FinanceApiService {
 
 	public CreditScoreResponseDto getCreditScore(CreditScoreRequestDto dto) {
 		return financeApiFetcher.fetch("/edu/loan/inquireMyCreditRating", dto, CreditScoreResponseDto.class);
+	}
+
+	public DepositAndSavingProductCreateResponseDto depositProductRegister(
+		DepositAndSavingProductCreateRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/deposit/createDeposit", dto,
+			DepositAndSavingProductCreateResponseDto.class);
+	}
+
+	public DepositAndSavingProductCreateResponseDto savingProductRegister(DepositAndSavingProductCreateRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/savings/createProduct", dto,
+			DepositAndSavingProductCreateResponseDto.class);
+	}
+
+	public LoanProductCreateResponseDto loansProductRegister(LoanProductCreateRequestDto dto) {
+		return financeApiFetcher.fetch("/edu/loan/createLoanProduct", dto, LoanProductCreateResponseDto.class);
 	}
 }
