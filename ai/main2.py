@@ -20,7 +20,7 @@ def set_flow(user_id="", prompt=""):
         type=str,
         help="enter user's request",
         required=False,
-        default="계좌의 잔액이 1000보다 작다면, 사랑해 알림을 보내",
+        default="계좌의 잔액이 -1000보다 작다면, 사랑해 알림을 보내",
     )
     parser.add_argument(
         "-m",
@@ -28,7 +28,7 @@ def set_flow(user_id="", prompt=""):
         type=int,
         help="choose model's number",
         required=False,
-        default=3,
+        default=4,
     )
     args = parser.parse_args()
 
@@ -37,6 +37,8 @@ def set_flow(user_id="", prompt=""):
         my_flow = create_flow(prompt, args.model_num)
     else:
         my_flow = create_flow(args.request, args.model_num)
+    print("myflow")
+    print(type(my_flow))
     print(my_flow)
 
 

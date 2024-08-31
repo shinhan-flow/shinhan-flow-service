@@ -28,15 +28,20 @@ def set_flow(user_id="", prompt=""):
         type=int,
         help="choose model's number",
         required=False,
-        default=2,
+        default=4,
     )
     args = parser.parse_args()
 
     # 플로우 생성 요청하기
-    if user_id and prompt:
-        my_flow = create_flow(prompt, args.model_num)
+    if prompt:
+        try:
+            my_flow = create_flow(prompt, args.model_num)
+        except:
+            my_flow = {"error": "100", "message": "AI: sorry, My mistake"}
+
     else:
         my_flow = create_flow(args.request, args.model_num)
+
     return my_flow
 
 

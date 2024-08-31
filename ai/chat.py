@@ -48,6 +48,7 @@ with open(f"{ROOT_DIR}/prompt/ver3/error_rule.json", "r") as f:
 
 
 model3_error_prompt = [check_list, check_trigger_value, check_action_value, error_rule]
+# model3_error_prompt = []
 
 
 def create_flow(MY_REQUEST, model_num):
@@ -81,7 +82,7 @@ def create_flow(MY_REQUEST, model_num):
             messages=messages,
             model="gpt-4o-mini",
         )
-        return chat_completion.choices[0].message.content
+        return eval(chat_completion.choices[0].message.content)
 
     # 에러 검수
     elif model_num == 3:
@@ -143,6 +144,7 @@ def create_flow(MY_REQUEST, model_num):
                 pass
         gen_response = max(res_case.values())[1]
         print(gen_response)
+        print("done")
         # SC Error
         system_prompt = model3_error_prompt
         messages = [*system_prompt]
@@ -157,11 +159,15 @@ def create_flow(MY_REQUEST, model_num):
             error_response = chat_completion.choices[0].message.content
             cnt = 0
             for case in [part.strip() for part in error_response.split("#$%")]:
-                if case:
+                if case and "ERROR" in case:
                     err_case[case] += 1
                     cnt += 1
             if cnt == 0:
                 err_case["not_error"] += 1
-            print(err_case)
-        err_result = max(err_case.items(), key=lambda x: -x[1])
-        print(err_result)
+            # print(err_case)
+        err_result, _ = max(err_case.items(), key=lambda x: -x[1])
+        # print(err_result)
+        if err_result == "not_error" or not err_result:
+            return eval(gen_response)
+        else:
+            return {"error": "100", "message": err_result}
