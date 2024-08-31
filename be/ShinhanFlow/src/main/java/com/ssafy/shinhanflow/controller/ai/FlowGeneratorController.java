@@ -12,7 +12,7 @@ import com.ssafy.shinhanflow.config.error.SuccessResponse;
 import com.ssafy.shinhanflow.dto.ai.FlowGeneratorRequestDto;
 import com.ssafy.shinhanflow.dto.ai.FlowGeneratorResponseDto;
 import com.ssafy.shinhanflow.dto.flow.CreateFlowRequestDto;
-import com.ssafy.shinhanflow.service.ai.FlowGeneratorService;
+import com.ssafy.shinhanflow.service.ai.LocalFlowGeneratorService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class FlowGeneratorController {
 
 	private final JWTUtil jwtUtil;
-	private final FlowGeneratorService flowGeneratorService;
+	private final LocalFlowGeneratorService flowGeneratorService;
 
 	@PostMapping("/flow-generator")
 	public SuccessResponse<FlowGeneratorResponseDto> generateFlow(
