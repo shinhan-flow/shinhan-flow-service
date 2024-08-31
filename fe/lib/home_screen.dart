@@ -30,6 +30,7 @@ import 'package:shinhan_flow/product/model/product_saving_model.dart';
 import 'package:shinhan_flow/product/provider/product_provider.dart';
 import 'package:shinhan_flow/product/view/product_account_screen.dart';
 import 'package:shinhan_flow/prompt/provider/prompt_provider.dart';
+import 'package:shinhan_flow/prompt/view/prompt_screen.dart';
 import 'package:shinhan_flow/theme/text_theme.dart';
 import 'package:shinhan_flow/trigger/model/enum/foreign_currency_category.dart';
 import 'package:shinhan_flow/util/util.dart';
@@ -96,6 +97,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 actions: [
                   GestureDetector(
                     onTap: () {
+                      context.pushNamed(PromptScreen.routeName);
+                    },
+                    child: const CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Text("AI"),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
                       context.pushNamed(MemberInfoScreen.routeName);
                     },
                     child: Row(
@@ -117,7 +127,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               return Text("error");
                             }
                             final model =
-                                (result as ResponseModel<MemberModel>);
+                            (result as ResponseModel<MemberModel>);
                             return Text(
                               "${model.data!.name}님",
                               style: SHFlowTextStyle.subTitle,
@@ -140,7 +150,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ref.read(accountListProvider.notifier).getList();
               ref.read(flowProvider.notifier).paginate(
                   paginationParams:
-                      const PaginationParam(nowPage: 0, perPage: 5),
+                  const PaginationParam(nowPage: 0, perPage: 5),
                   forceRefetch: true);
               ref.read(exchangeRateProvider.notifier).getExchangeRates();
               ref.read(productSavingProvider.notifier).get();
@@ -153,7 +163,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       _AccountCardComponent(),
                       _FinanceInfoComponent(),
                       _FlowComponent(),
-                      PromptComponent(),
+                      // PromptComponent(),
                     ],
                   ),
                 ),
@@ -310,7 +320,7 @@ class _AccountCardComponent extends ConsumerWidget {
                 return Text("error");
               }
               final modelList = (result
-                      as ResponseModel<BankListBaseModel<AccountDetailModel>>)
+              as ResponseModel<BankListBaseModel<AccountDetailModel>>)
                   .data!
                   .rec;
               if (modelList.isEmpty) {
@@ -320,7 +330,7 @@ class _AccountCardComponent extends ConsumerWidget {
                   },
                   child: Container(
                     padding:
-                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
+                    EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
                     decoration: BoxDecoration(
                         color: Colors.blueGrey,
                         borderRadius: BorderRadius.circular(15.r)),
@@ -390,21 +400,21 @@ class _FinanceInfoComponent extends ConsumerWidget {
                 return Text("error");
               }
               final assetValue = (memberResult
-                      as ResponseModel<BankBaseModel<MemberCreditScoreModel>>)
+              as ResponseModel<BankBaseModel<MemberCreditScoreModel>>)
                   .data!
                   .rec
                   .totalAssetValue;
               final asset = '${FormatUtil.formatNumber(assetValue)} 원';
               final currency =
-                  (exchangeResult as ResponseListModel<ExchangeRateModel>)
-                      .data!
-                      .firstWhere((e) => e.currency == CurrencyType.USD);
+              (exchangeResult as ResponseListModel<ExchangeRateModel>)
+                  .data!
+                  .firstWhere((e) => e.currency == CurrencyType.USD);
               final loanList = (loanResult
-                      as ResponseModel<BankListBaseModel<ProductLoanModel>>)
+              as ResponseModel<BankListBaseModel<ProductLoanModel>>)
                   .data!
                   .rec;
               final savingList = (savingResult
-                      as ResponseModel<BankListBaseModel<ProductSavingModel>>)
+              as ResponseModel<BankListBaseModel<ProductSavingModel>>)
                   .data!
                   .rec;
 
@@ -433,7 +443,8 @@ class _FinanceInfoComponent extends ConsumerWidget {
               }
               if (savingList.isNotEmpty) {
                 final desc =
-                    '${FormatUtil.formatDouble(savingList.first.interestRate)} %';
+                    '${FormatUtil.formatDouble(
+                    savingList.first.interestRate)} %';
                 cards.add(FinanceCard(
                   title: savingList.first.accountName.toString(),
                   desc: desc,
@@ -450,7 +461,8 @@ class _FinanceInfoComponent extends ConsumerWidget {
                     itemBuilder: (_, idx) {
                       return cards[idx];
                     },
-                    separatorBuilder: (_, idx) => SizedBox(
+                    separatorBuilder: (_, idx) =>
+                        SizedBox(
                           width: 30.w,
                         ),
                     itemCount: cards.length),
@@ -577,14 +589,13 @@ class FlowCard extends StatefulWidget {
   bool enable;
   final VoidCallback onTap;
 
-  FlowCard(
-      {super.key,
-      required this.memberId,
-      required this.title,
-      required this.description,
-      required this.enable,
-      required this.id,
-      required this.onTap});
+  FlowCard({super.key,
+    required this.memberId,
+    required this.title,
+    required this.description,
+    required this.enable,
+    required this.id,
+    required this.onTap});
 
   factory FlowCard.fromModel(
       {required FlowModel model, required VoidCallback onTap}) {
@@ -612,7 +623,7 @@ class _FlowCardState extends State<FlowCard> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.r),
           color:
-              widget.enable ? const Color(0xFF3F73FF) : const Color(0xFFEDEDED),
+          widget.enable ? const Color(0xFF3F73FF) : const Color(0xFFEDEDED),
         ),
         child: Row(
           children: [
@@ -652,8 +663,7 @@ class _FlowCardState extends State<FlowCard> {
                   onChanged: (v) async {
                     final result = await ref
                         .read(toggleFlowProvider(flowId: widget.id).future);
-                    if (result is ErrorModel) {
-                    } else {
+                    if (result is ErrorModel) {} else {
                       widget.enable = (result as ResponseModel<bool>).data!;
                     }
                     setState(() {});
@@ -663,7 +673,7 @@ class _FlowCardState extends State<FlowCard> {
                   inactiveTrackColor: const Color(0xFFCBCFD7),
                   inactiveThumbColor: Colors.white,
                   trackOutlineColor:
-                      WidgetStateProperty.all(Colors.transparent),
+                  WidgetStateProperty.all(Colors.transparent),
                   thumbIcon: WidgetStateProperty.all(const Icon(null)),
                 );
               },

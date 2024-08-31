@@ -379,6 +379,7 @@ class _AccountDropDownState extends ConsumerState<AccountDropDown> {
 
   Column getAccounts(AccountDetailModel model) {
     final textStyle = SHFlowTextStyle.subTitle.copyWith(color: Colors.white);
+    final balance = FormatUtil.formatNumber(int.parse(model.accountBalance));
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -399,7 +400,7 @@ class _AccountDropDownState extends ConsumerState<AccountDropDown> {
           style: textStyle,
         ),
         Text(
-          '${model.accountBalance} 원',
+          '$balance 원',
           textAlign: TextAlign.end,
           style: SHFlowTextStyle.body
               .copyWith(color: Colors.white, fontWeight: FontWeight.w600),

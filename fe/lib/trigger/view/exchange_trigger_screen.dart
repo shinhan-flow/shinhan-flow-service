@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shinhan_flow/auth/view/login_screen.dart';
 import 'package:shinhan_flow/common/component/bottom_nav_button.dart';
 import 'package:shinhan_flow/common/component/default_appbar.dart';
+import 'package:shinhan_flow/common/component/text_input_form.dart';
 import 'package:shinhan_flow/common/model/bank_model.dart';
 import 'package:shinhan_flow/exchange/model/exchange_rate_model.dart';
 import 'package:shinhan_flow/exchange/provider/exchange_provider.dart';
@@ -18,48 +19,67 @@ import '../../common/model/default_model.dart';
 import '../../flow/param/trigger/trigger_param.dart';
 import '../../flow/provider/widget/flow_form_provider.dart';
 
-class ExchangeTriggerScreen extends StatelessWidget {
+class ExchangeTriggerScreen extends ConsumerWidget {
   static String get routeName => 'exchange';
 
   const ExchangeTriggerScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavButton(child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          final valid = ref.watch(tgExchangeFormProvider).valid;
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+      onTap: FocusScope.of(context).requestFocus,
+      onPanDown: (v) => FocusScope.of(context).requestFocus(),
+      child: Scaffold(
+        bottomNavigationBar: BottomNavButton(child: Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            final valid = ref.watch(tgExchangeFormProvider).valid;
 
-          return DefaultTextButton(
-            onPressed: valid
-                ? () {
-                    final trigger = ref.read(tgExchangeFormProvider);
-                    ref.read(flowFormProvider.notifier).addTrigger(
-                        trigger: trigger.toParam() as TriggerBaseParam);
-                    context.pop();
-                  }
-                : null,
-            text: '완료',
-            able: valid,
-          );
-        },
-      )),
-      body: NestedScrollView(
-          headerSliverBuilder: (_, __) {
-            return [
-              const DefaultAppBar(
-                isSliver: true,
-                title: '환율 조건 설정',
-              )
-            ];
+            return DefaultTextButton(
+              onPressed: valid
+                  ? () {
+                      final trigger = ref.read(tgExchangeFormProvider);
+                      ref.read(flowFormProvider.notifier).addTrigger(
+                          trigger: trigger.toParam() as TriggerBaseParam);
+                      context.pop();
+                    }
+                  : null,
+              text: '완료',
+              able: valid,
+            );
           },
-          body: const CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: _ExchangeForm(),
-              )
-            ],
-          )),
+        )),
+        body: NestedScrollView(
+            headerSliverBuilder: (_, __) {
+              return [
+                const DefaultAppBar(
+                  isSliver: true,
+                  title: '환율 조건 설정',
+                )
+              ];
+            },
+            body: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: _ExchangeForm(),
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: CustomTextFormField(
+                      label: '조건 환율',
+                      hintText: '환전하고 싶은 환율을 입력해주세요.',
+                      keyboardType: TextInputType.number,
+                      onChanged: (v) {
+                        ref
+                            .read(tgExchangeFormProvider.notifier)
+                            .update(exRate: double.parse(v));
+                      },
+                    ),
+                  ),
+                )
+              ],
+            )),
+      ),
     );
   }
 }
@@ -76,8 +96,7 @@ class _ExchangeForm extends ConsumerWidget {
       return const CircularProgressIndicator();
     }
     if (result is ResponseListModel<ExchangeRateModel>) {
-      final model =
-          result.data!.firstWhere((e) => e.currency == form.currency);
+      final model = result.data!.firstWhere((e) => e.currency == form.currency);
       exchangeRate = model.exchangeRate;
     }
 
@@ -100,9 +119,9 @@ class _ExchangeForm extends ConsumerWidget {
                 onChanged: (v) {
                   if (v != null) {
                     final currency = CurrencyType.stringToEnum(value: v);
-                    ref
-                        .read(tgExchangeFormProvider.notifier)
-                        .update(currency: currency, exRate: exchangeRate);
+                    ref.read(tgExchangeFormProvider.notifier).update(
+                          currency: currency,
+                        );
                   }
                 },
               )

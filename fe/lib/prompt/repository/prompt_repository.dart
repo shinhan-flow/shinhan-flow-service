@@ -20,15 +20,14 @@ final promptRepositoryProvider = Provider<PromptRepository>((ref) {
   return repository;
 });
 
-@RestApi(baseUrl: serverURL)
+@RestApi(baseUrl: aiURL)
 abstract class PromptRepository {
   factory PromptRepository(Dio dio, {ParseErrorLogger errorLogger}) =
       _PromptRepository;
 
   @Headers({'token': 'true'})
-  @POST('/api/v1/ai/flow-generator')
-  Future<ResponseModel<FlowDetailModel>> getPrompt({
+  @POST('')
+  Future<PromptFlowModel> getPrompt({
     @Body() required PromptParam prompt,
-
-});
+  });
 }

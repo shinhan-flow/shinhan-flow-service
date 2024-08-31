@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "930600502228",
+    "project_id": "shinhan-flow-d68b9",
+    "storage_bucket": "shinhan-flow-d68b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930600502228:android:7d22939c6b27b2409b4c41",
+        "android_client_info": {
+          "package_name": "com.shinhanflow.shflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjWHbmEeEu54duJYAke-NCEqwK4K5n0l8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

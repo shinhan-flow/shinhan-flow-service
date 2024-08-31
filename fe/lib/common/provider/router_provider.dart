@@ -27,6 +27,7 @@ import '../../action/view/action_transfer_screen.dart';
 import '../../auth/provider/auth_provider.dart';
 import '../../auth/view/login_screen.dart';
 import '../../auth/view/sign_up_screen.dart';
+import '../../prompt/view/prompt_screen.dart';
 import '../../trigger/view/exchange_trigger_screen.dart';
 import '../../trigger/view/time_trigger_screen.dart';
 
@@ -102,6 +103,14 @@ final routerProvider = Provider<GoRouter>((ref) {
               return const HomeScreen();
             },
             routes: [
+              GoRoute(
+                path: 'prompt',
+                parentNavigatorKey: rootNavKey,
+                name: PromptScreen.routeName,
+                builder: (context, state) {
+                  return const PromptScreen();
+                },
+              ),
               GoRoute(
                 path: 'memberInfo',
                 parentNavigatorKey: rootNavKey,
