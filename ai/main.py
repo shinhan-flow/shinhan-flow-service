@@ -23,7 +23,7 @@ def main():
         type=str,
         help="enter user's request",
         required=False,
-        default="계좌의 잔액이 -1000보다 작다면, 사랑해 알림을 보내",
+        default="계좌의 잔액이 1000보다 작다면, 사랑해 알림을 보내",
     )
     parser.add_argument(
         "-m",
