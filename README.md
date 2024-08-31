@@ -1,2 +1,10 @@
-# service
-shinhan-flow의 service repo입니다.
+# 금융을 자동화하다: Shinhan Flow
+
+<!-- TODO: 대표 이미지 추가 -->
+
+## 프로젝트 소개
+
+
+## 팀원 구성
+
+|홍권|
