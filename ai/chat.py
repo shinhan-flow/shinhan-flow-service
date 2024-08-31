@@ -2,15 +2,19 @@ import openai
 import os
 from utils import *
 import json
+from collections import Counter, defaultdict
 
 ROOT_DIR = find_root_dir()
 client = openai.OpenAI(api_key=os.getenv("API_KEY"))
 assistant = client.beta.assistants.create(
     model="gpt-4o",
 )
+
 user_id = ""
 recent_requests = []
 recent_response = []
+N_ITER = 5
+
 
 # 시스템 설정 로드
 with open(f"{ROOT_DIR}/prompt/ver1/explain_flow.json", "r") as f:
@@ -106,3 +110,58 @@ def create_flow(MY_REQUEST, model_num):
             return "error"
         else:
             return gen_response
+    # SC 기법 적용
+    elif model_num == 4:
+        print("use model4")
+        system_prompt = model1_system_prompt
+        messages = [*system_prompt]
+        for rq, rp in zip(recent_requests, recent_response):
+            messages.append({"role": "user", "content": rq})
+            messages.append({"role": "assistant", "content": rp})
+        messages.append({"role": "user", "content": MY_REQUEST})
+
+        # SC Generator
+        res_case = {}
+        for i in range(N_ITER):
+            chat_completion = client.chat.completions.create(
+                messages=messages,
+                model="gpt-4o-mini",
+            )
+            gen_response = chat_completion.choices[0].message.content
+            try:
+                tmp = eval(gen_response)
+                key = "_".join(
+                    sorted([tr["type"] for tr in tmp["triggers"]])
+                    + sorted([tr["type"] for tr in tmp["actions"]])
+                )
+                if not key in res_case:
+                    res_case[key] = [1, gen_response]
+                else:
+                    res_case[key][0] += 1
+
+            except:
+                pass
+        gen_response = max(res_case.values())[1]
+        print(gen_response)
+        # SC Error
+        system_prompt = model3_error_prompt
+        messages = [*system_prompt]
+        messages.append({"role": "user", "content": gen_response})
+
+        err_case = Counter()
+        for i in range(N_ITER):
+            chat_completion = client.chat.completions.create(
+                messages=messages,
+                model="gpt-4o-mini",
+            )
+            error_response = chat_completion.choices[0].message.content
+            cnt = 0
+            for case in [part.strip() for part in error_response.split("#$%")]:
+                if case:
+                    err_case[case] += 1
+                    cnt += 1
+            if cnt == 0:
+                err_case["not_error"] += 1
+            print(err_case)
+        err_result = max(err_case.items(), key=lambda x: -x[1])
+        print(err_result)

@@ -23,7 +23,7 @@ def main():
         type=str,
         help="enter user's request",
         required=False,
-        default="계좌의 잔액이 -1000보다 작다면, 사랑해 알림을 보내",
+        default="계좌의 잔액이 1000보다 작다면, 사랑해 알림을 보내",
     )
     parser.add_argument(
         "-m",
@@ -31,7 +31,7 @@ def main():
         type=int,
         help="choose model's number",
         required=False,
-        default=3,
+        default=4,
     )
     args = parser.parse_args()
 

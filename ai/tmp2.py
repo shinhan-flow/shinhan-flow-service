@@ -2,6 +2,7 @@ import openai
 import os
 from utils import *
 import json
+from collections import Counter, defaultdict
 
 ROOT_DIR = find_root_dir()
 client = openai.OpenAI(api_key=os.getenv("API_KEY"))
@@ -31,31 +32,31 @@ model1_system_prompt = [
     enumerate_actions,
     set_output_format,
 ]
-MY_REQUEST = "내가 잘생겼으면"
-system_prompt = model1_system_prompt
-chat_completion = client.chat.completions.create(
-    messages=[
-        *system_prompt,
-        {
-            "role": "user",
-            "content": MY_REQUEST,
-        },
-    ],
-    model="gpt-4o-mini",
-)
-tmp = chat_completion.choices[0].message.content
-print(tmp)
-chat_completion = client.chat.completions.create(
-    messages=[
-        {
-            "role": "system",
-            "content": "너는 점검자야. user가 입력한 json을 점검할거야.\n1. actions 리스트에 아무것도 없다면 'no action'라고 말해.\n 2. triggers 리스트에 조건이 없다면 'no trigger'라고 말해",
-        },
-        {
-            "role": "user",
-            "content": tmp,
-        },
-    ],
-    model="gpt-4o-mini",
-)
-print(chat_completion.choices[0].message.content)
+result = []
+result_tri = Counter()
+result_act = Counter()
+result_err = Counter()
+for i in range(5):
+    MY_REQUEST = "달러 환율이 15이고 내 계좌 123123123123의 잔액이 1000원 미만일때 나에게 '안녕하세요' 알림을 줘"
+    system_prompt = model1_system_prompt
+    chat_completion = client.chat.completions.create(
+        messages=[
+            *system_prompt,
+            {
+                "role": "user",
+                "content": MY_REQUEST,
+            },
+        ],
+        model="gpt-4o-mini",
+        temperature=1,
+    )
+
+    tmp = chat_completion.choices[0].message.content
+    try:
+        tmp = eval(tmp)
+        key = "_".join(sorted([tr["type"] for tr in tmp["triggers"]]))
+        result[key] += 1
+    except:
+        result["output_format_error"] += 1
+
+    print(result)
