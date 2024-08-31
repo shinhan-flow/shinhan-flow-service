@@ -54,7 +54,7 @@ Github-flow 전략을 기반으로 main 여러 feature 브랜치를 개발에 �
 <details>
 <summary>AI</summary>
   
-```json
+```text
 .
 ├── back_up
 │   ├── example_openai
@@ -114,7 +114,7 @@ Github-flow 전략을 기반으로 main 여러 feature 브랜치를 개발에 �
 
 <summary>BE</summary>
 
-```json
+```text
 .
 ├── java
 │   └── com
@@ -287,7 +287,7 @@ Github-flow 전략을 기반으로 main 여러 feature 브랜치를 개발에 �
 
 <summary>FE</summary>
 
-```json
+```text
 .
 ├── account
 │   ├── component
