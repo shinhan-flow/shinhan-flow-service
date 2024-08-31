@@ -48,6 +48,40 @@ cd build/libs
 java -jar shinhanflow-0.0.1-SNAPSHOT.jar
 ```
 
+`resources/application.yaml` 파일을 다음과 같이 작성합니다:
+
+```yaml
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://svc.sel5.cloudtype.app:30977/shinhan
+    username: root
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+show_sql: true
+format_sql: true
+finance-api:
+  base-url: https://finopenapi.ssafy.io/ssafy/api/v1
+  key: 9e7ec85549d74751b3bce4439dee7a06
+
+jwt:
+  secret: my-secret-key-assssssssssssssssssssssssssssssssssssssssssssssss
+  access:
+    expire-time: 60000000000
+  refresh:
+    expire-time: 600000000000
+aws:
+  lambda:
+    region: ap-northeast-2
+    function-name: shFlowAI
+```
+
 ### FE
 
 1. android studio 에서 프로젝트를 열고 프로젝트 위치에서 `flutter pub get` 명령어를 통해 라이브러리를 받은 후 `dart run build_runner watch` 를 실행하여 generator 파일을 생성합니다.
