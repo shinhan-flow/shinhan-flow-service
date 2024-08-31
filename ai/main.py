@@ -31,7 +31,7 @@ def main():
         type=int,
         help="choose model's number",
         required=False,
-        default=4,
+        default=3,
     )
     args = parser.parse_args()
 
