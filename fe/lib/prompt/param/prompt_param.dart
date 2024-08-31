@@ -5,12 +5,12 @@ part 'prompt_param.g.dart';
 
 @JsonSerializable()
 class PromptParam extends DefaultParam {
-  final String prompt;
+  final String input_string;
 
-  PromptParam({required this.prompt});
+  PromptParam({required this.input_string});
 
   @override
-  List<Object?> get props => [prompt];
+  List<Object?> get props => [input_string];
 
   @override
   Map<String, dynamic> toJson() => _$PromptParamToJson(this);

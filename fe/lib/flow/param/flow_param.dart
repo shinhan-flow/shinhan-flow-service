@@ -36,12 +36,16 @@ class FlowParam extends DefaultParam {
     );
   }
 
+  factory FlowParam.fromJson(Map<String, dynamic> json) =>
+      _$FlowParamFromJson(json);
+
   Map<String, dynamic> toJson() => _$FlowParamToJson(this);
 }
 
 @JsonSerializable()
-class FlowPParam extends DefaultParam{
+class FlowPParam extends DefaultParam {
   @override
   List<Object?> get props => [];
+
   Map<String, dynamic> toJson() => _$FlowPParamToJson(this);
 }

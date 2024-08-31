@@ -67,3 +67,15 @@ class FlowDetailModel extends FlowParam {
   factory FlowDetailModel.fromJson(Map<String, dynamic> json) =>
       _$FlowDetailModelFromJson(json);
 }
+
+@JsonSerializable()
+class PromptFlowModel extends BaseModel {
+  final FlowParam processed_string;
+
+  PromptFlowModel({
+    required this.processed_string,
+  });
+
+  factory PromptFlowModel.fromJson(Map<String, dynamic> json) =>
+      _$PromptFlowModelFromJson(json);
+}

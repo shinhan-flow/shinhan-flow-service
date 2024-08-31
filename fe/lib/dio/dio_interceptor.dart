@@ -8,6 +8,7 @@ import '../auth/provider/auth_provider.dart';
 import '../common/logger/custom_logger.dart';
 
 const String serverURL = "http://13.124.223.172:8080";
+const String aiURL = "http://192.168.10.21:5000/process";
 
 class CustomDioInterceptor extends Interceptor {
   final FlutterSecureStorage storage;

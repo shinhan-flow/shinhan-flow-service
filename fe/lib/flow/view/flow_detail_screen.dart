@@ -267,9 +267,7 @@ class TriggerCard extends ConsumerWidget {
         return '${model.currency!.displayName}이 환율 $rate원 이하일 때';
       case TriggerType.InterestRateTrigger:
         final model = trigger as TgProductParam;
-        if (model.accountProduct == AccountProductType.CURRENT_ACCOUNT) {
-          return '수시 입출금 이자율이 ${model.rate}% 이상일 때';
-        } else if (model.accountProduct == AccountProductType.DEPOSIT_ACCOUNT) {
+        if (model.accountProduct == AccountProductType.DEPOSIT_ACCOUNT) {
           return '예금 이자율이 ${model.rate}% 이상일 때';
         } else if (model.accountProduct == AccountProductType.LOAN_ACCOUNT) {
           return '대출 이자율이 ${model.rate}% 이상일 때';
