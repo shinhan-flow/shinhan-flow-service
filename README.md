@@ -50,7 +50,7 @@ java -jar shinhanflow-0.0.1-SNAPSHOT.jar
 
 ### FE
 
-1. android studio 에서 프로젝트를 열고 프로젝트 위치에서 flutter pub get 명령어를 통해 라이브러리를 받은 후 dart run build_runner watch 를 실행하여 generator 파일을 생성합니다.
+1. android studio 에서 프로젝트를 열고 프로젝트 위치에서 `flutter pub get` 명령어를 통해 라이브러리를 받은 후 `dart run build_runner watch` 를 실행하여 generator 파일을 생성합니다.
 2. android simulator 를 실행하여 android studio에 가상 디바이스가 감지 되면 실행 할 수 있습니다.
 
 ## **2. 채택한 개발 기술과 브랜치 전략**
