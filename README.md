@@ -600,6 +600,18 @@ Github-flow 전략을 기반으로 main 여러 feature 브랜치를 개발에 �
 사용자가 제시하는 난해한 요청을 AI가 효과적으로 이해하고 처리하기 어려운 문제가 있습니다. 사용자들은 종종 모호하거나 복잡한 요구를 하게 되는데, 일반적인 AI 시스템은 이러한 요청을 정확히 파악하지 못해 원하는 결과를 제공하지 못하는 경우가 많습니다. 이 문제를 해결하기 위해, GAN(Generative Adversarial Network)의 Generator와 Discriminator 구조를 차용하여 사용자의 요구를 파악하고 해석하는 역할을 부여했습니다. Generator는 사용자의 난해한 요청을 앱이 이해할 수 있는 명확한 형태로 변환하는 작업을 수행하며, Discriminator는 이 변환된 요청이 실제 의도에 부합하는지를 검증합니다. 이를 통해 AI가 사용자 요청의 의미를 점점 더 정확하게 이해하도록 학습됩니다. 이 접근법을 통해 AI는 사용자의 복잡한 요구를 더 잘 파악하고, 앱에 적합하게 해석할 수 있는 능력을 갖추게 됩니다. 결과적으로, 사용자가 어떤 요구를 제시하더라도 AI가 이를 명확하게 이해하고, 적절하게 대응할 수 있도록 했습니다.
 
 ## 8. 페이지 별 기능
+ <p> <strong>1. 메인화면</strong></p><p>메인화면에서는 사용자의 계좌와 현재 금융 관련 정보, 마지막으로 사용자가 생성한 플로우 리스트를 한 눈에 확인할 수 있으며, 해당 화면에서 토글을 통해 플로우를 활성화하거나 비활성화 상태로 변경할 수 있습니다.</p>
+ <img src="https://github.com/user-attachments/assets/0a1c7bca-2a76-455d-92f6-cb6c41c62080" alt="Main Screen" width="300" height="600"/>
+<img src="https://github.com/user-attachments/assets/66e544a5-e782-40d1-b51a-4853053e2ed8" alt="플로우 생성 폼1" width="300" height="600"/>
+<img src="https://github.com/user-attachments/assets/345f1c39-8661-4ed2-bf5c-997cfd6b8b0e" alt="플로우 생성 폼2" width="300" height="600"/>
+    <img src="https://github.com/user-attachments/assets/7bc0f3f2-c82f-4262-9cb7-7acd32995f03" alt="플로우 생성 타이틀, 설명" width="300" height="600"/>
+     <img src="https://github.com/user-attachments/assets/ff614ce9-e07c-48e7-9884-1e85796af065" alt="플로우 액션 목록" width="300" height="600"/>
+ <img src="https://github.com/user-attachments/assets/1fa77dc3-6cda-4db0-8c7c-0412ee827ff7" alt="송금 행동" width="300" height="600"/>
+ 
+ <img src="https://github.com/user-attachments/assets/a8fbbbce-0717-4133-a5ed-32ee71f6e58e" alt="알림 행동" width="300" height="600"/>
+ <img src="https://github.com/user-attachments/assets/e8f59fcd-b299-437b-92f5-d23fa8dde613" alt="계좌 조건" width="300" height="600"/>
+
+
 
 ## 9. 개선목표
 
