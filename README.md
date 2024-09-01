@@ -1,9 +1,14 @@
-# 금융 활동 자동화 서비스 신한플로우
-![Frame 1094310](https://github.com/user-attachments/assets/3ba0f5f2-89f8-420e-a28a-0bfc32e51a84)
+# SHINHAN HACKATHON WITH SSAFY (24.08.30 - 24.09.01)
+![image](https://github.com/user-attachments/assets/57ade290-7e88-4c06-bef9-1ba85f99c813)
+
 
 ## 프로젝트 소개
+**금융 활동 자동화 서비스 신한플로우** - 금융 활동을 자동화하여 일상에 녹아들게 합니다.
 
-금융 활동을 자동화하여 일상에 녹아들게 합니다.
+
+![Frame 1094310](https://github.com/user-attachments/assets/3ba0f5f2-89f8-420e-a28a-0bfc32e51a84)
+
+
 
 **Flow**는 조건과 액션으로 구성된 기본 단위로, 지정된 조건이 충족되면 설정된 액션이 실행됩니다.
 
