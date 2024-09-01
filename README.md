@@ -613,6 +613,9 @@ Github-flow 전략을 기반으로 main 여러 feature 브랜치를 개발에 �
 
 
 
+<img src="https://github.com/user-attachments/assets/ae44b8de-a44c-41e8-ad50-a7002a639dc4" alt="로그인,회원가입" width=200>
+
+
 ## 9. 개선목표
 
 ### 유효성 검증
