@@ -12,7 +12,7 @@
 
 **Flow**는 조건과 액션으로 구성된 기본 단위로, 지정된 조건이 충족되면 설정된 액션이 실행됩니다.
 
-- **조건**: 액션이 실행될 기준으로, 날짜, 시간, 위치 등의 간단한 조건부터 계좌 잔액이나 소비액 등 사용자 정보에 기반한 복잡한 조건까지 설정할 수 있습니다.
+- **조건**: 액션이 실행될 기준으로, 날짜, 시간 등의 간단한 조건부터 계좌 잔액이나 소비액 등 사용자 정보에 기반한 복잡한 조건까지 설정할 수 있습니다.
 - **액션**: 조건이 충족될 때 실행되는 작업으로, 계좌 송금, 잔액 확인, 카드 사용액 확인 등 다양한 액션을 수행할 수 있습니다.
 
 ## **팀원 구성**
@@ -602,14 +602,26 @@ Github-flow 전략을 기반으로 main 여러 feature 브랜치를 개발에 �
 ## 8. 페이지 별 기능
  <p> <strong>1. 메인화면</strong></p><p>메인화면에서는 사용자의 계좌와 현재 금융 관련 정보, 마지막으로 사용자가 생성한 플로우 리스트를 한 눈에 확인할 수 있으며, 해당 화면에서 토글을 통해 플로우를 활성화하거나 비활성화 상태로 변경할 수 있습니다.</p>
  <img src="https://github.com/user-attachments/assets/0a1c7bca-2a76-455d-92f6-cb6c41c62080" alt="Main Screen" width="300" />
-<img src="https://github.com/user-attachments/assets/66e544a5-e782-40d1-b51a-4853053e2ed8" alt="플로우 생성 폼1" width="300" />
-<img src="https://github.com/user-attachments/assets/345f1c39-8661-4ed2-bf5c-997cfd6b8b0e" alt="플로우 생성 폼2" width="300" />
-    <img src="https://github.com/user-attachments/assets/7bc0f3f2-c82f-4262-9cb7-7acd32995f03" alt="플로우 생성 타이틀, 설명" width="300"/>
-     <img src="https://github.com/user-attachments/assets/ff614ce9-e07c-48e7-9884-1e85796af065" alt="플로우 액션 목록" width="300" />
- <img src="https://github.com/user-attachments/assets/1fa77dc3-6cda-4db0-8c7c-0412ee827ff7" alt="송금 행동" width="300" />
+<p> 
+<strong>2. 플로우 생성 화면 예시</strong></p><p>플로우는 제목과 설명 그리고 사용자가 원하는 조건 및 액션들을 조합하여 플로우를 생성할 수 있습니다.</p>
+<strong>2-1 조건 종류</strong></p><p>조건은 7가지가 있으며 날짜, 시간, 잔액, 입금, 출금, 환율, 이자율로 구성되어있습니다.</p>
+<strong>2-2 액션 종류</strong></p><p>액션은 5가지가 있으며 이체, 환전, 환율 알림, 잔액 알림, 텍스트 알림으로 구성되어있습니다.</p>
+
+<img src="https://github.com/user-attachments/assets/7bc0f3f2-c82f-4262-9cb7-7acd32995f03" alt="플로우 생성 타이틀, 설명" width="300"/>
+
+    
+ <img src="https://github.com/user-attachments/assets/ff614ce9-e07c-48e7-9884-1e85796af065" alt="플로우 액션 목록" width="300" />
+<img src="https://github.com/user-attachments/assets/e8f59fcd-b299-437b-92f5-d23fa8dde613" alt="계좌 조건" width="300" /> 
+<img src="https://github.com/user-attachments/assets/1fa77dc3-6cda-4db0-8c7c-0412ee827ff7" alt="송금 행동" width="300" />
  
  <img src="https://github.com/user-attachments/assets/a8fbbbce-0717-4133-a5ed-32ee71f6e58e" alt="알림 행동" width="300" />
- <img src="https://github.com/user-attachments/assets/e8f59fcd-b299-437b-92f5-d23fa8dde613" alt="계좌 조건" width="300" />
+ 
+ <img src="https://github.com/user-attachments/assets/66e544a5-e782-40d1-b51a-4853053e2ed8" alt="플로우 생성 폼1" width="300" />
+<img src="https://github.com/user-attachments/assets/345f1c39-8661-4ed2-bf5c-997cfd6b8b0e" alt="플로우 생성 폼2" width="300" />
+ 
+<strong>3. 계좌 거래 내역 화면</strong></p><p>계좌별 거래내역을 스와이프 제스처를 통해 거래내역을 빠르고 간편하게 확인할 수 있습니다.</p>
+<img src="https://github.com/user-attachments/assets/c09eaf18-a6e7-439e-a44d-b65b66cff64c" alt="거래 내역" width="300" />
+
 
 
 
