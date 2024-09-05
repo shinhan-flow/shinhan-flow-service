@@ -610,23 +610,24 @@ Github-flow 전략을 기반으로 main 여러 feature 브랜치를 개발에 �
 <img src="https://github.com/user-attachments/assets/7bc0f3f2-c82f-4262-9cb7-7acd32995f03" alt="플로우 생성 타이틀, 설명" width="300"/>
 
     
- <img src="https://github.com/user-attachments/assets/ff614ce9-e07c-48e7-9884-1e85796af065" alt="플로우 액션 목록" width="300" />
+<img src="https://github.com/user-attachments/assets/ff614ce9-e07c-48e7-9884-1e85796af065" alt="플로우 액션 목록" width="300" />
 <img src="https://github.com/user-attachments/assets/e8f59fcd-b299-437b-92f5-d23fa8dde613" alt="계좌 조건" width="300" /> 
 <img src="https://github.com/user-attachments/assets/1fa77dc3-6cda-4db0-8c7c-0412ee827ff7" alt="송금 행동" width="300" />
  
- <img src="https://github.com/user-attachments/assets/a8fbbbce-0717-4133-a5ed-32ee71f6e58e" alt="알림 행동" width="300" />
+<img src="https://github.com/user-attachments/assets/a8fbbbce-0717-4133-a5ed-32ee71f6e58e" alt="알림 행동" width="300" />
  
- <img src="https://github.com/user-attachments/assets/66e544a5-e782-40d1-b51a-4853053e2ed8" alt="플로우 생성 폼1" width="300" />
+<img src="https://github.com/user-attachments/assets/66e544a5-e782-40d1-b51a-4853053e2ed8" alt="플로우 생성 폼1" width="300" />
 <img src="https://github.com/user-attachments/assets/345f1c39-8661-4ed2-bf5c-997cfd6b8b0e" alt="플로우 생성 폼2" width="300" />
  
 <strong>3. 계좌 거래 내역 화면</strong></p><p>계좌별 거래내역을 스와이프 제스처를 통해 거래내역을 빠르고 간편하게 확인할 수 있습니다.</p>
 <img src="https://github.com/user-attachments/assets/c09eaf18-a6e7-439e-a44d-b65b66cff64c" alt="거래 내역" width="300" />
 
 
+<img src="https://github.com/user-attachments/assets/ae44b8de-a44c-41e8-ad50-a7002a639dc4" alt="로그인,회원가입" width=300 />
 
+https://github.com/user-attachments/assets/8c598472-4a58-4516-8837-ce53e05e849c
 
-<img src="https://github.com/user-attachments/assets/ae44b8de-a44c-41e8-ad50-a7002a639dc4" alt="로그인,회원가입" width=200>
-
+https://github.com/user-attachments/assets/eb9abf76-05d3-460e-aa6c-1ffab0175760
 
 ## 9. 개선목표
 
