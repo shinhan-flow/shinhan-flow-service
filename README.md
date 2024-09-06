@@ -611,10 +611,10 @@ Github-flow 전략을 기반으로 main 여러 feature 브랜치를 개발에 �
 
     
 <img src="https://github.com/user-attachments/assets/ff614ce9-e07c-48e7-9884-1e85796af065" alt="플로우 액션 목록" width="300" />
-<img src="https://github.com/user-attachments/assets/e8f59fcd-b299-437b-92f5-d23fa8dde613" alt="계좌 조건" width="300" /> 
-<img src="https://github.com/user-attachments/assets/1fa77dc3-6cda-4db0-8c7c-0412ee827ff7" alt="송금 행동" width="300" />
+<img src="https://github.com/user-attachments/assets/e8f59fcd-b299-437b-92f5-d23fa8dde613" alt="계좌 조건" width="300" /> 
+<img src="https://github.com/user-attachments/assets/1fa77dc3-6cda-4db0-8c7c-0412ee827ff7" alt="송금 행동" width="300" />
  
-<img src="https://github.com/user-attachments/assets/a8fbbbce-0717-4133-a5ed-32ee71f6e58e" alt="알림 행동" width="300" />
+<img src="https://github.com/user-attachments/assets/a8fbbbce-0717-4133-a5ed-32ee71f6e58e" alt="알림 행동" width="300" />
  
 <img src="https://github.com/user-attachments/assets/66e544a5-e782-40d1-b51a-4853053e2ed8" alt="플로우 생성 폼1" width="300" />
 <img src="https://github.com/user-attachments/assets/345f1c39-8661-4ed2-bf5c-997cfd6b8b0e" alt="플로우 생성 폼2" width="300" />
@@ -630,7 +630,7 @@ Github-flow 전략을 기반으로 main 여러 feature 브랜치를 개발에 �
 
 https://github.com/user-attachments/assets/8c598472-4a58-4516-8837-ce53e05e849c
 <p><strong>시나리오 2 - 기간내 특정 환율 이하시 자동 환전</strong></p>
-<p>사용자가 특정 환율 이하일 시 자동 환전 및 알림을 받을 수 있습니다.</p>
+<p>사용자가 특정 환율 이하일 시 자동 환전 및 알림을 받을 수 있습니다.</p>
 
 https://github.com/user-attachments/assets/eb9abf76-05d3-460e-aa6c-1ffab0175760
 
