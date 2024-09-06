@@ -623,9 +623,14 @@ Github-flow 전략을 기반으로 main 여러 feature 브랜치를 개발에 �
 <img src="https://github.com/user-attachments/assets/c09eaf18-a6e7-439e-a44d-b65b66cff64c" alt="거래 내역" width="300" />
 
 
+<p><strong>로그인 및 회원가입</strong></p>
 <img src="https://github.com/user-attachments/assets/ae44b8de-a44c-41e8-ad50-a7002a639dc4" alt="로그인,회원가입" width=300 />
+<p><strong>시나리오 1 - 부모님 용돈 드리기</strong></p>
+<p>월급 입금 시 부모님 계좌에 자동 이체 및 이체 완료 알림을 받을 수 있습니다.</p>
 
 https://github.com/user-attachments/assets/8c598472-4a58-4516-8837-ce53e05e849c
+<p><strong>시나리오 2 - 기간내 특정 환율 이하시 자동 환전</strong></p>
+<p>사용자가 특정 환율 이하일 시 자동 환전 및 알림을 받을 수 있습니다.</p>
 
 https://github.com/user-attachments/assets/eb9abf76-05d3-460e-aa6c-1ffab0175760
 
